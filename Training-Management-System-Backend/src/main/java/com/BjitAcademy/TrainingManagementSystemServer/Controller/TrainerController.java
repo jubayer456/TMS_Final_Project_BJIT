@@ -22,5 +22,8 @@ public class TrainerController {
     public ResponseEntity<Object> updateTrainers(@RequestBody TrainerRegReqDto trainerRegReqDto){
         return trainerService.updateTrainers(trainerRegReqDto);
     }
-
+    @DeleteMapping("/api/trainer/{trainerId}")
+    public ResponseEntity<Object> deleteTrainer(@PathVariable Long trainerId){
+        return trainerService.deleteTrainer(trainerId);
+    }
 }

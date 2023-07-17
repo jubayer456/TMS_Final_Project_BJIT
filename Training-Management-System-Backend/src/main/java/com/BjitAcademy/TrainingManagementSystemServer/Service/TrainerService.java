@@ -13,5 +13,5 @@ public interface TrainerService {
 
     ResponseEntity<Object> updateTrainers(TrainerRegReqDto trainerRegReqDto);
 
-
+    ResponseEntity<Object> deleteTrainer(Long trainerId);
 }

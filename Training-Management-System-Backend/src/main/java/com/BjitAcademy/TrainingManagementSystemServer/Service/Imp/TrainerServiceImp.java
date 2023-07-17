@@ -55,7 +55,8 @@ public class TrainerServiceImp implements TrainerService {
         trainerRepository.save(trainer);
         return new ResponseEntity<>("successfully Registered", HttpStatus.OK);
     }
-    
+
+
     @Override
     public ResponseEntity<Object> updateTrainers(TrainerRegReqDto trainerRegReqDto) {
         UserEntity userEntityById = userRepository.findByUserId(trainerRegReqDto.getTrainerId());
@@ -80,4 +81,13 @@ public class TrainerServiceImp implements TrainerService {
         return new ResponseEntity<>("SuccessFully Updated",HttpStatus.OK);
     }
 
+    @Override
+    public ResponseEntity<Object> deleteTrainer(Long trainerId) {
+        TrainerEntity trainer = trainerRepository.findByTrainerId(trainerId);
+        if (trainer==null){
+            throw new UserNotFoundException("trainer is not found for delete");
+        }
+        trainerRepository.delete(trainer);
+        return new ResponseEntity<>("SuccessFully Deleted Trainer",HttpStatus.OK);
+    }
 }
