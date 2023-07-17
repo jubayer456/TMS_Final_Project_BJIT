@@ -28,4 +28,7 @@ public interface BatchService {
     ResponseEntity<Object> removeScheduleFromBatch(Long scheduleId);
 
     ResponseEntity<Set<BatchScheduleResDto>> getAllBatchSchedule(Long batchId);
+
+    ResponseEntity<Set<TraineeResDto>> getAllTraineeBatch(Long batchId);
+
 }

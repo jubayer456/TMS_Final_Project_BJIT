@@ -7,11 +7,13 @@ import com.BjitAcademy.TrainingManagementSystemServer.Dto.Batch.BatchResDto;
 import com.BjitAcademy.TrainingManagementSystemServer.Dto.Batch.BatchTraineeReqDto;
 import com.BjitAcademy.TrainingManagementSystemServer.Dto.Schedule.BatchScheduleResDto;
 import com.BjitAcademy.TrainingManagementSystemServer.Dto.Schedule.ScheduleReqDto;
+import com.BjitAcademy.TrainingManagementSystemServer.Dto.Trainee.TraineeResDto;
 import com.BjitAcademy.TrainingManagementSystemServer.Entity.*;
 import com.BjitAcademy.TrainingManagementSystemServer.Exception.*;
 import com.BjitAcademy.TrainingManagementSystemServer.Mapper.BatchMappingModel;
 
 import com.BjitAcademy.TrainingManagementSystemServer.Mapper.ScheduleMappingModel;
+import com.BjitAcademy.TrainingManagementSystemServer.Mapper.TraineeMappingModel;
 import com.BjitAcademy.TrainingManagementSystemServer.Repository.*;
 import com.BjitAcademy.TrainingManagementSystemServer.Service.BatchService;
 import lombok.RequiredArgsConstructor;
@@ -208,4 +210,15 @@ public class BatchServiceImp implements BatchService {
         }).collect(Collectors.toSet());
         return new ResponseEntity<>(batchSchedules,HttpStatus.OK);
     }
+
+    @Override
+    public ResponseEntity<Set<TraineeResDto>> getAllTraineeBatch(Long batchId) {
+        BatchEntity batch=batchesRepository.findByBatchId(batchId);
+        if (batch==null){
+            throw new BatchNotFoundException("Batch are not found");
+        }
+        Set<TraineeResDto> trainees=batch.getTrainees().stream().map(traineeEntity -> TraineeMappingModel.traineeEntityToDto(traineeEntity,traineeEntity.getUser())).collect(Collectors.toSet());
+        return new ResponseEntity<>(trainees,HttpStatus.OK);
+    }
+
 }

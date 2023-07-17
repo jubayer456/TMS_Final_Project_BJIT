@@ -53,4 +53,8 @@ public class BatchController {
     public ResponseEntity<Set<BatchScheduleResDto>> getAllBatchSchedule(@PathVariable Long batchId){
         return batchService.getAllBatchSchedule(batchId);
     }
+    @GetMapping("/api/batch/{batchId}/getAllTrainee")
+    public ResponseEntity<Set<TraineeResDto>> getAllTraineeBatch(@PathVariable Long batchId){
+        return batchService.getAllTraineeBatch(batchId);
+    }
 }
