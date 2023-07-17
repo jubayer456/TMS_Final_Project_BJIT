@@ -174,4 +174,20 @@ public class BatchServiceImp implements BatchService {
         return new ResponseEntity<>(success, HttpStatus.OK);
     }
 
+    @Override
+    public ResponseEntity<Object> removeScheduleFromBatch(Long scheduleId) {
+        ScheduleEntity existSchedule=scheduleRepository.findByScheduleId(scheduleId);
+        if (existSchedule==null){
+            throw new ScheduleNotFoundException("Schedule is not found for Delete");
+        }
+        BatchEntity batch=batchesRepository.findByBatchId(existSchedule.getBatchId());
+        batch.getSchedules().remove(existSchedule);
+        scheduleRepository.delete(existSchedule);
+        batchesRepository.save(batch);
+        SuccessResponseDto success=SuccessResponseDto.builder()
+                .msg("Successfully remove Schedule")
+                .status(HttpStatus.OK.value())
+                .build();
+        return new ResponseEntity<>(success, HttpStatus.OK);
+    }
 }

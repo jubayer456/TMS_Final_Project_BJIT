@@ -45,4 +45,9 @@ public class BatchController {
     public ResponseEntity<Object> addScheduleToBatch(@RequestBody ScheduleReqDto scheduleReqDto){
         return batchService.addScheduleToBatch(scheduleReqDto);
     }
+    @DeleteMapping("/api/batch/remove-schedule/{scheduleId}")
+    public ResponseEntity<Object> removeScheduleFromBatch(@PathVariable Long scheduleId){
+        return batchService.removeScheduleFromBatch(scheduleId);
+    }
+
 }
