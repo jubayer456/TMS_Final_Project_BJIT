@@ -18,5 +18,9 @@ public class TrainerController {
     public ResponseEntity<Object> createTrainers(@RequestBody TrainerRegReqDto trainerRegReqDto){
         return trainerService.createTrainers(trainerRegReqDto);
     }
+    @PutMapping("/api/auth/trainer")
+    public ResponseEntity<Object> updateTrainers(@RequestBody TrainerRegReqDto trainerRegReqDto){
+        return trainerService.updateTrainers(trainerRegReqDto);
+    }
 
 }

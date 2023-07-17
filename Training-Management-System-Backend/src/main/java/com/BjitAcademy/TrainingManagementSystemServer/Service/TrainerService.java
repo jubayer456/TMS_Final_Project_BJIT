@@ -9,4 +9,9 @@ import java.util.List;
 public interface TrainerService {
     ResponseEntity<Object> createTrainers(TrainerRegReqDto trainerRegReqDto);
 
+
+
+    ResponseEntity<Object> updateTrainers(TrainerRegReqDto trainerRegReqDto);
+
+
 }

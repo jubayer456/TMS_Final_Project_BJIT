@@ -55,4 +55,29 @@ public class TrainerServiceImp implements TrainerService {
         trainerRepository.save(trainer);
         return new ResponseEntity<>("successfully Registered", HttpStatus.OK);
     }
+    
+    @Override
+    public ResponseEntity<Object> updateTrainers(TrainerRegReqDto trainerRegReqDto) {
+        UserEntity userEntityById = userRepository.findByUserId(trainerRegReqDto.getTrainerId());
+        if (userEntityById == null) {
+            throw new UserNotFoundException("trainer is not found for update");
+        }
+        //update trainer details using set method
+        userEntityById.setEmail(trainerRegReqDto.getEmail());
+        userEntityById.setFullName(trainerRegReqDto.getFullName());
+        userEntityById.setGender(trainerRegReqDto.getGender());
+        userEntityById.setProfilePicture(trainerRegReqDto.getProfilePicture());
+        userEntityById.setContactNumber(trainerRegReqDto.getContactNumber());
+
+        TrainerEntity trainer = trainerRepository.findByTrainerId(trainerRegReqDto.getTrainerId());
+        trainer.setAddress(trainerRegReqDto.getAddress());
+        trainer.setDesignation(trainerRegReqDto.getDesignation());
+        trainer.setJoiningDate(trainerRegReqDto.getJoiningDate());
+        trainer.setExpertises(trainerRegReqDto.getExpertises());
+        trainer.setTotalYrsExp(trainerRegReqDto.getTotalYrsExp());
+        trainer.setUser(userEntityById);
+        trainerRepository.save(trainer);
+        return new ResponseEntity<>("SuccessFully Updated",HttpStatus.OK);
+    }
+
 }
