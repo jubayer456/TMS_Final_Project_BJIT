@@ -11,4 +11,6 @@ public interface TraineeService {
 
     ResponseEntity<List<TraineeResDto>> getAllTrainee();
 
+    ResponseEntity<String> updateTrainee(TraineeRegReqDto traineeReqDto);
+
 }

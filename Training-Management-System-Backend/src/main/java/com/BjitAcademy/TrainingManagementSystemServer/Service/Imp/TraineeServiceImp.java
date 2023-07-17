@@ -63,4 +63,29 @@ public class TraineeServiceImp implements TraineeService {
         List<TraineeResDto> traineeResDtoList=trainees.stream().map(trainee-> TraineeMappingModel.traineeEntityToDto(trainee,trainee.getUser())).toList();
         return new ResponseEntity<>(traineeResDtoList,HttpStatus.OK);
     }
+
+    @Override
+    public ResponseEntity<String> updateTrainee(TraineeRegReqDto traineeReqDto) {
+        UserEntity userEntityById = userRepository.findByUserId(traineeReqDto.getTraineeId());
+        if (userEntityById == null) {
+            throw new UserNotFoundException("trainee is not found for update");
+        }
+        userEntityById.setEmail(traineeReqDto.getEmail());
+        userEntityById.setFullName(traineeReqDto.getFullName());
+        userEntityById.setGender(traineeReqDto.getGender());
+        userEntityById.setProfilePicture(traineeReqDto.getProfilePicture());
+        userEntityById.setContactNumber(traineeReqDto.getContactNumber());
+
+        TraineeEntity trainee = traineeRepository.findByTraineeId(traineeReqDto.getTraineeId());
+        trainee.setAddress(traineeReqDto.getAddress());
+        trainee.setCgpa(traineeReqDto.getCgpa());
+        trainee.setDob(traineeReqDto.getDob());
+        trainee.setDegreeName(traineeReqDto.getDegreeName());
+        trainee.setEducationalInstitute(traineeReqDto.getEducationalInstitute());
+        trainee.setPassingYear(traineeReqDto.getPassingYear());
+        trainee.setUser(userEntityById);
+        userRepository.save(userEntityById);
+        return new ResponseEntity<>("SuccessFully Updated",HttpStatus.OK);
+    }
+
 }

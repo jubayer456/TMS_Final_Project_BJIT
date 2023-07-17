@@ -21,4 +21,9 @@ public class TraineeController {
     public ResponseEntity<String> updateTrainee(@RequestBody TraineeRegReqDto traineeReqDto) {
         return traineeService.updateTrainee(traineeReqDto);
     }
+
+    @GetMapping("/api/trainee/getAll")
+    public ResponseEntity<List<TraineeResDto>> getAllTrainee() {
+        return traineeService.getAllTrainee();
+    }
 }
