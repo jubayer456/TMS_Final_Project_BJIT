@@ -18,4 +18,6 @@ public interface BatchService {
 
     ResponseEntity<Object> updateBatch(Long batchId, BatchReqDto batchReqDto);
 
+    ResponseEntity<List<BatchResDto>> getAllBatch();
+
 }

@@ -27,4 +27,10 @@ public class BatchController {
     public ResponseEntity<Object> updateBatch(@PathVariable Long batchId, @RequestBody BatchReqDto batchReqDto){
         return batchService.updateBatch(batchId,batchReqDto);
     }
+    @GetMapping("/api/batch/getAll")
+    public ResponseEntity<List<BatchResDto>> getAllBatch(){
+        return batchService.getAllBatch();
+    }
+
+
 }
