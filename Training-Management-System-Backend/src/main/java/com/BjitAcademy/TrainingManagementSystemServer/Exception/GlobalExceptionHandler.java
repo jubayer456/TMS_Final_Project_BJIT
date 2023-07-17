@@ -13,8 +13,9 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({
             UserNotFoundException.class,
             UserAlreadyExistException.class,
-           TraineeNotFoundException.class,
-            TraineeAlreadyExistException.class
+            TraineeNotFoundException.class,
+            TraineeAlreadyExistException.class,
+            TrainerNotFoundException.class
 
     })
     public ResponseEntity<Object> runtimeException(Exception ex) {
@@ -31,6 +32,9 @@ public class GlobalExceptionHandler {
             return new ResponseEntity<>(error,HttpStatus.NOT_ACCEPTABLE);
         }
         else if(ex instanceof TraineeAlreadyExistException){
+            ErrorResponseDto error=new ErrorResponseDto(HttpStatus.NOT_ACCEPTABLE.value(),ex.getMessage());
+            return new ResponseEntity<>(error,HttpStatus.NOT_ACCEPTABLE);
+        }  else if(ex instanceof TrainerNotFoundException){
             ErrorResponseDto error=new ErrorResponseDto(HttpStatus.NOT_ACCEPTABLE.value(),ex.getMessage());
             return new ResponseEntity<>(error,HttpStatus.NOT_ACCEPTABLE);
         }

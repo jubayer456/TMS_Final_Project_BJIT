@@ -30,6 +30,7 @@ public class SecurityConfig {
                 .permitAll()
                 .requestMatchers("/api/auth/login")
                 .permitAll() .requestMatchers("/api/auth/trainee","/api/trainee/{traineeId}","/api/trainee/getAll")
+                .permitAll().requestMatchers("/api/auth/trainer","/api/auth/trainer","/api/trainer/{trainerId}","/api/trainer/getAll")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
