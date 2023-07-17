@@ -46,4 +46,23 @@ public class CourseServiceImp implements CourseService {
         return new ResponseEntity<>(success,HttpStatus.OK);
     }
 
+    @Override
+    public ResponseEntity<Object> updateCourse(Long courseId, CourseReqDto courseReqDto) {
+       CourseEntity course=courseRepository.findByCourseId(courseId);
+       if(course==null){
+           throw new CourseNotFoundException("course not found for update");
+       }
+       TrainerEntity trainer=trainerRepository.findByTrainerId(courseReqDto.getTrainerId());
+       if (trainer==null){
+           throw new TraineeNotFoundException("please enter valid trainerId");
+       }
+       course.setName(courseReqDto.getName());
+       course.setTrainer(trainer);
+       courseRepository.save(course);
+        SuccessResponseDto success=SuccessResponseDto.builder()
+                .status(HttpStatus.OK.value())
+                .msg("Successfully update Course")
+                .build();
+       return new ResponseEntity<>(success,HttpStatus.OK);
+    }
 }

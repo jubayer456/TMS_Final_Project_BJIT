@@ -19,5 +19,10 @@ public class CourseController {
     public ResponseEntity<Object> createCourse(@RequestBody CourseReqDto courseReqDto){
         return courseService.createCourse(courseReqDto);
     }
+    @PutMapping("/api/course/{courseId}")
+    public ResponseEntity<Object> updateCourse(@PathVariable Long courseId,@RequestBody CourseReqDto courseReqDto){
+        return courseService.updateCourse(courseId,courseReqDto);
+    }
+
 
 }

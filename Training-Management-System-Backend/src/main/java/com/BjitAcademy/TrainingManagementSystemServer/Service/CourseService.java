@@ -12,5 +12,7 @@ public interface CourseService {
 
     ResponseEntity<Object> createCourse(CourseReqDto courseReqDto);
 
+    ResponseEntity<Object> updateCourse(Long courseId,CourseReqDto courseReqDto);
+
 
 }
