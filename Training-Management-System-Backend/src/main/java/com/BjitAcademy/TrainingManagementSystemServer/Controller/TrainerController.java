@@ -26,4 +26,8 @@ public class TrainerController {
     public ResponseEntity<Object> deleteTrainer(@PathVariable Long trainerId){
         return trainerService.deleteTrainer(trainerId);
     }
+    @GetMapping("/api/trainer/getAll")
+    public ResponseEntity<List<TrainerResDto>> getAllTrainee() {
+        return trainerService.getAllTrainer();
+    }
 }

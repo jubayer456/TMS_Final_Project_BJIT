@@ -56,6 +56,15 @@ public class TrainerServiceImp implements TrainerService {
         return new ResponseEntity<>("successfully Registered", HttpStatus.OK);
     }
 
+    @Override
+    public ResponseEntity<List<TrainerResDto>> getAllTrainer() {
+        List<TrainerEntity> trainees=trainerRepository.findAll();
+
+        //trainer entity to trainer res dto using mapping for user details collecting for showing frontend
+        List<TrainerResDto> traineeResDtoList=trainees.stream().map(
+                trainer-> TrainerMappingModel.trainerEntityToDto(trainer,trainer.getUser())).toList();
+        return new ResponseEntity<>(traineeResDtoList,HttpStatus.OK);
+    }
 
     @Override
     public ResponseEntity<Object> updateTrainers(TrainerRegReqDto trainerRegReqDto) {
