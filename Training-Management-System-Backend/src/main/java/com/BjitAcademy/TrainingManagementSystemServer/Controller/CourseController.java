@@ -29,4 +29,9 @@ public class CourseController {
         return courseService.getCourseDetails(courseId);
     }
 
+    @GetMapping("/api/course/getAll")
+    public ResponseEntity<List<CourseResDto>> getAllCourse(){
+        return courseService.getAllCourse();
+    }
+
 }

@@ -76,4 +76,10 @@ public class CourseServiceImp implements CourseService {
         return new ResponseEntity<>(courseResDto,HttpStatus.OK);
     }
 
+    @Override
+    public ResponseEntity<List<CourseResDto>> getAllCourse() {
+        List<CourseEntity> courses=courseRepository.findAll();
+        List<CourseResDto> courseResList=courses.stream().map(CourseMappingModel::CourseEntityToDto).toList();
+        return new ResponseEntity<>(courseResList, HttpStatus.OK);
+    }
 }

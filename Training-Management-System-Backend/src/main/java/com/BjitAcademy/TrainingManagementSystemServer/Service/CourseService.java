@@ -16,4 +16,5 @@ public interface CourseService {
 
     ResponseEntity<Object> getCourseDetails(Long courseId);
 
+    ResponseEntity<List<CourseResDto>> getAllCourse();
 }
