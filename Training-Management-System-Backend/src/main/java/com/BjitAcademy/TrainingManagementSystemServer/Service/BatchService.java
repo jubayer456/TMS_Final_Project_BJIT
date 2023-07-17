@@ -20,4 +20,6 @@ public interface BatchService {
 
     ResponseEntity<List<BatchResDto>> getAllBatch();
 
+    ResponseEntity<Object> addTraineeToBatch(BatchTraineeReqDto batchTraineeReqDto);
+
 }

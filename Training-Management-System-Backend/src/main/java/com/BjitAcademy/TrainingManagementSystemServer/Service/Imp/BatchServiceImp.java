@@ -4,6 +4,7 @@ import com.BjitAcademy.TrainingManagementSystemServer.Dto.Authentication.Success
 import com.BjitAcademy.TrainingManagementSystemServer.Dto.Batch.BatchReqDto;
 
 import com.BjitAcademy.TrainingManagementSystemServer.Dto.Batch.BatchResDto;
+import com.BjitAcademy.TrainingManagementSystemServer.Dto.Batch.BatchTraineeReqDto;
 import com.BjitAcademy.TrainingManagementSystemServer.Entity.*;
 import com.BjitAcademy.TrainingManagementSystemServer.Exception.*;
 import com.BjitAcademy.TrainingManagementSystemServer.Mapper.BatchMappingModel;
@@ -24,6 +25,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BatchServiceImp implements BatchService {
     private final BatchesRepository batchesRepository;
+    private final TraineeRepository traineeRepository;
     private final ClassRoomRepository classRoomRepository;
     @Override
     public ResponseEntity<Object> createBatch(BatchReqDto batchReqDto) {
@@ -81,4 +83,36 @@ public class BatchServiceImp implements BatchService {
         List<BatchResDto> batchResDtoList=batches.stream().map(BatchMappingModel::BatchEntityToDto).toList();
         return new ResponseEntity<>(batchResDtoList,HttpStatus.OK);
     }
+    @Override
+    public ResponseEntity<Object> addTraineeToBatch(BatchTraineeReqDto batchTraineeReqDto) {
+        BatchEntity batch=batchesRepository.findByBatchId(batchTraineeReqDto.getBatchId());
+        if(batch==null){
+            throw new BatchNotFoundException("Batch not Found");
+        }
+        TraineeEntity trainee=traineeRepository.findByTraineeId(batchTraineeReqDto.getTraineeId());
+        if(trainee==null){
+            throw new TraineeNotFoundException("Trainee not found");
+        }
+        //checking trainee already assigned another batch?
+        if (trainee.getBatchId()!=null && !trainee.getBatchId().equals(batch.getBatchId())){
+            throw new TraineeAlreadyExistException("Trainee is already inserted "+ batch.getBatchName()+" Batch");
+        }
+        //checking trainee already assigned current batch where I want to assign?
+        if (trainee.getBatchId() != null ){
+            throw new TraineeAlreadyExistException("Trainee is already inserted this batch Batch");
+        }
+        //set batch id to trainee table
+        trainee.setBatchId(batch.getBatchId());
+        //add to batch the trainee entity
+        batch.getTrainees().add(trainee);
+        //save the batch entity to batch repo
+        batchesRepository.save(batch);
+        //give success msg to UI with status code
+        SuccessResponseDto success=SuccessResponseDto.builder()
+                .msg("Successfully add trainee to batch")
+                .status(HttpStatus.OK.value())
+                .build();
+        return new ResponseEntity<>(success, HttpStatus.OK);
+    }
+
 }

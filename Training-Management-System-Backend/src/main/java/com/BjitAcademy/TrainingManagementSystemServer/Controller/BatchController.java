@@ -33,4 +33,9 @@ public class BatchController {
     }
 
 
+    @PostMapping("/api/batch/add-trainee")
+    public ResponseEntity<Object> addTraineeToBatch(@RequestBody BatchTraineeReqDto batchTraineeReqDto){
+        return batchService.addTraineeToBatch(batchTraineeReqDto);
+    }
+
 }
