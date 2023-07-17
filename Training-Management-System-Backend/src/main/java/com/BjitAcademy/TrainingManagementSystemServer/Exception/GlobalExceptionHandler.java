@@ -15,7 +15,8 @@ public class GlobalExceptionHandler {
             UserAlreadyExistException.class,
             TraineeNotFoundException.class,
             TraineeAlreadyExistException.class,
-            TrainerNotFoundException.class
+            TrainerNotFoundException.class,
+            CourseNotFoundException.class
 
     })
     public ResponseEntity<Object> runtimeException(Exception ex) {
@@ -35,6 +36,9 @@ public class GlobalExceptionHandler {
             ErrorResponseDto error=new ErrorResponseDto(HttpStatus.NOT_ACCEPTABLE.value(),ex.getMessage());
             return new ResponseEntity<>(error,HttpStatus.NOT_ACCEPTABLE);
         }  else if(ex instanceof TrainerNotFoundException){
+            ErrorResponseDto error=new ErrorResponseDto(HttpStatus.NOT_ACCEPTABLE.value(),ex.getMessage());
+            return new ResponseEntity<>(error,HttpStatus.NOT_ACCEPTABLE);
+        } else if(ex instanceof CourseNotFoundException){
             ErrorResponseDto error=new ErrorResponseDto(HttpStatus.NOT_ACCEPTABLE.value(),ex.getMessage());
             return new ResponseEntity<>(error,HttpStatus.NOT_ACCEPTABLE);
         }
