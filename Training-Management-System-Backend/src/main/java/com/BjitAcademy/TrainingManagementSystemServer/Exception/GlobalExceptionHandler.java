@@ -16,7 +16,11 @@ public class GlobalExceptionHandler {
             TraineeNotFoundException.class,
             TraineeAlreadyExistException.class,
             TrainerNotFoundException.class,
-            CourseNotFoundException.class
+            CourseNotFoundException.class,
+            BatchAlreadyExistException.class,
+            BatchNotFoundException.class,
+            ScheduleAlreadyExistException.class,
+            ScheduleNotFoundException.class
 
     })
     public ResponseEntity<Object> runtimeException(Exception ex) {
@@ -39,6 +43,21 @@ public class GlobalExceptionHandler {
             ErrorResponseDto error=new ErrorResponseDto(HttpStatus.NOT_ACCEPTABLE.value(),ex.getMessage());
             return new ResponseEntity<>(error,HttpStatus.NOT_ACCEPTABLE);
         } else if(ex instanceof CourseNotFoundException){
+            ErrorResponseDto error=new ErrorResponseDto(HttpStatus.NOT_ACCEPTABLE.value(),ex.getMessage());
+            return new ResponseEntity<>(error,HttpStatus.NOT_ACCEPTABLE);
+        } else if(ex instanceof BatchNotFoundException){
+            ErrorResponseDto error=new ErrorResponseDto(HttpStatus.NOT_ACCEPTABLE.value(),ex.getMessage());
+            return new ResponseEntity<>(error,HttpStatus.NOT_ACCEPTABLE);
+        }
+        else if(ex instanceof BatchAlreadyExistException){
+            ErrorResponseDto error=new ErrorResponseDto(HttpStatus.NOT_ACCEPTABLE.value(),ex.getMessage());
+            return new ResponseEntity<>(error,HttpStatus.NOT_ACCEPTABLE);
+        }
+        else if(ex instanceof ScheduleAlreadyExistException){
+            ErrorResponseDto error=new ErrorResponseDto(HttpStatus.NOT_ACCEPTABLE.value(),ex.getMessage());
+            return new ResponseEntity<>(error,HttpStatus.NOT_ACCEPTABLE);
+
+        }else if(ex instanceof ScheduleNotFoundException){
             ErrorResponseDto error=new ErrorResponseDto(HttpStatus.NOT_ACCEPTABLE.value(),ex.getMessage());
             return new ResponseEntity<>(error,HttpStatus.NOT_ACCEPTABLE);
         }
