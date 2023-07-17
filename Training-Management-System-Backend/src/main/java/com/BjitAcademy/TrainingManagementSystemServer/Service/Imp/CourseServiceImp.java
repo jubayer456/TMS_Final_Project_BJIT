@@ -10,7 +10,6 @@ import com.BjitAcademy.TrainingManagementSystemServer.Exception.CourseNotFoundEx
 import com.BjitAcademy.TrainingManagementSystemServer.Exception.ScheduleAlreadyExistException;
 import com.BjitAcademy.TrainingManagementSystemServer.Exception.TraineeNotFoundException;
 import com.BjitAcademy.TrainingManagementSystemServer.Exception.TrainerNotFoundException;
-import com.BjitAcademy.TrainingManagementSystemServer.Mapper.AdminMappingModel;
 import com.BjitAcademy.TrainingManagementSystemServer.Mapper.CourseMappingModel;
 import com.BjitAcademy.TrainingManagementSystemServer.Repository.CourseRepository;
 import com.BjitAcademy.TrainingManagementSystemServer.Repository.ScheduleRepository;
@@ -81,5 +80,25 @@ public class CourseServiceImp implements CourseService {
         List<CourseEntity> courses=courseRepository.findAll();
         List<CourseResDto> courseResList=courses.stream().map(CourseMappingModel::CourseEntityToDto).toList();
         return new ResponseEntity<>(courseResList, HttpStatus.OK);
+    }
+
+
+    @Override
+    public ResponseEntity<Object> deleteCourse(Long courseId) {
+        List<ScheduleEntity> schedules=scheduleRepository.findAll();
+        if(schedules.stream().anyMatch(scheduleEntity -> Objects.equals(scheduleEntity.getCourseId(), courseId))){
+            throw new ScheduleAlreadyExistException("Schedule already exist so you can not delete");
+        }
+        CourseEntity course=courseRepository.findByCourseId(courseId);
+        if (course==null){
+            throw new CourseNotFoundException("Course id is invalid,,, please give a valid course Id");
+        }
+        course.setTrainer(null);
+        courseRepository.delete(course);
+        SuccessResponseDto success=SuccessResponseDto.builder()
+                .status(HttpStatus.OK.value())
+                .msg("SuccessFully deleted course id: "+courseId)
+                .build();
+        return new ResponseEntity<>(success,HttpStatus.OK);
     }
 }

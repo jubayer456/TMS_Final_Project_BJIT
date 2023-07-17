@@ -33,5 +33,9 @@ public class CourseController {
     public ResponseEntity<List<CourseResDto>> getAllCourse(){
         return courseService.getAllCourse();
     }
+    @DeleteMapping("/api/course/{courseId}")
+    public ResponseEntity<Object> deleteCourse(@PathVariable Long courseId){
+        return courseService.deleteCourse(courseId);
+    }
 
 }

@@ -17,4 +17,6 @@ public interface CourseService {
     ResponseEntity<Object> getCourseDetails(Long courseId);
 
     ResponseEntity<List<CourseResDto>> getAllCourse();
+
+    ResponseEntity<Object> deleteCourse(Long courseId);
 }
