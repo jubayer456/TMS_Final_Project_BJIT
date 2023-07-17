@@ -24,5 +24,9 @@ public class CourseController {
         return courseService.updateCourse(courseId,courseReqDto);
     }
 
+    @GetMapping("/api/course/{courseId}")
+    public ResponseEntity<Object> getCourseDetails(@PathVariable Long courseId){
+        return courseService.getCourseDetails(courseId);
+    }
 
 }

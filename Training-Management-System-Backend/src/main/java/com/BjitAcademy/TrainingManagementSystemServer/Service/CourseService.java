@@ -14,5 +14,6 @@ public interface CourseService {
 
     ResponseEntity<Object> updateCourse(Long courseId,CourseReqDto courseReqDto);
 
+    ResponseEntity<Object> getCourseDetails(Long courseId);
 
 }

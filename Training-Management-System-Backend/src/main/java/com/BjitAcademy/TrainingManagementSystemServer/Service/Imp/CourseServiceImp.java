@@ -65,4 +65,15 @@ public class CourseServiceImp implements CourseService {
                 .build();
        return new ResponseEntity<>(success,HttpStatus.OK);
     }
+
+    @Override
+    public ResponseEntity<Object> getCourseDetails(Long courseId) {
+        CourseEntity course=courseRepository.findByCourseId(courseId);
+        if(course==null){
+            throw new CourseNotFoundException("course not found for update");
+        }
+        CourseResDto courseResDto=CourseMappingModel.CourseEntityToDto(course);
+        return new ResponseEntity<>(courseResDto,HttpStatus.OK);
+    }
+
 }
