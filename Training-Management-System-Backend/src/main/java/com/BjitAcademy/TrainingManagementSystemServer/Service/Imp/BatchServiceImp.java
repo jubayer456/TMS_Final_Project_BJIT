@@ -5,6 +5,7 @@ import com.BjitAcademy.TrainingManagementSystemServer.Dto.Batch.BatchReqDto;
 
 import com.BjitAcademy.TrainingManagementSystemServer.Dto.Batch.BatchResDto;
 import com.BjitAcademy.TrainingManagementSystemServer.Dto.Batch.BatchTraineeReqDto;
+import com.BjitAcademy.TrainingManagementSystemServer.Dto.Schedule.BatchScheduleResDto;
 import com.BjitAcademy.TrainingManagementSystemServer.Dto.Schedule.ScheduleReqDto;
 import com.BjitAcademy.TrainingManagementSystemServer.Entity.*;
 import com.BjitAcademy.TrainingManagementSystemServer.Exception.*;
@@ -21,6 +22,8 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -189,5 +192,20 @@ public class BatchServiceImp implements BatchService {
                 .status(HttpStatus.OK.value())
                 .build();
         return new ResponseEntity<>(success, HttpStatus.OK);
+    }
+    @Override
+    public ResponseEntity<Set<BatchScheduleResDto>> getAllBatchSchedule(Long batchId) {
+        BatchEntity batch=batchesRepository.findByBatchId(batchId);
+        if (batch==null){
+            throw new BatchNotFoundException("Batch not found for to show all schedules details");
+        }
+        Set<ScheduleEntity> schedules=batch.getSchedules();
+
+        Set<BatchScheduleResDto> batchSchedules=schedules.stream().map(schedule->{
+            CourseEntity course=courseRepository.findByCourseId(schedule.getCourseId());
+            return BatchMappingModel.scheduleEntityToBatchRes(schedule,course,batchId);
+
+        }).collect(Collectors.toSet());
+        return new ResponseEntity<>(batchSchedules,HttpStatus.OK);
     }
 }

@@ -49,5 +49,8 @@ public class BatchController {
     public ResponseEntity<Object> removeScheduleFromBatch(@PathVariable Long scheduleId){
         return batchService.removeScheduleFromBatch(scheduleId);
     }
-
+    @GetMapping("/api/batch/{batchId}/getAllSchedule")
+    public ResponseEntity<Set<BatchScheduleResDto>> getAllBatchSchedule(@PathVariable Long batchId){
+        return batchService.getAllBatchSchedule(batchId);
+    }
 }
