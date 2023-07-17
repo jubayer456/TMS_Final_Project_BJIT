@@ -41,5 +41,8 @@ public class BatchController {
     public ResponseEntity<Object> removeTraineeFromBatch(@PathVariable Long traineeId){
         return batchService.removeTraineeFromBatch(traineeId);
     }
-
+    @PostMapping("/api/batch/add-schedule")
+    public ResponseEntity<Object> addScheduleToBatch(@RequestBody ScheduleReqDto scheduleReqDto){
+        return batchService.addScheduleToBatch(scheduleReqDto);
+    }
 }

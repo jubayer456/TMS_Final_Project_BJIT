@@ -5,10 +5,12 @@ import com.BjitAcademy.TrainingManagementSystemServer.Dto.Batch.BatchReqDto;
 
 import com.BjitAcademy.TrainingManagementSystemServer.Dto.Batch.BatchResDto;
 import com.BjitAcademy.TrainingManagementSystemServer.Dto.Batch.BatchTraineeReqDto;
+import com.BjitAcademy.TrainingManagementSystemServer.Dto.Schedule.ScheduleReqDto;
 import com.BjitAcademy.TrainingManagementSystemServer.Entity.*;
 import com.BjitAcademy.TrainingManagementSystemServer.Exception.*;
 import com.BjitAcademy.TrainingManagementSystemServer.Mapper.BatchMappingModel;
 
+import com.BjitAcademy.TrainingManagementSystemServer.Mapper.ScheduleMappingModel;
 import com.BjitAcademy.TrainingManagementSystemServer.Repository.*;
 import com.BjitAcademy.TrainingManagementSystemServer.Service.BatchService;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +28,8 @@ import java.util.List;
 public class BatchServiceImp implements BatchService {
     private final BatchesRepository batchesRepository;
     private final TraineeRepository traineeRepository;
+    private final CourseRepository courseRepository;
+    private final ScheduleRepository scheduleRepository;
     private final ClassRoomRepository classRoomRepository;
     @Override
     public ResponseEntity<Object> createBatch(BatchReqDto batchReqDto) {
@@ -136,4 +140,38 @@ public class BatchServiceImp implements BatchService {
                 .build();
         return new ResponseEntity<>(success, HttpStatus.OK);
     }
+
+    @Override
+    public ResponseEntity<Object> addScheduleToBatch(ScheduleReqDto scheduleReqDto) {
+        BatchEntity batch=batchesRepository.findByBatchId(scheduleReqDto.getBatchId());
+        if(batch==null){
+            throw new BatchNotFoundException("Batch not found for Insert Scheduling");
+        }
+        CourseEntity course=courseRepository.findByCourseId(scheduleReqDto.getCourseId());
+        if(course==null){
+            throw new CourseNotFoundException("Course are not found for Scheduling");
+        }
+        //for checking date ,,, using date formatter
+        DateTimeFormatter dateTimeFormatter=DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        //checking valid starting date and ending date
+        if((LocalDate.parse((CharSequence) batch.getStartingDate(),dateTimeFormatter).isAfter(LocalDate.parse((CharSequence) scheduleReqDto.getEndingDate(),dateTimeFormatter)) )||
+                (LocalDate.parse((CharSequence)scheduleReqDto.getEndingDate(),dateTimeFormatter).isAfter(LocalDate.parse((CharSequence)  batch.getEndingDate(),dateTimeFormatter))
+                )){
+            throw new ScheduleNotFoundException("please enter a valid date range");
+        }
+        ScheduleEntity existSchedule=scheduleRepository.findByBatchIdAndCourseId(scheduleReqDto.getBatchId(),scheduleReqDto.getCourseId());
+        if (existSchedule!=null){
+            throw new ScheduleNotFoundException("Course is already exist in Batch,,,, try to insert new course");
+        }
+        ScheduleEntity newSchedule=scheduleRepository.save(ScheduleMappingModel.scheduleDtoToEntity(scheduleReqDto,course));
+        batch.getSchedules().add(newSchedule);
+        batchesRepository.save(batch);
+        //give success msg to UI with status code
+        SuccessResponseDto success=SuccessResponseDto.builder()
+                .msg("Successfully add schedule to batch")
+                .status(HttpStatus.OK.value())
+                .build();
+        return new ResponseEntity<>(success, HttpStatus.OK);
+    }
+
 }

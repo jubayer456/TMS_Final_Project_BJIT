@@ -24,4 +24,6 @@ public interface BatchService {
 
     ResponseEntity<Object> removeTraineeFromBatch(Long traineeId);
 
+    ResponseEntity<Object> addScheduleToBatch(ScheduleReqDto scheduleReqDto);
+
 }
