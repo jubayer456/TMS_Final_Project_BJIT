@@ -17,4 +17,8 @@ public class TraineeController {
     public ResponseEntity<Object> createTrainee(@RequestBody TraineeRegReqDto traineeReqDto) {
         return traineeService.createTrainee(traineeReqDto);
     }
+    @PutMapping("/api/auth/trainee")
+    public ResponseEntity<String> updateTrainee(@RequestBody TraineeRegReqDto traineeReqDto) {
+        return traineeService.updateTrainee(traineeReqDto);
+    }
 }

@@ -9,4 +9,6 @@ import java.util.List;
 public interface TraineeService {
     ResponseEntity<Object> createTrainee(TraineeRegReqDto traineeReqDto);
 
+    ResponseEntity<List<TraineeResDto>> getAllTrainee();
+
 }

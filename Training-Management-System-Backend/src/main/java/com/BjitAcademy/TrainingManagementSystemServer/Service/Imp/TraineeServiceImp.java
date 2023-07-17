@@ -56,4 +56,11 @@ public class TraineeServiceImp implements TraineeService {
                 .build();
         return new ResponseEntity<>(success ,HttpStatus.OK);
     }
+
+    @Override
+    public ResponseEntity<List<TraineeResDto>> getAllTrainee() {
+        List<TraineeEntity> trainees=traineeRepository.findAll();
+        List<TraineeResDto> traineeResDtoList=trainees.stream().map(trainee-> TraineeMappingModel.traineeEntityToDto(trainee,trainee.getUser())).toList();
+        return new ResponseEntity<>(traineeResDtoList,HttpStatus.OK);
+    }
 }
