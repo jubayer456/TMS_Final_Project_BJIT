@@ -21,7 +21,10 @@ public class TraineeController {
     public ResponseEntity<String> updateTrainee(@RequestBody TraineeRegReqDto traineeReqDto) {
         return traineeService.updateTrainee(traineeReqDto);
     }
-
+    @DeleteMapping("/api/trainee/{traineeId}")
+    public ResponseEntity<String> deleteTrainee(@PathVariable Long traineeId) {
+        return traineeService.deleteTrainee(traineeId);
+    }
     @GetMapping("/api/trainee/getAll")
     public ResponseEntity<List<TraineeResDto>> getAllTrainee() {
         return traineeService.getAllTrainee();

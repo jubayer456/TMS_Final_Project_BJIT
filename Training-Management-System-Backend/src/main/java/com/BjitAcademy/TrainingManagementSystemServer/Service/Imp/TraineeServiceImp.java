@@ -38,6 +38,8 @@ public class TraineeServiceImp implements TraineeService {
             throw new UserAlreadyExistException("User Already Exist.. Please Change the email");
         }
 
+        // trainee Registration Dto have some filed which is insert to user table,,,
+
         UserEntity user = UserEntity.builder()
                 .userId(traineeRegReqDto.getTraineeId())
                 .fullName(traineeRegReqDto.getFullName())
@@ -50,6 +52,8 @@ public class TraineeServiceImp implements TraineeService {
                 .build();
         TraineeEntity trainee= TraineeMappingModel.traineeDtoToEntity(traineeRegReqDto,user);
         traineeRepository.save(trainee);
+
+        //creating success class for getting backend response msg to frontend
         SuccessResponseDto success=SuccessResponseDto.builder()
                 .status(HttpStatus.OK.value())
                 .msg("successfully registered")
@@ -88,4 +92,13 @@ public class TraineeServiceImp implements TraineeService {
         return new ResponseEntity<>("SuccessFully Updated",HttpStatus.OK);
     }
 
+    @Override
+    public ResponseEntity<String> deleteTrainee(Long traineeId) {
+        TraineeEntity trainee = traineeRepository.findByTraineeId(traineeId);
+        if (trainee==null){
+            throw new TraineeNotFoundException("Trainee Not Found for delete");
+        }
+        traineeRepository.delete(trainee);
+        return new ResponseEntity<>("Successfully Deleted",HttpStatus.OK);
+    }
 }

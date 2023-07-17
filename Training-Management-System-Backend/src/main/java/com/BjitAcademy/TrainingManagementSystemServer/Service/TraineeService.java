@@ -13,4 +13,5 @@ public interface TraineeService {
 
     ResponseEntity<String> updateTrainee(TraineeRegReqDto traineeReqDto);
 
+    ResponseEntity<String> deleteTrainee(Long traineeId);
 }
