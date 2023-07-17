@@ -23,4 +23,8 @@ public class BatchController {
     public ResponseEntity<Object> createBatch(@RequestBody BatchReqDto batchReqDto){
         return batchService.createBatch(batchReqDto);
     }
+    @PutMapping("/api/batch/{batchId}")
+    public ResponseEntity<Object> updateBatch(@PathVariable Long batchId, @RequestBody BatchReqDto batchReqDto){
+        return batchService.updateBatch(batchId,batchReqDto);
+    }
 }

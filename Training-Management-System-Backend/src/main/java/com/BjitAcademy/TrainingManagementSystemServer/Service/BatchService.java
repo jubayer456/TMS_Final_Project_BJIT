@@ -16,4 +16,6 @@ public interface BatchService {
 
     ResponseEntity<Object> createBatch(BatchReqDto batchReqDto);
 
+    ResponseEntity<Object> updateBatch(Long batchId, BatchReqDto batchReqDto);
+
 }

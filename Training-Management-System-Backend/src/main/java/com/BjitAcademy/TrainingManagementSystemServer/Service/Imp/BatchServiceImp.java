@@ -22,7 +22,6 @@ import java.time.format.DateTimeFormatter;
 @RequiredArgsConstructor
 public class BatchServiceImp implements BatchService {
     private final BatchesRepository batchesRepository;
-
     private final ClassRoomRepository classRoomRepository;
     @Override
     public ResponseEntity<Object> createBatch(BatchReqDto batchReqDto) {
@@ -44,4 +43,22 @@ public class BatchServiceImp implements BatchService {
         return new ResponseEntity<>(success, HttpStatus.OK);
     }
 
+    @Override
+    public ResponseEntity<Object> updateBatch(Long batchId, BatchReqDto batchReqDto) {
+        BatchEntity batch=batchesRepository.findByBatchId(batchId);
+        if (batch==null){
+            throw new BatchNotFoundException("Batch is Not Found");
+        }
+        batch.setBatchName(batchReqDto.getBatchName());
+        batch.setStartingDate(batchReqDto.getStartingDate());
+        batch.setEndingDate(batchReqDto.getStartingDate());
+        batch.setTotalNumOfTrainee(batchReqDto.getTotalNumOfTrainee());
+        batchesRepository.save(batch);
+        SuccessResponseDto success=SuccessResponseDto.builder()
+                .msg("Successfully Batch updated")
+                .status(HttpStatus.OK.value())
+                .build();
+        return new ResponseEntity<>(success, HttpStatus.OK);
+    }
+    
 }
