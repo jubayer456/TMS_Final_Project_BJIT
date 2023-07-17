@@ -22,4 +22,6 @@ public interface BatchService {
 
     ResponseEntity<Object> addTraineeToBatch(BatchTraineeReqDto batchTraineeReqDto);
 
+    ResponseEntity<Object> removeTraineeFromBatch(Long traineeId);
+
 }

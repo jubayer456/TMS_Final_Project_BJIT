@@ -37,5 +37,9 @@ public class BatchController {
     public ResponseEntity<Object> addTraineeToBatch(@RequestBody BatchTraineeReqDto batchTraineeReqDto){
         return batchService.addTraineeToBatch(batchTraineeReqDto);
     }
+    @DeleteMapping("/api/batch/remove-trainee/{traineeId}")
+    public ResponseEntity<Object> removeTraineeFromBatch(@PathVariable Long traineeId){
+        return batchService.removeTraineeFromBatch(traineeId);
+    }
 
 }

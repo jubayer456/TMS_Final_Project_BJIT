@@ -115,4 +115,25 @@ public class BatchServiceImp implements BatchService {
         return new ResponseEntity<>(success, HttpStatus.OK);
     }
 
+    @Override
+    public ResponseEntity<Object> removeTraineeFromBatch(Long traineeId) {
+        TraineeEntity trainee=traineeRepository.findByTraineeId(traineeId);
+        if (trainee==null ||trainee.getBatchId()==null){
+            throw new TraineeNotFoundException("Trainee Are not found for Delete");
+        }
+        //find batch using traineeId
+        BatchEntity batch=batchesRepository.findByBatchId(trainee.getBatchId());
+        //remove  trainee from batch
+        batch.getTrainees().remove(trainee);
+        //set the trainee batch status null
+        trainee.setBatchId(null);
+        //save updated trainee entity to trainee Repository
+        traineeRepository.save(trainee);
+        //give success msg to UI with status code
+        SuccessResponseDto success=SuccessResponseDto.builder()
+                .msg("remove trainee to Batch")
+                .status(HttpStatus.OK.value())
+                .build();
+        return new ResponseEntity<>(success, HttpStatus.OK);
+    }
 }
