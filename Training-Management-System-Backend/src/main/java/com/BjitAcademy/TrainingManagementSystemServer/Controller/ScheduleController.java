@@ -22,4 +22,8 @@ public class ScheduleController {
     private ResponseEntity<Object> getAllScheduleForTrainer(@PathVariable Long trainerId){
         return scheduleService.getAllScheduleForTrainer(trainerId);
     }
+    @PutMapping("/api/schedule/{assignmentId}")
+    private ResponseEntity<Object> updateAssignment(@PathVariable Long assignmentId,@RequestBody AssignmentReqDto assignmentReqDto){
+        return scheduleService.updateAssignment(assignmentId,assignmentReqDto);
+    }
 }

@@ -55,4 +55,25 @@ public class ScheduleServiceImp implements ScheduleService {
         List<ScheduleResDto> trainerSchedules=scheduleRepository.findByTrainerId(trainerId).stream().map(ScheduleMappingModel::scheduleEntityToDto).toList();
         return new ResponseEntity<>(trainerSchedules,HttpStatus.OK);
     }
+
+    @Override
+    public ResponseEntity<Object> updateAssignment(Long assignmentId,AssignmentReqDto assignmentReqDto) {
+        AssignmentEntity assignment=assignmentRepository.findByAssignmentId(assignmentId);
+        if (assignment==null){
+            throw new AssignmentNotFoundException("Assignment are not found for update");
+        }
+        //using set method for updating assignment data
+        assignment.setAssignmentFile(assignmentReqDto.getAssignmentFile());
+        assignment.setAssignmentName(assignmentReqDto.getAssignmentName());
+        assignment.setDeadLine(assignmentReqDto.getDeadLine());
+        //save the assignment entity in assignment repository
+        assignmentRepository.save(assignment);
+        //showing success msg in UI schedule using status code
+        SuccessResponseDto success=SuccessResponseDto.builder()
+                .msg("Successfully updated")
+                .status(HttpStatus.OK.value())
+                .build();
+        return new ResponseEntity<>(success, HttpStatus.OK);
+    }
+
 }
