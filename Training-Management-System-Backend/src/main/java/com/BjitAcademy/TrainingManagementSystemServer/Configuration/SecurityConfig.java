@@ -36,6 +36,8 @@ public class SecurityConfig {
                 .requestMatchers("/api/batch/save","/api/batch/{batchId}","/api/batch/getAll","/api/batch/add-trainee","/api/batch/remove-trainee/{traineeId}",
                         "/api/batch/add-schedule","/api/batch/remove-schedule/{scheduleId}","/api/batch/{batchId}/getAllSchedule","/api/batch/{batchId}/getAllTrainee"
                 )
+                .permitAll().requestMatchers("/api/schedule/{scheduleId}/add-assignment","/api/schedule/{trainerId}","/api/schedule/{assignmentId}","/api/schedule/{assignmentId}","/api/schedule/add-assignmentSub","/api/schedule/{scheduleId}/allAssignment",
+                        "/api/schedule/{scheduleId}/{assignmentId}","/api/schedule/{batchId}/allAssignmentSub","/api/schedule/{assignmentId}/{submissionId}")
                 .permitAll()
                 .anyRequest()
                 .authenticated()

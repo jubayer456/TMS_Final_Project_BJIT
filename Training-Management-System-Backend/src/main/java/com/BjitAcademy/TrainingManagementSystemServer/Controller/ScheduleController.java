@@ -13,6 +13,7 @@ import java.util.Set;
 @RestController
 @RequiredArgsConstructor
 public class ScheduleController {
+
     private final ScheduleService scheduleService;
     @PostMapping("/api/schedule/{scheduleId}/add-assignment")
     private ResponseEntity<Object> addAssignmentToSchedule(@PathVariable Long scheduleId,@RequestBody AssignmentReqDto assignmentReqDto){
