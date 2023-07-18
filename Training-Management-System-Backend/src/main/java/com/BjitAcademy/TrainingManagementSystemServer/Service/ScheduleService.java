@@ -9,5 +9,6 @@ import java.util.Set;
 public interface ScheduleService {
     ResponseEntity<Object> addAssignmentToSchedule(Long scheduleId,AssignmentReqDto assignmentReqDto);
 
+    ResponseEntity<Object> getAllScheduleForTrainer(Long trainerId);
 
 }

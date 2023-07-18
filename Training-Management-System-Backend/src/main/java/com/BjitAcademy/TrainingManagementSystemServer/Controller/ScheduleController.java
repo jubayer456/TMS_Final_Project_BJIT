@@ -18,4 +18,8 @@ public class ScheduleController {
     private ResponseEntity<Object> addAssignmentToSchedule(@PathVariable Long scheduleId,@RequestBody AssignmentReqDto assignmentReqDto){
         return scheduleService.addAssignmentToSchedule(scheduleId,assignmentReqDto);
     }
+    @GetMapping("/api/schedule/{trainerId}")
+    private ResponseEntity<Object> getAllScheduleForTrainer(@PathVariable Long trainerId){
+        return scheduleService.getAllScheduleForTrainer(trainerId);
+    }
 }
