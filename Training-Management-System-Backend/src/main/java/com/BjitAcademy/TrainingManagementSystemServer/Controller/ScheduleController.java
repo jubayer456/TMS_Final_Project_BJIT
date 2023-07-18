@@ -43,4 +43,9 @@ public class ScheduleController {
     private ResponseEntity<Set<AsignSubResDto>> getAllAssignmentSub(@PathVariable Long scheduleId,@PathVariable Long assignmentId){
         return scheduleService.getAllAssignmentSub(scheduleId,assignmentId);
     }
+
+    @GetMapping("/api/schedule/{batchId}/allAssignmentSub")
+    private ResponseEntity<Set<AssignmentResDto>> getAllAssignmentForBatch(@PathVariable Long batchId){
+        return scheduleService.getAllAssignmentForBatch(batchId);
+    }
 }

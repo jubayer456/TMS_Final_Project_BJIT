@@ -134,14 +134,27 @@ public class ScheduleServiceImp implements ScheduleService {
     }
     @Override
     public ResponseEntity<Set<AsignSubResDto>> getAllAssignmentSub(Long scheduleId, Long assignmentId) {
+        //checking assignment is existed or not?
         AssignmentEntity assignment=assignmentRepository.findByAssignmentId(assignmentId);
         if (assignment==null){
             throw new AssignmentNotFoundException("Assignment are not found");
         }
+        //for UI firstly take assignment list then using map function inside the map function getting trainee Entity then pass
+        // the entity to Assignment mapping model then it will give respected response dto
         Set<AsignSubResDto> asignSubResDtos=assignment.getAssignmentSubEntities().stream().map(assignmentSubEntity->{
             TraineeEntity trainee=traineeRepository.findByTraineeId(assignmentSubEntity.getTraineeId());
             return AssignmentMappingModel.assignmentSubEntityToDto(assignmentSubEntity,assignment,trainee);
         }).collect(Collectors.toSet());
         return new ResponseEntity<>(asignSubResDtos,HttpStatus.OK);
     }
+
+    @Override
+    public ResponseEntity<Set<AssignmentResDto>> getAllAssignmentForBatch(Long batchId) {
+        // checking assignment is presented or not ?
+        Set<AssignmentEntity> assignments=assignmentRepository.findAllByBatchId(batchId);
+        // mapping assignment entity for UI
+        Set<AssignmentResDto> assignmentResDtos=assignments.stream().map(AssignmentMappingModel::assignmentEntityToDto).collect(Collectors.toSet());
+        return new ResponseEntity<>(assignmentResDtos,HttpStatus.OK);
+    }
+
 }

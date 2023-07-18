@@ -17,4 +17,5 @@ public interface ScheduleService {
 
     ResponseEntity<Set<AssignmentResDto>> getAllAssignment(Long scheduleId);
     ResponseEntity<Set<AsignSubResDto>> getAllAssignmentSub(Long scheduleId, Long assignmentId);
+    ResponseEntity<Set<AssignmentResDto>> getAllAssignmentForBatch(Long batchId);
 }
