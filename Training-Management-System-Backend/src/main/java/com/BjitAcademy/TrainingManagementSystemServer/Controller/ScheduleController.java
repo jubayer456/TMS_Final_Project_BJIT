@@ -39,5 +39,8 @@ public class ScheduleController {
     private ResponseEntity<Set<AssignmentResDto>> getAllAssignment(@PathVariable Long scheduleId){
         return scheduleService.getAllAssignment(scheduleId);
     }
-
+    @GetMapping("/api/schedule/{scheduleId}/{assignmentId}")
+    private ResponseEntity<Set<AsignSubResDto>> getAllAssignmentSub(@PathVariable Long scheduleId,@PathVariable Long assignmentId){
+        return scheduleService.getAllAssignmentSub(scheduleId,assignmentId);
+    }
 }

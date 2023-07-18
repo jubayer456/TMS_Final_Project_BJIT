@@ -132,4 +132,16 @@ public class ScheduleServiceImp implements ScheduleService {
         Set<AssignmentResDto> assignments=schedule.getAssignments().stream().map(AssignmentMappingModel::assignmentEntityToDto).collect(Collectors.toSet());
         return new ResponseEntity<>(assignments,HttpStatus.OK);
     }
+    @Override
+    public ResponseEntity<Set<AsignSubResDto>> getAllAssignmentSub(Long scheduleId, Long assignmentId) {
+        AssignmentEntity assignment=assignmentRepository.findByAssignmentId(assignmentId);
+        if (assignment==null){
+            throw new AssignmentNotFoundException("Assignment are not found");
+        }
+        Set<AsignSubResDto> asignSubResDtos=assignment.getAssignmentSubEntities().stream().map(assignmentSubEntity->{
+            TraineeEntity trainee=traineeRepository.findByTraineeId(assignmentSubEntity.getTraineeId());
+            return AssignmentMappingModel.assignmentSubEntityToDto(assignmentSubEntity,assignment,trainee);
+        }).collect(Collectors.toSet());
+        return new ResponseEntity<>(asignSubResDtos,HttpStatus.OK);
+    }
 }
