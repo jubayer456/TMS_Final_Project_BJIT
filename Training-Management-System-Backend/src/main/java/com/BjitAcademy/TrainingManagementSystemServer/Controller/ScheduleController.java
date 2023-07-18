@@ -30,4 +30,8 @@ public class ScheduleController {
     private ResponseEntity<Object> removeAssignment(@PathVariable Long assignmentId){
         return scheduleService.removeAssignment(assignmentId);
     }
+    @PostMapping("/api/schedule/add-assignmentSub")
+    private ResponseEntity<Object> addAssignmentSubmission(@RequestBody AsignSubReqDto asignSubReqDto){
+        return scheduleService.addAssignmentSubmission(asignSubReqDto);
+    }
 }

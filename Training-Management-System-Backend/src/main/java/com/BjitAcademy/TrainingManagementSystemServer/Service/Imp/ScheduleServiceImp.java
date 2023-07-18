@@ -93,4 +93,29 @@ public class ScheduleServiceImp implements ScheduleService {
                 .build();
         return new ResponseEntity<>(success, HttpStatus.OK);
     }
+
+    @Override
+    public ResponseEntity<Object> addAssignmentSubmission(AsignSubReqDto asignSubReqDto) {
+        AssignmentEntity assignment=assignmentRepository.findByAssignmentId(asignSubReqDto.getAssignmentId());
+        if (assignment==null){
+            throw new AssignmentNotFoundException("Assignment are not found for submission");
+        }
+//        AssignmentSubEntity assignmentSubEntity=assignmentSubRepository.findByTraineeId(asignSubReqDto.getTraineeId());
+//        if (assignmentSubEntity!=null){
+//            throw new TraineeAlreadyExistException("Trainee Already Submit their Assignment");
+//        }
+        // assignment submission req dto to assignment submission entity using mapper class
+        AssignmentSubEntity assignmentSub=AssignmentMappingModel.assignmentSubDtoToEntity(asignSubReqDto);
+        //add assignment sub to assignment submission list
+        assignment.getAssignmentSubEntities().add(assignmentSub);
+        //save assignment list to assignment assignmentRepository
+        assignmentRepository.save(assignment);
+        //showing success msg in UI schedule using status code
+        SuccessResponseDto success=SuccessResponseDto.builder()
+                .msg("Successfully submitted assignment")
+                .status(HttpStatus.OK.value())
+                .build();
+        return new ResponseEntity<>(success, HttpStatus.OK);
+    }
+
 }
