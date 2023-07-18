@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -65,7 +66,6 @@ public class AdminServiceImp implements AdminService {
         //set Al the properties without adminId for update
         admin.setEmail(adminRegReqDto.getEmail());
         admin.setFullName(adminRegReqDto.getFullName());
-        admin.setGender(adminRegReqDto.getGender());
         admin.setContactNumber(adminRegReqDto.getContactNumber());
         userRepository.save(admin);
         SuccessResponseDto success=SuccessResponseDto.builder()
@@ -83,6 +83,21 @@ public class AdminServiceImp implements AdminService {
         }
         UserResDto adminResDto=UserMappingModel.userEntityToResDto(admin);
         return new ResponseEntity<>(adminResDto,HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<Object> updateAdminPicture(Long adminId, String picture) {
+        UserEntity admin = userRepository.findByUserId(adminId);
+        if (admin==null){
+            throw new UserNotFoundException("Admin Found");
+        }
+        admin.setProfilePicture(picture);
+        userRepository.save(admin);
+        SuccessResponseDto success=SuccessResponseDto.builder()
+                .status(HttpStatus.OK.value())
+                .msg("SuccessFully Updated Picture")
+                .build();
+        return new ResponseEntity<>(success,HttpStatus.OK);
     }
 
     @Override
