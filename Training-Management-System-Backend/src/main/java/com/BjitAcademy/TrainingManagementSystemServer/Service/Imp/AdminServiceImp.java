@@ -1,6 +1,7 @@
 package com.BjitAcademy.TrainingManagementSystemServer.Service.Imp;
 
 import com.BjitAcademy.TrainingManagementSystemServer.Dto.Admin.AdminRegReqDto;
+import com.BjitAcademy.TrainingManagementSystemServer.Dto.Authentication.SuccessResponseDto;
 import com.BjitAcademy.TrainingManagementSystemServer.Dto.Authentication.UserResDto;
 import com.BjitAcademy.TrainingManagementSystemServer.Entity.*;
 import com.BjitAcademy.TrainingManagementSystemServer.Exception.*;
@@ -13,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -48,11 +50,15 @@ public class AdminServiceImp implements AdminService {
         //convert admin dto to entity using admin mapping model
         AdminEntity admin = AdminMappingModel.AdminDtoToEntity(adminRegReqDto, user);
         adminRepository.save(admin);
-        return new ResponseEntity<>("successfully Registered", HttpStatus.OK);
+        SuccessResponseDto success=SuccessResponseDto.builder()
+                .status(HttpStatus.OK.value())
+                .msg("SuccessFully Registered")
+                .build();
+        return new ResponseEntity<>(success,HttpStatus.OK);
     }
     @Override
-    public ResponseEntity<Object> updateAdmin(AdminRegReqDto adminRegReqDto) {
-        UserEntity admin = userRepository.findByUserId(adminRegReqDto.getAdminId());
+    public ResponseEntity<Object> updateAdmin(@PathVariable Long adminId, AdminRegReqDto adminRegReqDto) {
+        UserEntity admin = userRepository.findByUserId(adminId);
         if (admin == null) {
             throw new UserNotFoundException("Admin is not found for update");
         }
@@ -60,10 +66,23 @@ public class AdminServiceImp implements AdminService {
         admin.setEmail(adminRegReqDto.getEmail());
         admin.setFullName(adminRegReqDto.getFullName());
         admin.setGender(adminRegReqDto.getGender());
-        admin.setProfilePicture(adminRegReqDto.getProfilePicture());
         admin.setContactNumber(adminRegReqDto.getContactNumber());
         userRepository.save(admin);
-        return new ResponseEntity<>("SuccessFully Updated",HttpStatus.OK);
+        SuccessResponseDto success=SuccessResponseDto.builder()
+                .status(HttpStatus.OK.value())
+                .msg("SuccessFully Updated")
+                .build();
+        return new ResponseEntity<>(success,HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<Object> getAdminDetails(Long adminId) {
+        UserEntity admin = userRepository.findByUserId(adminId);
+        if (admin==null){
+            throw new UserNotFoundException("Admin Found");
+        }
+        UserResDto adminResDto=UserMappingModel.userEntityToResDto(admin);
+        return new ResponseEntity<>(adminResDto,HttpStatus.OK);
     }
 
     @Override

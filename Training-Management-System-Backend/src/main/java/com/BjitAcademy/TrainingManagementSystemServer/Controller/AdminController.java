@@ -12,16 +12,20 @@ import java.util.List;
 @RestController
 @RequestMapping
 @RequiredArgsConstructor
-@CrossOrigin
+//@CrossOrigin
 public class AdminController {
     private final AdminService adminService;
-    @PostMapping("/api/auth/admin")
+    @PostMapping("/api/admin")
     public ResponseEntity<Object> createAdmin(@RequestBody AdminRegReqDto adminRegReqDto){
         return adminService.createAdmin(adminRegReqDto);
     }
-    @PutMapping("/api/auth/admin")
-    public ResponseEntity<Object> updateAdmin(@RequestBody AdminRegReqDto adminRegReqDto){
-        return adminService.updateAdmin(adminRegReqDto);
+    @PutMapping("/api/admin/{adminId}")
+    public ResponseEntity<Object> updateAdmin(@PathVariable Long adminId,@RequestBody AdminRegReqDto adminRegReqDto){
+        return adminService.updateAdmin(adminId,adminRegReqDto);
+    }
+    @GetMapping("/api/admin/{adminId}")
+    public ResponseEntity<Object> getAdminDetails(@PathVariable Long adminId){
+        return adminService.getAdminDetails(adminId);
     }
     @GetMapping("/api/admin/AllUser")
     public ResponseEntity<List<UserResDto>> getAllUser(){
