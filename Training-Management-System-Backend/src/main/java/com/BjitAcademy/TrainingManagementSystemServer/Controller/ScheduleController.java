@@ -48,4 +48,8 @@ public class ScheduleController {
     private ResponseEntity<Set<AssignmentResDto>> getAllAssignmentForBatch(@PathVariable Long batchId){
         return scheduleService.getAllAssignmentForBatch(batchId);
     }
+    @PutMapping("/api/schedule/{assignmentId}/{submissionId}")
+    private ResponseEntity<Object> giveEvolution(@PathVariable Long assignmentId, @PathVariable Long submissionId, @RequestBody AssignmentEvoReqDto assignmentEvoReqDto){
+        return scheduleService.giveEvolution(assignmentId,submissionId,assignmentEvoReqDto);
+    }
 }

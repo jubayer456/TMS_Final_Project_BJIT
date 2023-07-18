@@ -24,8 +24,9 @@ import java.util.stream.Collectors;
 public class ScheduleServiceImp implements ScheduleService {
     private final ScheduleRepository scheduleRepository;
     private final TrainerRepository trainerRepository;
-    private final AssignmentRepository assignmentRepository;
     private final TraineeRepository traineeRepository;
+    private final AssignmentRepository assignmentRepository;
+    private final AssignmentSubRepository assignmentSubRepository;
     @Override
     public ResponseEntity<Object> addAssignmentToSchedule(Long scheduleId,AssignmentReqDto assignmentReqDto) {
         //convert assignment request dto to assignment entity dto
@@ -156,5 +157,23 @@ public class ScheduleServiceImp implements ScheduleService {
         Set<AssignmentResDto> assignmentResDtos=assignments.stream().map(AssignmentMappingModel::assignmentEntityToDto).collect(Collectors.toSet());
         return new ResponseEntity<>(assignmentResDtos,HttpStatus.OK);
     }
-
+    @Override
+    public ResponseEntity<Object> giveEvolution(Long assignmentId, Long submissionId, AssignmentEvoReqDto assignmentEvoReqDto) {
+        AssignmentEntity assignment=assignmentRepository.findByAssignmentId(assignmentId);
+        if (assignment==null){
+            throw new AssignmentNotFoundException("Assignment are not found");
+        }
+        AssignmentSubEntity assignmentSub=assignmentSubRepository.findByAsgSubId(submissionId);
+        if (assignmentSub==null){
+            throw new AssignmentNotFoundException("Assignment Sub  are not found");
+        }
+        assignmentSub.setEvolution(assignmentEvoReqDto.getEvolution());
+        assignmentSubRepository.save(assignmentSub);
+        //showing success msg in UI schedule using status code
+        SuccessResponseDto success=SuccessResponseDto.builder()
+                .status(HttpStatus.OK.value())
+                .msg("Successfully Evolution done")
+                .build();
+        return new ResponseEntity<>(success,HttpStatus.OK);
+    }
 }
