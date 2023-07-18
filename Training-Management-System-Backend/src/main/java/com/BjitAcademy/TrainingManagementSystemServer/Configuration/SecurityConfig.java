@@ -31,8 +31,11 @@ public class SecurityConfig {
                 .requestMatchers("/api/auth/login")
                 .permitAll() .requestMatchers("/api/auth/trainee","/api/trainee/{traineeId}","/api/trainee/getAll")
                 .permitAll().requestMatchers("/api/auth/trainer","/api/auth/trainer","/api/trainer/{trainerId}","/api/trainer/getAll")
+                .permitAll().requestMatchers("/api/course/save","/api/course/{courseId}","/api/course/getAll","/api/course/{courseId}")
                 .permitAll()
-                .requestMatchers("/api/batch/save","/api/batch/{batchId}")
+                .requestMatchers("/api/batch/save","/api/batch/{batchId}","/api/batch/getAll","/api/batch/add-trainee","/api/batch/remove-trainee/{traineeId}",
+                        "/api/batch/add-schedule","/api/batch/remove-schedule/{scheduleId}","/api/batch/{batchId}/getAllSchedule","/api/batch/{batchId}/getAllTrainee"
+                )
                 .permitAll()
                 .anyRequest()
                 .authenticated()
