@@ -76,4 +76,21 @@ public class ScheduleServiceImp implements ScheduleService {
         return new ResponseEntity<>(success, HttpStatus.OK);
     }
 
+    @Override
+    public ResponseEntity<Object> removeAssignment(Long assignmentId) {
+        AssignmentEntity assignment=assignmentRepository.findByAssignmentId(assignmentId);
+        if (assignment==null){
+            throw new AssignmentNotFoundException("Assignment are not found for delete");
+        }
+        //find schedule entity using scheduleId ,,,then get the assignment list and remove the assignment from the list
+        scheduleRepository.findByScheduleId(assignment.getScheduleId()).getAssignments().remove(assignment);
+        //delete the assignment from the assignment repository
+        assignmentRepository.delete(assignment);
+        //showing success msg in UI schedule using status code
+        SuccessResponseDto success=SuccessResponseDto.builder()
+                .msg("Successfully deleted")
+                .status(HttpStatus.OK.value())
+                .build();
+        return new ResponseEntity<>(success, HttpStatus.OK);
+    }
 }

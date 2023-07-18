@@ -26,4 +26,8 @@ public class ScheduleController {
     private ResponseEntity<Object> updateAssignment(@PathVariable Long assignmentId,@RequestBody AssignmentReqDto assignmentReqDto){
         return scheduleService.updateAssignment(assignmentId,assignmentReqDto);
     }
+    @DeleteMapping("/api/schedule/{assignmentId}")
+    private ResponseEntity<Object> removeAssignment(@PathVariable Long assignmentId){
+        return scheduleService.removeAssignment(assignmentId);
+    }
 }

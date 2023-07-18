@@ -11,4 +11,5 @@ public interface ScheduleService {
 
     ResponseEntity<Object> getAllScheduleForTrainer(Long trainerId);
     ResponseEntity<Object> updateAssignment(Long assignmentId,AssignmentReqDto assignmentReqDto);
+    ResponseEntity<Object> removeAssignment(Long assignmentId);
 }
