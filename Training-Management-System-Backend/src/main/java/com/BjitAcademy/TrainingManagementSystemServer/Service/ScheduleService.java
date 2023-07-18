@@ -14,4 +14,6 @@ public interface ScheduleService {
     ResponseEntity<Object> removeAssignment(Long assignmentId);
 
     ResponseEntity<Object> addAssignmentSubmission(AsignSubReqDto asignSubReqDto);
+
+    ResponseEntity<Set<AssignmentResDto>> getAllAssignment(Long scheduleId);
 }

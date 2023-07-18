@@ -15,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -23,6 +25,7 @@ public class ScheduleServiceImp implements ScheduleService {
     private final ScheduleRepository scheduleRepository;
     private final TrainerRepository trainerRepository;
     private final AssignmentRepository assignmentRepository;
+    private final TraineeRepository traineeRepository;
     @Override
     public ResponseEntity<Object> addAssignmentToSchedule(Long scheduleId,AssignmentReqDto assignmentReqDto) {
         //convert assignment request dto to assignment entity dto
@@ -118,4 +121,15 @@ public class ScheduleServiceImp implements ScheduleService {
         return new ResponseEntity<>(success, HttpStatus.OK);
     }
 
+    @Override
+    public ResponseEntity<Set<AssignmentResDto>> getAllAssignment(Long scheduleId) {
+        //checking, schedule is presented or not?
+        ScheduleEntity schedule=scheduleRepository.findByScheduleId(scheduleId);
+        if (schedule==null){
+            throw new ScheduleNotFoundException("Schedule Not found");
+        }
+        //in schedule there is assignment list ,,, then using map function to convert entity to dto for UI
+        Set<AssignmentResDto> assignments=schedule.getAssignments().stream().map(AssignmentMappingModel::assignmentEntityToDto).collect(Collectors.toSet());
+        return new ResponseEntity<>(assignments,HttpStatus.OK);
+    }
 }
