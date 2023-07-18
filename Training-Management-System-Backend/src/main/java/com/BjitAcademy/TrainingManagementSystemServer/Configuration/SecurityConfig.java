@@ -38,6 +38,7 @@ public class SecurityConfig {
                 )
                 .permitAll().requestMatchers("/api/schedule/{scheduleId}/add-assignment","/api/schedule/{trainerId}","/api/schedule/{assignmentId}","/api/schedule/{assignmentId}","/api/schedule/add-assignmentSub","/api/schedule/{scheduleId}/allAssignment",
                         "/api/schedule/{scheduleId}/{assignmentId}","/api/schedule/{batchId}/allAssignmentSub","/api/schedule/{assignmentId}/{submissionId}")
+                .permitAll().requestMatchers("/api/upload","/api/download/{fileName}")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
