@@ -20,7 +20,8 @@ public class GlobalExceptionHandler {
             BatchAlreadyExistException.class,
             BatchNotFoundException.class,
             ScheduleAlreadyExistException.class,
-            ScheduleNotFoundException.class
+            ScheduleNotFoundException.class,
+            AssignmentNotFoundException.class
 
     })
     public ResponseEntity<Object> runtimeException(Exception ex) {
@@ -58,6 +59,9 @@ public class GlobalExceptionHandler {
             return new ResponseEntity<>(error,HttpStatus.NOT_ACCEPTABLE);
 
         }else if(ex instanceof ScheduleNotFoundException){
+            ErrorResponseDto error=new ErrorResponseDto(HttpStatus.NOT_ACCEPTABLE.value(),ex.getMessage());
+            return new ResponseEntity<>(error,HttpStatus.NOT_ACCEPTABLE);
+        }else if(ex instanceof AssignmentNotFoundException){
             ErrorResponseDto error=new ErrorResponseDto(HttpStatus.NOT_ACCEPTABLE.value(),ex.getMessage());
             return new ResponseEntity<>(error,HttpStatus.NOT_ACCEPTABLE);
         }
