@@ -86,21 +86,6 @@ public class AdminServiceImp implements AdminService {
     }
 
     @Override
-    public ResponseEntity<Object> updateAdminPicture(Long adminId, String picture) {
-        UserEntity admin = userRepository.findByUserId(adminId);
-        if (admin==null){
-            throw new UserNotFoundException("Admin Found");
-        }
-        admin.setProfilePicture(picture);
-        userRepository.save(admin);
-        SuccessResponseDto success=SuccessResponseDto.builder()
-                .status(HttpStatus.OK.value())
-                .msg("SuccessFully Updated Picture")
-                .build();
-        return new ResponseEntity<>(success,HttpStatus.OK);
-    }
-
-    @Override
     public ResponseEntity<List<UserResDto>> getAllUser() {
         List<UserEntity> users=userRepository.findAll();
 

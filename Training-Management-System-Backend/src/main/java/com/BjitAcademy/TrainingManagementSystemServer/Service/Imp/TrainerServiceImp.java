@@ -68,16 +68,14 @@ public class TrainerServiceImp implements TrainerService {
 
     @Override
     public ResponseEntity<Object> updateTrainers(TrainerRegReqDto trainerRegReqDto) {
-        UserEntity userEntityById = userRepository.findByUserId(trainerRegReqDto.getTrainerId());
-        if (userEntityById == null) {
+        UserEntity user = userRepository.findByUserId(trainerRegReqDto.getTrainerId());
+        if (user == null) {
             throw new UserNotFoundException("trainer is not found for update");
         }
         //update trainer details using set method
-        userEntityById.setEmail(trainerRegReqDto.getEmail());
-        userEntityById.setFullName(trainerRegReqDto.getFullName());
-        userEntityById.setGender(trainerRegReqDto.getGender());
-        userEntityById.setProfilePicture(trainerRegReqDto.getProfilePicture());
-        userEntityById.setContactNumber(trainerRegReqDto.getContactNumber());
+        user.setEmail(trainerRegReqDto.getEmail());
+        user.setFullName(trainerRegReqDto.getFullName());
+        user.setContactNumber(trainerRegReqDto.getContactNumber());
 
         TrainerEntity trainer = trainerRepository.findByTrainerId(trainerRegReqDto.getTrainerId());
         trainer.setAddress(trainerRegReqDto.getAddress());
@@ -85,7 +83,7 @@ public class TrainerServiceImp implements TrainerService {
         trainer.setJoiningDate(trainerRegReqDto.getJoiningDate());
         trainer.setExpertises(trainerRegReqDto.getExpertises());
         trainer.setTotalYrsExp(trainerRegReqDto.getTotalYrsExp());
-        trainer.setUser(userEntityById);
+        trainer.setUser(user);
         trainerRepository.save(trainer);
         return new ResponseEntity<>("SuccessFully Updated",HttpStatus.OK);
     }
@@ -98,5 +96,15 @@ public class TrainerServiceImp implements TrainerService {
         }
         trainerRepository.delete(trainer);
         return new ResponseEntity<>("SuccessFully Deleted Trainer",HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<Object> trainerDetails(Long trainerId) {
+        TrainerEntity trainer = trainerRepository.findByTrainerId(trainerId);
+        if (trainer==null){
+            throw new UserNotFoundException("trainer is not found");
+        }
+        TrainerResDto trainerResDto=TrainerMappingModel.trainerEntityToDto(trainer,trainer.getUser());
+        return new ResponseEntity<>(trainerResDto,HttpStatus.OK);
     }
 }

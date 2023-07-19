@@ -5,18 +5,19 @@ import com.BjitAcademy.TrainingManagementSystemServer.Dto.Authentication.Authent
 import com.BjitAcademy.TrainingManagementSystemServer.Dto.Authentication.LoginDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
 @CrossOrigin
 public class AuthController {
-    private final AuthService authServiceImp;
+    private final AuthService authService;
     @PostMapping("/api/auth/login")
     public ResponseEntity<AuthenticationResDto> login(@RequestBody LoginDto loginDto) {
-        return authServiceImp.login(loginDto);
+        return authService.login(loginDto);
+    }
+    @PutMapping("/api/auth/updatePicture/{userId}")
+    public ResponseEntity<Object> updateUserPicture(@PathVariable Long userId,@RequestBody String picture){
+        return authService.updateUserPicture(userId,picture);
     }
 }

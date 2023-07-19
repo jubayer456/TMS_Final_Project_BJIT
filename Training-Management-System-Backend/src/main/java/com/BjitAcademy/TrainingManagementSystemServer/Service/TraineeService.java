@@ -11,7 +11,9 @@ public interface TraineeService {
 
     ResponseEntity<List<TraineeResDto>> getAllTrainee();
 
-    ResponseEntity<String> updateTrainee(TraineeRegReqDto traineeReqDto);
+    ResponseEntity<Object> updateTrainee( TraineeRegReqDto traineeReqDto);
 
-    ResponseEntity<String> deleteTrainee(Long traineeId);
+    ResponseEntity<Object> deleteTrainee(Long traineeId);
+
+    ResponseEntity<Object> traineeDetails(Long traineeId);
 }

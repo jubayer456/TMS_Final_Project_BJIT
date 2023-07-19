@@ -13,16 +13,20 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TraineeController {
     private final TraineeService traineeService;
-    @PostMapping("/api/auth/trainee")
+    @PostMapping("/api/trainee")
     public ResponseEntity<Object> createTrainee(@RequestBody TraineeRegReqDto traineeReqDto) {
         return traineeService.createTrainee(traineeReqDto);
     }
-    @PutMapping("/api/auth/trainee")
-    public ResponseEntity<String> updateTrainee(@RequestBody TraineeRegReqDto traineeReqDto) {
+    @PutMapping("/api/trainee")
+    public ResponseEntity<Object> updateTrainee(@RequestBody TraineeRegReqDto traineeReqDto) {
         return traineeService.updateTrainee(traineeReqDto);
     }
+    @GetMapping("/api/trainee/{traineeId}")
+    public ResponseEntity<Object> traineeDetails(@PathVariable Long traineeId) {
+        return traineeService.traineeDetails(traineeId);
+    }
     @DeleteMapping("/api/trainee/{traineeId}")
-    public ResponseEntity<String> deleteTrainee(@PathVariable Long traineeId) {
+    public ResponseEntity<Object> deleteTrainee(@PathVariable Long traineeId) {
         return traineeService.deleteTrainee(traineeId);
     }
     @GetMapping("/api/trainee/getAll")

@@ -6,4 +6,6 @@ import org.springframework.http.ResponseEntity;
 
 public interface AuthService {
     ResponseEntity<AuthenticationResDto> login(LoginDto loginDto);
+
+    ResponseEntity<Object> updateUserPicture(Long userId, String picture);
 }

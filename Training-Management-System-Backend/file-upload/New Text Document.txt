@@ -1,0 +1,103 @@
+  <div className='m-5'>
+            <section className="container">
+                < header>Trainee Registration Form</header>
+                <form onSubmit={handleSubmit(onSubmit)} className="form">
+                    <div className="column">
+                        <div className="input-box">
+                            <label>Trainee Id</label>
+                            <input type="text" placeholder="Trainee ID" required />
+                        </div>
+                        <div className="input-box">
+                            <label>Full Name:</label>
+                            <input type="text" placeholder="Full Name:" required />
+                        </div>
+                    </div>
+
+                    <div className="column">
+                        <div className="input-box">
+                            <label>Email Address:</label>
+                            <input type="email" placeholder="Enter email address" required />
+                        </div>
+                        <div className="input-box">
+                            <label>Password:</label>
+                            <input type="password" placeholder="Enter Password" required />
+                        </div>
+                    </div>
+
+
+                    <div className="column">
+                        <div className="input-box">
+                            <label>Contact Number:</label>
+                            <input type="text" placeholder="Enter Contact Number" required />
+                        </div>
+                        <div className="input-box">
+                            <label>Birth Date</label>
+                            <input type="date" placeholder="Enter birth date" required />
+                        </div>
+                    </div>
+                    <div className="column">
+                        <div className="gender-box">
+                            <h3>Gender</h3>
+                            <div className="gender-option">
+                                <div className="gender">
+                                    <input type="radio" id="check-male" name="gender" checked />
+                                    <label for="check-male">male</label>
+                                </div>
+                                <div className="gender">
+                                    <input type="radio" id="check-female" name="gender" />
+                                    <label for="check-female">Female</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div className='input-box'>
+                            <label>Profile picture:</label>
+                            <input type="file" placeholder="Enter street address" required />
+                        </div>
+                    </div>
+                    <div className="input-box address">
+                        <label>Address</label>
+                        <input type="text" placeholder="Enter street address" required />
+
+                        <div className="column">
+                            <div className="input-box">
+                                <label>Educational Institute:</label>
+                                <input type="text" placeholder="Enter Educational Institute" required />
+                            </div>
+                            <div className="input-box">
+                                <label>Degree Name:</label>
+                                <input type="text" placeholder="Enter Degree Name" required />
+                            </div>
+                        </div>
+                        <div className="column">
+                            <div className="input-box">
+                                <label>Passing Year:</label>
+                                <input type="text" placeholder="Enter Passing Year" required />
+                            </div>
+                            <div className="input-box">
+                                <label>CGPA:</label>
+                                <input type="text" placeholder="Enter CGPA:" required />
+                            </div>
+                        </div>
+                    </div>
+                    <button>Submit</button>
+                </form>
+            </section>
+        </div>
+
+        // fetch('http://localhost:8082/api/auth/trainee', {
+        //     method: 'POST',
+        //     headers: {
+        //         'content-type': 'application/json'
+        //     },
+        //     body: JSON.stringify(registerData)
+        // })
+        //     .then(res => res.json())
+        //     .then(trainee => {
+        //         console.log(trainee);
+        //         if(trainee.status==200){
+        //             alert("successFully registerd");
+        //         }
+        //         else
+        //         alert(trainee.msg)
+        //     })
+        //     .catch(errror=>alert(""))

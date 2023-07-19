@@ -19,7 +19,7 @@ public class TraineeResDto {
     private String contactNumber;
     private String address;
     private String gender;
-    private Date dob;
+    private String dob;
     private String degreeName;
     private String educationalInstitute;
     private Integer passingYear;

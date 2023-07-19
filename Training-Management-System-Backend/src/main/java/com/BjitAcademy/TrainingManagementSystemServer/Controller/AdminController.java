@@ -23,10 +23,7 @@ public class AdminController {
     public ResponseEntity<Object> updateAdmin(@PathVariable Long adminId,@RequestBody AdminRegReqDto adminRegReqDto){
         return adminService.updateAdmin(adminId,adminRegReqDto);
     }
-    @PutMapping("/api/admin/updatePicture/{adminId}")
-    public ResponseEntity<Object> updateAdminPicture(@PathVariable Long adminId,@RequestBody String picture){
-        return adminService.updateAdminPicture(adminId,picture);
-    }
+
     @GetMapping("/api/admin/{adminId}")
     public ResponseEntity<Object> getAdminDetails(@PathVariable Long adminId){
         return adminService.getAdminDetails(adminId);

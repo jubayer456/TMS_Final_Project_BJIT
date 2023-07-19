@@ -2,6 +2,9 @@ package com.BjitAcademy.TrainingManagementSystemServer.Service.Imp;
 
 import com.BjitAcademy.TrainingManagementSystemServer.Dto.Authentication.AuthenticationResDto;
 import com.BjitAcademy.TrainingManagementSystemServer.Dto.Authentication.LoginDto;
+import com.BjitAcademy.TrainingManagementSystemServer.Dto.Authentication.SuccessResponseDto;
+import com.BjitAcademy.TrainingManagementSystemServer.Entity.UserEntity;
+import com.BjitAcademy.TrainingManagementSystemServer.Exception.UserNotFoundException;
 import com.BjitAcademy.TrainingManagementSystemServer.Mapper.UserMappingModel;
 import com.BjitAcademy.TrainingManagementSystemServer.Repository.UserRepository;
 import com.BjitAcademy.TrainingManagementSystemServer.Service.AuthService;
@@ -30,4 +33,19 @@ public class AuthServiceImp implements AuthService {
                     .user(UserMappingModel.userEntityToResDto(user))
                     .build(), HttpStatus.OK);
         }
+
+    @Override
+    public ResponseEntity<Object> updateUserPicture(Long userId, String picture) {
+        UserEntity user = userRepository.findByUserId(userId);
+        if (user==null){
+            throw new UserNotFoundException("Admin Found");
+        }
+        user.setProfilePicture(picture);
+        userRepository.save(user);
+        SuccessResponseDto success=SuccessResponseDto.builder()
+                .status(HttpStatus.OK.value())
+                .msg("SuccessFully Updated Picture")
+                .build();
+        return new ResponseEntity<>(success,HttpStatus.OK);
     }
+}

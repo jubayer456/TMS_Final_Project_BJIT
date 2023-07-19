@@ -14,17 +14,22 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class TrainerController {
     private final TrainerService trainerService;
-    @PostMapping("/api/auth/trainer")
+    @PostMapping("/api/trainer")
     public ResponseEntity<Object> createTrainers(@RequestBody TrainerRegReqDto trainerRegReqDto){
         return trainerService.createTrainers(trainerRegReqDto);
     }
-    @PutMapping("/api/auth/trainer")
+    @PutMapping("/api/trainer")
     public ResponseEntity<Object> updateTrainers(@RequestBody TrainerRegReqDto trainerRegReqDto){
         return trainerService.updateTrainers(trainerRegReqDto);
     }
     @DeleteMapping("/api/trainer/{trainerId}")
     public ResponseEntity<Object> deleteTrainer(@PathVariable Long trainerId){
         return trainerService.deleteTrainer(trainerId);
+    }
+
+    @GetMapping("/api/trainer/{trainerId}")
+    public ResponseEntity<Object> trainerDetails(@PathVariable Long trainerId){
+        return trainerService.trainerDetails(trainerId);
     }
     @GetMapping("/api/trainer/getAll")
     public ResponseEntity<List<TrainerResDto>> getAllTrainee() {

@@ -1,0 +1,86 @@
+=================================Admin Mapping==========================
+package com.BjitAcademy.TrainingManagementSystemServer.Mapper;
+
+import com.BjitAcademy.TrainingManagementSystemServer.Dto.Admin.AdminRegReqDto;
+import com.BjitAcademy.TrainingManagementSystemServer.Dto.Batch.BatchReqDto;
+import com.BjitAcademy.TrainingManagementSystemServer.Dto.Batch.BatchResDto;
+import com.BjitAcademy.TrainingManagementSystemServer.Dto.Batch.BatchTraineeResDto;
+import com.BjitAcademy.TrainingManagementSystemServer.Dto.Authentication.UserResDto;
+import com.BjitAcademy.TrainingManagementSystemServer.Dto.Course.CourseReqDto;
+import com.BjitAcademy.TrainingManagementSystemServer.Dto.Course.CourseResDto;
+import com.BjitAcademy.TrainingManagementSystemServer.Dto.Schedule.BatchScheduleResDto;
+import com.BjitAcademy.TrainingManagementSystemServer.Dto.Schedule.ScheduleReqDto;
+import com.BjitAcademy.TrainingManagementSystemServer.Dto.Schedule.ScheduleResDto;
+import com.BjitAcademy.TrainingManagementSystemServer.Entity.*;
+import lombok.RequiredArgsConstructor;
+
+
+
+
+    public static BatchTraineeResDto traineeEntityToDto(TraineeEntity traineeEntity){
+        return BatchTraineeResDto.builder()
+                .traineeId(traineeEntity.getTraineeId())
+                .fullName(traineeEntity.getUser().getFullName())
+                .profilePicture(traineeEntity.getUser().getProfilePicture())
+                .email(traineeEntity.getUser().getEmail())
+                .build();
+    }
+
+
+==============================================================================================================
+   .requestMatchers("/api/auth/login","/api/auth/trainee","/api/auth/trainer")
+                .permitAll()
+                .requestMatchers("/api/batch/save","/api/batch/{batchId}","/api/batch/getAll","/api/batch/add-trainee",
+                        "/api/batch/add-schedule","/api/batch/{batchId}/getAllSchedule","/api/batch/{batchId}/getAllTrainee",
+                        "/api/batch/remove-trainee/{traineeId}","/api/batch/remove-schedule/{scheduleId}")
+                .permitAll()
+                .requestMatchers("/api/classroom/remove-comment/{postId}/{commentId}","/api/admin/AllUser","/api/trainee/getAll","/api/trainer/getAll")
+                .permitAll()
+                .requestMatchers( "/api/classroom/{classId}/getAllNotice","/api/classroom/add-notice","/api/classroom/add-post","/api/classroom/add-comment","/api/classroom/update-comment/{commentId}",
+                        "/api/classroom/update-post/{postId}","/api/classroom/remove-post/{postId}","/api/classroom/{classId}/getAllPost")
+                .permitAll()
+                .requestMatchers("/api/course/{courseId}","/api/course/getAll","/api/course/save","/api/upload","/api/download/{fileName}")
+                .permitAll()
+                .requestMatchers("/api/schedule/{trainerId}","/api/schedule/{scheduleId}/add-assignment","/api/schedule/add-assignmentSub","/api/schedule/{assignmentId}","/api/schedule/{assignmentId}",
+                        "/api/schedule/{scheduleId}/allAssignment","/api/schedule/{scheduleId}/{assignmentId}")
+                .permitAll().requestMatchers("/api/course/{courseId}","/api/course/getAll","/api/course/save")
+                .permitAll()
+                .requestMatchers("/api/trainee/{traineeId}","/api/trainer/{trainerId}","/api/schedule/add-assignment")
+                .permitAll()
+//                .requestMatchers("/api/batch/get/{batchId}").hasAuthority("admin")
+//                .requestMatchers("/user/delete").hasAuthority("ADMIN")
+
+
+
+
+===========================================================================================
+
+    @DeleteMapping("/api/course/{courseId}")
+    public ResponseEntity<Object> deleteCourse(@PathVariable Long courseId){
+        return courseService.deleteCourse(courseId);
+    }
+
+
+    ResponseEntity<Object> deleteCourse(Long courseId);
+
+
+    @Override
+    public ResponseEntity<Object> deleteCourse(Long courseId) {
+        List<ScheduleEntity> schedules=scheduleRepository.findAll();
+        if(schedules.stream().anyMatch(scheduleEntity -> Objects.equals(scheduleEntity.getCourseId(), courseId))){
+            throw new ScheduleAlreadyExistException("Schedule already exist so you can not delete");
+        }
+        CourseEntity course=courseRepository.findByCourseId(courseId);
+        if (course==null){
+            throw new CourseNotFoundException("Course id is invalid,,, please give a valid course Id");
+        }
+        course.setTrainer(null);
+        courseRepository.delete(course);
+        SuccessResponseDto success=SuccessResponseDto.builder()
+                .status(HttpStatus.OK.value())
+                .msg("SuccessFully deleted course id: "+courseId)
+                .build();
+        return new ResponseEntity<>(success,HttpStatus.OK);
+    }
+
+========================================================================================================

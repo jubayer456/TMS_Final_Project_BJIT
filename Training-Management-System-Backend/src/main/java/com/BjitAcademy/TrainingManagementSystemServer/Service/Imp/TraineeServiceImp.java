@@ -69,16 +69,14 @@ public class TraineeServiceImp implements TraineeService {
     }
 
     @Override
-    public ResponseEntity<String> updateTrainee(TraineeRegReqDto traineeReqDto) {
-        UserEntity userEntityById = userRepository.findByUserId(traineeReqDto.getTraineeId());
-        if (userEntityById == null) {
+    public ResponseEntity<Object> updateTrainee(TraineeRegReqDto traineeReqDto) {
+        UserEntity user = userRepository.findByUserId(traineeReqDto.getTraineeId());
+        if (user == null) {
             throw new UserNotFoundException("trainee is not found for update");
         }
-        userEntityById.setEmail(traineeReqDto.getEmail());
-        userEntityById.setFullName(traineeReqDto.getFullName());
-        userEntityById.setGender(traineeReqDto.getGender());
-        userEntityById.setProfilePicture(traineeReqDto.getProfilePicture());
-        userEntityById.setContactNumber(traineeReqDto.getContactNumber());
+        user.setEmail(traineeReqDto.getEmail());
+        user.setFullName(traineeReqDto.getFullName());
+        user.setContactNumber(traineeReqDto.getContactNumber());
 
         TraineeEntity trainee = traineeRepository.findByTraineeId(traineeReqDto.getTraineeId());
         trainee.setAddress(traineeReqDto.getAddress());
@@ -87,18 +85,32 @@ public class TraineeServiceImp implements TraineeService {
         trainee.setDegreeName(traineeReqDto.getDegreeName());
         trainee.setEducationalInstitute(traineeReqDto.getEducationalInstitute());
         trainee.setPassingYear(traineeReqDto.getPassingYear());
-        trainee.setUser(userEntityById);
-        userRepository.save(userEntityById);
-        return new ResponseEntity<>("SuccessFully Updated",HttpStatus.OK);
+        trainee.setUser(user);
+        traineeRepository.save(trainee);
+        SuccessResponseDto success=SuccessResponseDto.builder()
+                .status(HttpStatus.OK.value())
+                .msg("Successfully updated")
+                .build();
+        return new ResponseEntity<>(success,HttpStatus.OK);
     }
 
     @Override
-    public ResponseEntity<String> deleteTrainee(Long traineeId) {
+    public ResponseEntity<Object> deleteTrainee(Long traineeId) {
         TraineeEntity trainee = traineeRepository.findByTraineeId(traineeId);
         if (trainee==null){
             throw new TraineeNotFoundException("Trainee Not Found for delete");
         }
         traineeRepository.delete(trainee);
         return new ResponseEntity<>("Successfully Deleted",HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<Object> traineeDetails(Long traineeId) {
+        TraineeEntity trainee = traineeRepository.findByTraineeId(traineeId);
+        if (trainee == null) {
+            throw new UserNotFoundException("trainee is not found for update");
+        }
+        TraineeResDto traineeResDto=TraineeMappingModel.traineeEntityToDto(trainee,trainee.getUser());
+        return new ResponseEntity<>(traineeResDto,HttpStatus.OK);
     }
 }

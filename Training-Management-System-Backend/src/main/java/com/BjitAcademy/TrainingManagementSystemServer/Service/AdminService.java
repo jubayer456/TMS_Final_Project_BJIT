@@ -14,7 +14,4 @@ public interface AdminService {
     ResponseEntity<Object> updateAdmin(@PathVariable Long adminId, AdminRegReqDto adminRegReqDto);
 
     ResponseEntity<Object> getAdminDetails(Long adminId);
-
-    ResponseEntity<Object> updateAdminPicture(Long adminId, String picture);
-
 }

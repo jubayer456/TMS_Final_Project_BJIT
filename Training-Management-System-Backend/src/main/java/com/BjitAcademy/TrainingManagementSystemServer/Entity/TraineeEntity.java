@@ -19,7 +19,7 @@ public class TraineeEntity{
     private Long traineeId;
 
     private String address;
-    private Date dob;
+    private String dob;
     private String degreeName;
     private String educationalInstitute;
     private Integer passingYear;
