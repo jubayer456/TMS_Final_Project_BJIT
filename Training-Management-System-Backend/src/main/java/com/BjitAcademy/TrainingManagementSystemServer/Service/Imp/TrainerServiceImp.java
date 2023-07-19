@@ -2,13 +2,14 @@ package com.BjitAcademy.TrainingManagementSystemServer.Service.Imp;
 
 import com.BjitAcademy.TrainingManagementSystemServer.Dto.Trainer.TrainerRegReqDto;
 import com.BjitAcademy.TrainingManagementSystemServer.Dto.Trainer.TrainerResDto;
-import com.BjitAcademy.TrainingManagementSystemServer.Entity.TraineeEntity;
-import com.BjitAcademy.TrainingManagementSystemServer.Entity.TrainerEntity;
-import com.BjitAcademy.TrainingManagementSystemServer.Entity.UserEntity;
+import com.BjitAcademy.TrainingManagementSystemServer.Entity.*;
+import com.BjitAcademy.TrainingManagementSystemServer.Exception.TrainerNotFoundException;
 import com.BjitAcademy.TrainingManagementSystemServer.Exception.UserAlreadyExistException;
 import com.BjitAcademy.TrainingManagementSystemServer.Exception.UserNotFoundException;
 import com.BjitAcademy.TrainingManagementSystemServer.Mapper.TrainerMappingModel;
 import com.BjitAcademy.TrainingManagementSystemServer.Mapper.UserMappingModel;
+import com.BjitAcademy.TrainingManagementSystemServer.Repository.CourseRepository;
+import com.BjitAcademy.TrainingManagementSystemServer.Repository.ScheduleRepository;
 import com.BjitAcademy.TrainingManagementSystemServer.Repository.TrainerRepository;
 import com.BjitAcademy.TrainingManagementSystemServer.Repository.UserRepository;
 import com.BjitAcademy.TrainingManagementSystemServer.Service.TrainerService;
@@ -27,6 +28,8 @@ public class TrainerServiceImp implements TrainerService {
     private final TrainerRepository trainerRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final ScheduleRepository scheduleRepository;
+    private final CourseRepository courseRepository;
     @Override
     public ResponseEntity<Object> createTrainers(TrainerRegReqDto trainerRegReqDto) {
         UserEntity userEntityById=userRepository.findByUserId(trainerRegReqDto.getTrainerId());
@@ -93,6 +96,11 @@ public class TrainerServiceImp implements TrainerService {
         TrainerEntity trainer = trainerRepository.findByTrainerId(trainerId);
         if (trainer==null){
             throw new UserNotFoundException("trainer is not found for delete");
+        }
+        List<CourseEntity> course=courseRepository.findAll();
+        boolean isTrainerAssociated= course.stream().anyMatch(courseEntity -> Objects.equals(courseEntity.getTrainer().getTrainerId(), trainerId));
+        if (isTrainerAssociated){
+            throw new TrainerNotFoundException("trainer is Already exist in course");
         }
         trainerRepository.delete(trainer);
         return new ResponseEntity<>("SuccessFully Deleted Trainer",HttpStatus.OK);

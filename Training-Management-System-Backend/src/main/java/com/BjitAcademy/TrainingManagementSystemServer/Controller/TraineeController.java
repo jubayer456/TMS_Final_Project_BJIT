@@ -11,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin
 public class TraineeController {
     private final TraineeService traineeService;
     @PostMapping("/api/trainee")
