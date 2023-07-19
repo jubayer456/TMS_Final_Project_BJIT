@@ -22,7 +22,8 @@ public class GlobalExceptionHandler {
             ScheduleAlreadyExistException.class,
             ScheduleNotFoundException.class,
             AssignmentNotFoundException.class,
-            PasswordNotCorrectException.class
+            PasswordNotCorrectException.class,
+            ClassRoomNotFoundException.class
 
     })
     public ResponseEntity<Object> runtimeException(Exception ex) {
@@ -66,6 +67,9 @@ public class GlobalExceptionHandler {
             ErrorResponseDto error=new ErrorResponseDto(HttpStatus.NOT_ACCEPTABLE.value(),ex.getMessage());
             return new ResponseEntity<>(error,HttpStatus.NOT_ACCEPTABLE);
         }else if(ex instanceof PasswordNotCorrectException){
+            ErrorResponseDto error=new ErrorResponseDto(HttpStatus.NOT_ACCEPTABLE.value(),ex.getMessage());
+            return new ResponseEntity<>(error,HttpStatus.NOT_ACCEPTABLE);
+        }else if(ex instanceof ClassRoomNotFoundException){
             ErrorResponseDto error=new ErrorResponseDto(HttpStatus.NOT_ACCEPTABLE.value(),ex.getMessage());
             return new ResponseEntity<>(error,HttpStatus.NOT_ACCEPTABLE);
         }
