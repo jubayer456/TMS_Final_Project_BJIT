@@ -17,4 +17,8 @@ public class ClassroomController {
     public ResponseEntity<String> addPost(@RequestBody ClassRoomPostReqDto post){
         return classroomService.addPost(post);
     }
+    @PostMapping("/api/classroom/add-notice")
+    public ResponseEntity<String> addNotice(@RequestBody NoticeReqDto notice){
+        return classroomService.addNotice(notice);
+    }
 }

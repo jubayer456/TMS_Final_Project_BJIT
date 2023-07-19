@@ -40,4 +40,10 @@ public class ClassroomServiceImp implements ClassroomService {
         classRoomRepository.save(classRoom);
         return new ResponseEntity<>("Successfully upload post", HttpStatus.OK);
     }
+    @Override
+    public ResponseEntity<String> addNotice(NoticeReqDto noticeReqDto) {
+        ClassRoomNotice notice=ClassRoomMappingModel.noticeDtoToEntity(noticeReqDto);
+        noticeRepository.save(notice);
+        return new ResponseEntity<>("Successfully create notice",HttpStatus.OK);
+    }
 }
