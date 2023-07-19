@@ -46,4 +46,10 @@ public class ClassroomServiceImp implements ClassroomService {
         noticeRepository.save(notice);
         return new ResponseEntity<>("Successfully create notice",HttpStatus.OK);
     }
+    @Override
+    public ResponseEntity<List<NoticeResDto>> getAllNotice(Long classId) {
+        List<ClassRoomNotice> notice=noticeRepository.findAll();
+        List<NoticeResDto> noticeRes=notice.stream().map(ClassRoomMappingModel::noticeEntityToDto).toList();
+        return new ResponseEntity<>(noticeRes,HttpStatus.OK);
+    }
 }

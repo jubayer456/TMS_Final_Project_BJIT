@@ -9,4 +9,6 @@ import java.util.Set;
 public interface ClassroomService {
     ResponseEntity<String> addPost(ClassRoomPostReqDto post);
     ResponseEntity<String> addNotice(NoticeReqDto notice);
+    ResponseEntity<List<NoticeResDto>> getAllNotice(Long classId);
+
 }

@@ -21,4 +21,8 @@ public class ClassroomController {
     public ResponseEntity<String> addNotice(@RequestBody NoticeReqDto notice){
         return classroomService.addNotice(notice);
     }
+    @GetMapping("/api/classroom/{classId}/getAllNotice")
+    public ResponseEntity<List<NoticeResDto>> getAllNotice(@PathVariable Long classId){
+        return classroomService.getAllNotice(classId);
+    }
 }
