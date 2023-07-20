@@ -12,5 +12,6 @@ public interface ClassroomService {
     ResponseEntity<List<NoticeResDto>> getAllNotice(Long classId);
     ResponseEntity<String> addComment(PostCommentReqDto comment);
     ResponseEntity<String> updateComment(Long commentId, PostCommentReqDto comment);
+    ResponseEntity<String> updatePost(Long postId, ClassRoomPostReqDto post);
 
 }

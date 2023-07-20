@@ -33,4 +33,8 @@ public class ClassroomController {
     public ResponseEntity<String> updateComment(@PathVariable Long commentId,@RequestBody PostCommentReqDto comment){
         return classroomService.updateComment(commentId,comment);
     }
+    @PutMapping("/api/classroom/update-post/{postId}")
+    public ResponseEntity<String> updatePost(@PathVariable Long postId,@RequestBody ClassRoomPostReqDto post){
+        return classroomService.updatePost(postId,post);
+    }
 }
