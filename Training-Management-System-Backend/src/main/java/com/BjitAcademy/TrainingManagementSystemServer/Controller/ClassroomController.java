@@ -26,21 +26,24 @@ public class ClassroomController {
         return classroomService.getAllNotice(classId);
     }
     @PostMapping("/api/classroom/add-comment")
-    public ResponseEntity<String> addComment(@RequestBody PostCommentReqDto comment){
+    public ResponseEntity<Object> addComment(@RequestBody PostCommentReqDto comment){
         return classroomService.addComment(comment);
     }
     @PutMapping("/api/classroom/update-comment/{commentId}")
-    public ResponseEntity<String> updateComment(@PathVariable Long commentId,@RequestBody PostCommentReqDto comment){
+    public ResponseEntity<Object> updateComment(@PathVariable Long commentId,@RequestBody PostCommentReqDto comment){
         return classroomService.updateComment(commentId,comment);
     }
     @PutMapping("/api/classroom/update-post/{postId}")
-    public ResponseEntity<String> updatePost(@PathVariable Long postId,@RequestBody ClassRoomPostReqDto post){
+    public ResponseEntity<Object> updatePost(@PathVariable Long postId,@RequestBody ClassRoomPostReqDto post){
         return classroomService.updatePost(postId,post);
     }
 
     @DeleteMapping("/api/classroom/remove-post/{postId}")
-    public ResponseEntity<String> removePost(@PathVariable Long postId){
+    public ResponseEntity<Object> removePost(@PathVariable Long postId){
         return classroomService.removePost(postId);
     }
-
+    @DeleteMapping("/api/classroom/remove-comment/{postId}/{commentId}")
+    public ResponseEntity<Object> removeComment(@PathVariable Long postId,@PathVariable Long commentId){
+        return classroomService.removeComment(postId,commentId);
+    }
 }

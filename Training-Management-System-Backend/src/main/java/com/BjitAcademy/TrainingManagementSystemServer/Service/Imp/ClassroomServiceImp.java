@@ -61,7 +61,7 @@ public class ClassroomServiceImp implements ClassroomService {
         return new ResponseEntity<>(noticeRes,HttpStatus.OK);
     }
     @Override
-    public ResponseEntity<String> addComment(PostCommentReqDto comment) {
+    public ResponseEntity<Object> addComment(PostCommentReqDto comment) {
         //checking post is exist or not using post Id
         PostEntity existPost=postRepository.findByPostId(comment.getPostId());
         if ((existPost==null)){
@@ -76,7 +76,7 @@ public class ClassroomServiceImp implements ClassroomService {
         return new ResponseEntity<>("SuccessFully comment",HttpStatus.OK);
     }
     @Override
-    public ResponseEntity<String> updateComment(Long commentId, PostCommentReqDto comment) {
+    public ResponseEntity<Object> updateComment(Long commentId, PostCommentReqDto comment) {
         //checking post is exist or not?
         PostComment existComment=postCommentRepository.findByCommentId(commentId);
         if (existComment==null){
@@ -89,7 +89,7 @@ public class ClassroomServiceImp implements ClassroomService {
         return new ResponseEntity<>("update post comment ",HttpStatus.OK);
     }
     @Override
-    public ResponseEntity<String> updatePost(Long postId, ClassRoomPostReqDto post) {
+    public ResponseEntity<Object> updatePost(Long postId, ClassRoomPostReqDto post) {
         //checking post is exist or not?
         PostEntity existPost=postRepository.findByPostId(postId);
         if ((existPost==null)){
@@ -103,7 +103,7 @@ public class ClassroomServiceImp implements ClassroomService {
         return new ResponseEntity<>("Successfully updated",HttpStatus.OK);
     }
     @Override
-    public ResponseEntity<String> removePost(Long postId) {
+    public ResponseEntity<Object> removePost(Long postId) {
         //checking post is exist or not?
         PostEntity post=postRepository.findByPostId(postId);
         if ((post==null)){
@@ -113,5 +113,22 @@ public class ClassroomServiceImp implements ClassroomService {
         postRepository.delete(post);
         return new ResponseEntity<>("Successfully deleted",HttpStatus.OK);
     }
-
+    @Override
+    public ResponseEntity<Object> removeComment(Long postId,Long commentId) {
+        //checking comment is exist or not?
+        PostComment existComment=postCommentRepository.findByCommentId(commentId);
+        if (existComment==null){
+            throw new ClassRoomNotFoundException("comment can not deleted");
+        }
+        //checking post is exist or not?
+        PostEntity postEntity=postRepository.findByPostId(postId);
+        if(postEntity==null){
+            throw new ClassRoomNotFoundException("comment can not deleted");
+        }
+        //post has list of comment . then remove the comment from the list
+        postEntity.getPostComments().remove(existComment);
+        //remove the comment from the comment repository
+        postCommentRepository.delete(existComment);
+        return new ResponseEntity<>("Successfully deleted",HttpStatus.OK);
+    }
 }

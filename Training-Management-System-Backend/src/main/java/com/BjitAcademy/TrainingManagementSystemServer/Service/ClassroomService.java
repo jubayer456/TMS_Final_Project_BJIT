@@ -10,8 +10,9 @@ public interface ClassroomService {
     ResponseEntity<Object> addPost(ClassRoomPostReqDto post);
     ResponseEntity<Object> addNotice(NoticeReqDto notice);
     ResponseEntity<List<NoticeResDto>> getAllNotice(Long classId);
-    ResponseEntity<String> addComment(PostCommentReqDto comment);
-    ResponseEntity<String> updateComment(Long commentId, PostCommentReqDto comment);
-    ResponseEntity<String> updatePost(Long postId, ClassRoomPostReqDto post);
-    ResponseEntity<String> removePost(Long postId);
+    ResponseEntity<Object> addComment(PostCommentReqDto comment);
+    ResponseEntity<Object> updateComment(Long commentId, PostCommentReqDto comment);
+    ResponseEntity<Object> updatePost(Long postId, ClassRoomPostReqDto post);
+    ResponseEntity<Object> removePost(Long postId);
+    ResponseEntity<Object> removeComment(Long postId,Long commentId);
 }
