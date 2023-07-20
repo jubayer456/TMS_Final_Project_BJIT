@@ -1,0 +1,112 @@
+import React, { useState } from 'react';
+import CreateTraierModal from './CreateTraierModal';
+import ConfirmationModal from '../../Shared/ConfirmationModal';
+import Loading from '../../Shared/Loading';
+import { useQuery } from 'react-query';
+import Trainer from './Trainer'
+import { toast } from 'react-hot-toast';
+
+const Trainers = () => {
+    const [trainerModal, setTrainerModal] = useState(false);
+    const [deletingTrainer, setDeletingTrainer] = useState(null);
+
+    const closeModal = () => {
+        setDeletingTrainer(null);
+    }
+
+    const { data: trainers = [], refetch, isLoading } = useQuery({
+        queryKey: ['getAllTrainer'],
+        queryFn: async () => {
+            const res = await fetch(`http://localhost:8082/api/trainer/getAll`);
+            const data = await res.json();
+            return data
+        }
+    });
+    if (isLoading) {
+        return <Loading></Loading>
+    }
+
+    const handleDeleteTrainee = trainer => {
+        fetch(`http://localhost:8082/api/trainer/${trainer.trainerId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+                // authorization: `Bearer ${localStorage.getItem('accessToken')}`
+            }
+        })
+            .then(res => {
+                // if (res.status === 401 || res.status === 403) {
+                //     toast.error(`${res.statusText} Access`);
+                //     localStorage.removeItem('accessToken');
+                //     navigate('/login');
+                // }
+                return res.json();
+            })
+            .then(data => {
+                console.log(data);
+                if (data.status == 200) {
+                    refetch();
+                    toast.success(`${deletingTrainer.fullName} succesfully Deleted`)
+                }
+                else {
+                    toast.error(data.msg)
+                }
+            })
+    }
+    return (
+        <div className="m-2 p-4">
+            <div>
+                <div className=" ">
+                    <label htmlFor="trainer-create-modal" onClick={() => setTrainerModal(true)} className="btn btn-primary btn-sm">Create Trainer</label>
+                </div>
+                <div className="divider"></div>
+                <h1 className='text-3xl py-5 text-center'>All Trainers</h1>
+                <div>
+                    <div className="overflow-x-auto">
+                        <table className="table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>email</th>
+                                    <th>contact Num</th>
+                                    <th>Designation</th>
+                                    <th>Expertise</th>
+                                    <th>More</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                            {
+                                trainers.map((trainer, index) => <Trainer
+                                    key={trainer.trainerId}
+                                    index={index + 1}
+                                    trainer={trainer}
+                                    setDeletingTrainer={setDeletingTrainer}
+                                ></Trainer>)
+                            }
+                        </table>
+                    </div>
+                </div>
+                {
+                    deletingTrainer && <ConfirmationModal
+                        title={`Are you sure you want to delete?`}
+                        message={`If you delete ${deletingTrainer.name}. It cannot be undone.`}
+                        successAction={handleDeleteTrainee}
+                        successButtonName="Delete"
+                        modalData={deletingTrainer}
+                        closeModal={closeModal}>
+                    </ConfirmationModal>
+                }
+                {
+                    trainerModal && <CreateTraierModal
+                        refetch={refetch}
+                        setTrainerModal={setTrainerModal}
+                    ></CreateTraierModal>
+                }
+                {/* </> */}
+            </div>
+        </div>
+    );
+};
+
+export default Trainers;

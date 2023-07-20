@@ -1,0 +1,61 @@
+import React, { useState } from 'react';
+import Loading from '../../Shared/Loading';
+import { useQuery } from 'react-query';
+import { useParams } from 'react-router-dom';
+import AssignmentUpdateModal from './AssignmentUpdateModal';
+import Assignment from './Assignment';
+
+const AllAssignment = () => {
+    const [assignUpdateModal, setAssignUpdatedModal] = useState(null);
+
+    const { scheduleId } = useParams();
+    const { data: assignments = [], refetch, isLoading } = useQuery({
+        queryKey: ['getAllAssignment'],
+        queryFn: async () => {
+            const res = await fetch(`http://localhost:8082/api/schedule/${scheduleId}/allAssignment`);
+            const data = await res.json();
+            return data
+        }
+    });
+    if (isLoading) {
+        return <Loading></Loading>
+    }
+    return (
+        <div className='m-2'>
+            <h1 className='text-3xl pb-3 text-center'>All Assignment</h1>
+            <div>
+                <div className="overflow-x-auto">
+                    <table className="table">
+                        <thead>
+                            <tr>
+                                <th>Assignment Id</th>
+                                <th>Assignment Name</th>
+                                <th>Assignment File</th>
+                                <th>DeadLine</th>
+                                <th>More</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                assignments.map((assignment, index) => <Assignment
+                                    key={assignment.assignmentId}
+                                    index={index + 1}
+                                    assignment={assignment}
+                                    setAssignUpdatedModal={setAssignUpdatedModal}
+                                ></Assignment>)
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                {
+                    assignUpdateModal && <AssignmentUpdateModal
+                        setAssignUpdatedModal={setAssignUpdatedModal}
+                        assignUpdateModal={assignUpdateModal}
+                    ></AssignmentUpdateModal>
+                }
+            </div>
+        </div>
+    );
+};
+
+export default AllAssignment;

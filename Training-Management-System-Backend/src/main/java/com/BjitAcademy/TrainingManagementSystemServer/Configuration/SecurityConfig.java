@@ -40,7 +40,9 @@ public class SecurityConfig {
                 .permitAll().requestMatchers("/api/schedule/{scheduleId}/add-assignment","/api/schedule/{trainerId}","/api/schedule/{assignmentId}","/api/schedule/{assignmentId}","/api/schedule/add-assignmentSub","/api/schedule/{scheduleId}/allAssignment",
                         "/api/schedule/{scheduleId}/{assignmentId}","/api/schedule/{batchId}/allAssignmentSub","/api/schedule/{assignmentId}/{submissionId}")
                 .permitAll().requestMatchers("/api/upload","/api/download/{fileName}")
-                .permitAll().requestMatchers("/api/classroom/{trainerId}/getAllClassRoom")
+                .permitAll().requestMatchers("/api/classroom/{trainerId}/getAllClassRoom","/api/classroom/{classId}/getAllPost","/api/classroom/remove-comment/{postId}/{commentId}",
+                        "/api/classroom/remove-post/{postId}","/api/classroom/update-post/{postId}","/api/classroom/update-comment/{commentId}",
+                        "/api/classroom/add-comment","/api/classroom/{classId}/getAllNotice","/api/classroom/add-notice","/api/classroom/add-post")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
