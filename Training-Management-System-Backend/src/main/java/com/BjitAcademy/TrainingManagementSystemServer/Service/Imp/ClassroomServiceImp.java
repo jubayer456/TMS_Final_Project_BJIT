@@ -62,15 +62,30 @@ public class ClassroomServiceImp implements ClassroomService {
     }
     @Override
     public ResponseEntity<String> addComment(PostCommentReqDto comment) {
+        //checking post is exist or not using post Id
         PostEntity existPost=postRepository.findByPostId(comment.getPostId());
         if ((existPost==null)){
             throw new ClassRoomNotFoundException("post Not found for delete");
         }
+        //converting comment dto to entity
         PostComment newComment=ClassRoomMappingModel.commentDtoEntity(comment);
+       //collecting post ... inside post there is comment list,,then add the comment to the list
         existPost.getPostComments().add(postCommentRepository.save(newComment));
+       //save the post in post repository
         postRepository.save(existPost);
         return new ResponseEntity<>("SuccessFully comment",HttpStatus.OK);
     }
-
-
+    @Override
+    public ResponseEntity<String> updateComment(Long commentId, PostCommentReqDto comment) {
+        //checking post is exist or not?
+        PostComment existComment=postCommentRepository.findByCommentId(commentId);
+        if (existComment==null){
+            throw new ClassRoomNotFoundException("comment can not updated");
+        }
+        //set the msg for update
+        existComment.setMsg(comment.getMsg());
+        //save it postCommentRepository
+        postCommentRepository.save(existComment);
+        return new ResponseEntity<>("update post comment ",HttpStatus.OK);
+    }
 }

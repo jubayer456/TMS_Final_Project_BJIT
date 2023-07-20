@@ -29,4 +29,8 @@ public class ClassroomController {
     public ResponseEntity<String> addComment(@RequestBody PostCommentReqDto comment){
         return classroomService.addComment(comment);
     }
+    @PutMapping("/api/classroom/update-comment/{commentId}")
+    public ResponseEntity<String> updateComment(@PathVariable Long commentId,@RequestBody PostCommentReqDto comment){
+        return classroomService.updateComment(commentId,comment);
+    }
 }
