@@ -46,4 +46,8 @@ public class ClassroomController {
     public ResponseEntity<Object> removeComment(@PathVariable Long postId,@PathVariable Long commentId){
         return classroomService.removeComment(postId,commentId);
     }
+    @GetMapping("/api/classroom/{classId}/getAllPost")
+    public ResponseEntity<Set<ClassRoomPostResDto>> getAllPost(@PathVariable Long classId){
+        return classroomService.getAllPost(classId);
+    }
 }

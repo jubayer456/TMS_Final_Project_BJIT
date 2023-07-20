@@ -15,4 +15,5 @@ public interface ClassroomService {
     ResponseEntity<Object> updatePost(Long postId, ClassRoomPostReqDto post);
     ResponseEntity<Object> removePost(Long postId);
     ResponseEntity<Object> removeComment(Long postId,Long commentId);
+    ResponseEntity<Set<ClassRoomPostResDto>> getAllPost(Long classId);
 }

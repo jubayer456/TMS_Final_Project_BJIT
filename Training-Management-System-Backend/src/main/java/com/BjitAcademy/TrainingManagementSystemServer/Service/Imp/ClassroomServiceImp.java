@@ -131,4 +131,24 @@ public class ClassroomServiceImp implements ClassroomService {
         postCommentRepository.delete(existComment);
         return new ResponseEntity<>("Successfully deleted",HttpStatus.OK);
     }
+
+    @Override
+    public ResponseEntity<Set<ClassRoomPostResDto>> getAllPost(Long classId) {
+        //get All the post
+        List<PostEntity> posts=postRepository.findAll();
+        //get all the comment for specifics post and convert it response dto using mapper class named ClassRoomMappingModel
+        Set<ClassRoomPostResDto> allComments= posts.stream().map(postEntity -> {
+            //convert comment to post comment res dto
+            Set<PostCommentResDto> comments=postEntity.getPostComments().stream().map(ClassRoomMappingModel::commentEntityToDto).collect(Collectors.toSet());
+            return ClassRoomPostResDto.builder()
+                    .postId(postEntity.getPostId())
+                    .msg(postEntity.getMsg())
+                    .trainerId(postEntity.getTrainerId())
+                    .postFile(postEntity.getPostFile())
+                    .classRoomId(postEntity.getClassRoomId())
+                    .comments(comments).build();
+        }).collect(Collectors.toSet());
+        return new ResponseEntity<>(allComments,HttpStatus.OK);
+    }
+
 }
