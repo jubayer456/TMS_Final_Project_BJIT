@@ -17,4 +17,5 @@ public class BatchResDto {
     private String startingDate;
     private String endingDate;
     private Integer totalNumOfTrainee;
+    private String classRoomName;
 }

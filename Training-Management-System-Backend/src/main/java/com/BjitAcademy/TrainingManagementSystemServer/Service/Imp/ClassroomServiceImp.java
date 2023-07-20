@@ -1,22 +1,22 @@
 package com.BjitAcademy.TrainingManagementSystemServer.Service.Imp;
 
+import com.BjitAcademy.TrainingManagementSystemServer.Dto.Batch.BatchResDto;
 import com.BjitAcademy.TrainingManagementSystemServer.Dto.ClassRoom.*;
-import com.BjitAcademy.TrainingManagementSystemServer.Entity.ClassRoom;
-import com.BjitAcademy.TrainingManagementSystemServer.Entity.ClassRoomNotice;
-import com.BjitAcademy.TrainingManagementSystemServer.Entity.PostComment;
-import com.BjitAcademy.TrainingManagementSystemServer.Entity.PostEntity;
+import com.BjitAcademy.TrainingManagementSystemServer.Dto.Schedule.ScheduleResDto;
+import com.BjitAcademy.TrainingManagementSystemServer.Entity.*;
 import com.BjitAcademy.TrainingManagementSystemServer.Exception.ClassRoomNotFoundException;
+import com.BjitAcademy.TrainingManagementSystemServer.Exception.TrainerNotFoundException;
+import com.BjitAcademy.TrainingManagementSystemServer.Mapper.BatchMappingModel;
 import com.BjitAcademy.TrainingManagementSystemServer.Mapper.ClassRoomMappingModel;
-import com.BjitAcademy.TrainingManagementSystemServer.Repository.ClassRoomRepository;
-import com.BjitAcademy.TrainingManagementSystemServer.Repository.NoticeRepository;
-import com.BjitAcademy.TrainingManagementSystemServer.Repository.PostCommentRepository;
-import com.BjitAcademy.TrainingManagementSystemServer.Repository.PostRepository;
+import com.BjitAcademy.TrainingManagementSystemServer.Mapper.ScheduleMappingModel;
+import com.BjitAcademy.TrainingManagementSystemServer.Repository.*;
 import com.BjitAcademy.TrainingManagementSystemServer.Service.ClassroomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -28,6 +28,9 @@ public class ClassroomServiceImp implements ClassroomService {
     private final PostRepository postRepository;
     private final PostCommentRepository postCommentRepository;
     private final NoticeRepository noticeRepository;
+    private final TrainerRepository trainerRepository;
+    private final ScheduleRepository scheduleRepository;
+    private final BatchesRepository batchesRepository;
 
     @Override
     public ResponseEntity<Object> addPost(ClassRoomPostReqDto postReq) {
@@ -149,6 +152,30 @@ public class ClassroomServiceImp implements ClassroomService {
                     .comments(comments).build();
         }).collect(Collectors.toSet());
         return new ResponseEntity<>(allComments,HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<Set<BatchResDto>> getAllTrainerClass(Long trainerId) {
+        //checking trainer is exist or not?
+        TrainerEntity trainer=trainerRepository.findByTrainerId(trainerId);
+        if (trainer==null){
+            throw new TrainerNotFoundException("Trainer are not found for ClassRoom");
+        }
+        //find the schedule for specific trainer
+        List<ScheduleResDto> scheduleEntities=scheduleRepository.findAllByTrainerId(trainerId).stream().map(ScheduleMappingModel::scheduleEntityToDto).toList();
+        //initialize hash set for output
+        Set<BatchResDto> classRooms=new HashSet<>();
+        //initialize hash set for unique batch
+        Set<Long> batches=new HashSet<>();
+        for (ScheduleResDto schedule:scheduleEntities){
+            //checking batch is unique or not?
+            if(batches.add(schedule.getBatchId())){
+                // finding batch for response details for UI
+                BatchEntity batch=batchesRepository.findByBatchId(schedule.getBatchId());
+                classRooms.add(BatchMappingModel.BatchEntityToDto(batch));
+            }
+        }
+        return  new ResponseEntity<>(classRooms,HttpStatus.OK);
     }
 
 }

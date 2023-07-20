@@ -3,6 +3,7 @@ package com.BjitAcademy.TrainingManagementSystemServer.Service.Imp;
 import com.BjitAcademy.TrainingManagementSystemServer.Dto.Authentication.AuthenticationResDto;
 import com.BjitAcademy.TrainingManagementSystemServer.Dto.Authentication.LoginDto;
 import com.BjitAcademy.TrainingManagementSystemServer.Dto.Authentication.SuccessResponseDto;
+import com.BjitAcademy.TrainingManagementSystemServer.Dto.Authentication.UserResDto;
 import com.BjitAcademy.TrainingManagementSystemServer.Entity.UserEntity;
 import com.BjitAcademy.TrainingManagementSystemServer.Exception.UserNotFoundException;
 import com.BjitAcademy.TrainingManagementSystemServer.Mapper.UserMappingModel;
@@ -30,7 +31,7 @@ public class AuthServiceImp implements AuthService {
             var jwtToken=jwtService.generateToken(user);
             return new ResponseEntity<>(AuthenticationResDto.builder()
                     .token(jwtToken)
-                    .user(UserMappingModel.userEntityToResDto(user))
+                    .user(UserMappingModel.userEntityToLoginResDto(user))
                     .build(), HttpStatus.OK);
         }
 
@@ -47,5 +48,15 @@ public class AuthServiceImp implements AuthService {
                 .msg("SuccessFully Updated Picture")
                 .build();
         return new ResponseEntity<>(success,HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<Object> userDetails(Long userId) {
+        UserEntity user = userRepository.findByUserId(userId);
+        if (user==null){
+            throw new UserNotFoundException("User Not Found");
+        }
+        UserResDto userResDto=UserMappingModel.userEntityToResDto(user);
+        return new ResponseEntity<>(userResDto,HttpStatus.OK);
     }
 }

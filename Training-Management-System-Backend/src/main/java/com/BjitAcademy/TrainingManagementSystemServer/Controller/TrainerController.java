@@ -32,7 +32,7 @@ public class TrainerController {
         return trainerService.trainerDetails(trainerId);
     }
     @GetMapping("/api/trainer/getAll")
-    public ResponseEntity<List<TrainerResDto>> getAllTrainee() {
+    public ResponseEntity<List<TrainerResDto>> getAllTrainer() {
         return trainerService.getAllTrainer();
     }
 }

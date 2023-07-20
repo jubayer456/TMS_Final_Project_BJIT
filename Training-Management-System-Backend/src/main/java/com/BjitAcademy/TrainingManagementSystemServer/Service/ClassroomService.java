@@ -1,5 +1,6 @@
 package com.BjitAcademy.TrainingManagementSystemServer.Service;
 
+import com.BjitAcademy.TrainingManagementSystemServer.Dto.Batch.BatchResDto;
 import com.BjitAcademy.TrainingManagementSystemServer.Dto.ClassRoom.*;
 import org.springframework.http.ResponseEntity;
 
@@ -16,4 +17,6 @@ public interface ClassroomService {
     ResponseEntity<Object> removePost(Long postId);
     ResponseEntity<Object> removeComment(Long postId,Long commentId);
     ResponseEntity<Set<ClassRoomPostResDto>> getAllPost(Long classId);
+
+    ResponseEntity<Set<BatchResDto>> getAllTrainerClass(Long trainerId);
 }

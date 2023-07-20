@@ -19,4 +19,6 @@ public interface ScheduleRepository extends JpaRepository<ScheduleEntity,Long>{
     ScheduleEntity findByBatchIdAndCourseId(Long batchId, Long courseId);
 
     List<ScheduleEntity> findByTrainerId(Long trainerId);
+
+    List<ScheduleEntity> findAllByTrainerId(Long trainerId);
 }

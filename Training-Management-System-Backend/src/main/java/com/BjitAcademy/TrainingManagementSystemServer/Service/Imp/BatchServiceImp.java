@@ -51,11 +51,11 @@ public class BatchServiceImp implements BatchService {
         }
         //mapping batch req dto to entity using batch mapper model
         BatchEntity batch= BatchMappingModel.BatchDtoToEntity(batchReqDto);
+        ClassRoom classRoom=new ClassRoom();
+        classRoom.setClassRoomName(batch.getBatchName());
         batch.setClassRoom( classRoomRepository.save(new ClassRoom()));
-
         //saving batch entity to batch repository
         batchesRepository.save(batch);
-
         //showing backend msg to frontend using success object
         SuccessResponseDto success=SuccessResponseDto.builder()
                 .msg("Successfully Batch Created")

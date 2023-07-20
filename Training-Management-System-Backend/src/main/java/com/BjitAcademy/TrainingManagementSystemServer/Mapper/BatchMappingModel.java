@@ -28,6 +28,7 @@ public class BatchMappingModel {
                 .startingDate(batchEntity.getStartingDate())
                 .endingDate(batchEntity.getEndingDate())
                 .totalNumOfTrainee(batchEntity.getTotalNumOfTrainee())
+                .classRoomName(batchEntity.getClassRoom().getClassRoomName())
                 .build();
     }
 

@@ -20,4 +20,8 @@ public class AuthController {
     public ResponseEntity<Object> updateUserPicture(@PathVariable Long userId,@RequestBody String picture){
         return authService.updateUserPicture(userId,picture);
     }
+    @GetMapping ("/api/auth/{userId}")
+    public ResponseEntity<Object> userDetails(@PathVariable Long userId){
+        return authService.userDetails(userId);
+    }
 }

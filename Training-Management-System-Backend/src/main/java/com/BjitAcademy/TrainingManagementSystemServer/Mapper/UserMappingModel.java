@@ -1,5 +1,6 @@
 package com.BjitAcademy.TrainingManagementSystemServer.Mapper;
 
+import com.BjitAcademy.TrainingManagementSystemServer.Dto.Authentication.UserLoginDto;
 import com.BjitAcademy.TrainingManagementSystemServer.Dto.Authentication.UserResDto;
 import com.BjitAcademy.TrainingManagementSystemServer.Entity.*;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,12 @@ public class UserMappingModel {
                 .profilePicture(user.getProfilePicture())
                 .gender(user.getGender())
                 .contactNumber(user.getContactNumber())
+                .role(user.getRole())
+                .build();
+    }
+    public static UserLoginDto userEntityToLoginResDto(UserEntity user){
+        return UserLoginDto.builder()
+                .userId(user.getUserId())
                 .role(user.getRole())
                 .build();
     }

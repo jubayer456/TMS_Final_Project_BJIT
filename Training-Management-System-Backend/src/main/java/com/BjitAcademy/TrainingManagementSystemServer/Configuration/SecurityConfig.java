@@ -30,7 +30,7 @@ public class SecurityConfig {
                 .permitAll().requestMatchers("/api/trainee","/api/trainee/getAll","/api/trainee/{traineeId}")
                 .permitAll().requestMatchers("/api/trainer","/api/trainer/getAll","/api/trainer/{trainerId}")
                 .permitAll()
-                .requestMatchers("/api/auth/login","/api/auth/changePass/{userId}","/api/auth/updatePicture/{userId}")
+                .requestMatchers("/api/auth/login","/api/auth/changePass/{userId}","/api/auth/updatePicture/{userId}","/api/auth/{userId}")
                 .permitAll() .requestMatchers("/api/auth/trainee","/api/trainee/{traineeId}","/api/trainee/getAll")
                 .permitAll().requestMatchers("/api/course/save","/api/course/{courseId}","/api/course/getAll","/api/course/{courseId}")
                 .permitAll()
@@ -40,6 +40,7 @@ public class SecurityConfig {
                 .permitAll().requestMatchers("/api/schedule/{scheduleId}/add-assignment","/api/schedule/{trainerId}","/api/schedule/{assignmentId}","/api/schedule/{assignmentId}","/api/schedule/add-assignmentSub","/api/schedule/{scheduleId}/allAssignment",
                         "/api/schedule/{scheduleId}/{assignmentId}","/api/schedule/{batchId}/allAssignmentSub","/api/schedule/{assignmentId}/{submissionId}")
                 .permitAll().requestMatchers("/api/upload","/api/download/{fileName}")
+                .permitAll().requestMatchers("/api/classroom/{trainerId}/getAllClassRoom")
                 .permitAll()
                 .anyRequest()
                 .authenticated()

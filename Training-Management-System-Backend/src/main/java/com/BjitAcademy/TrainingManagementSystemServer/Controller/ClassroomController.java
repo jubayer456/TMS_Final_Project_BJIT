@@ -1,5 +1,6 @@
 package com.BjitAcademy.TrainingManagementSystemServer.Controller;
 
+import com.BjitAcademy.TrainingManagementSystemServer.Dto.Batch.BatchResDto;
 import com.BjitAcademy.TrainingManagementSystemServer.Dto.ClassRoom.*;
 import com.BjitAcademy.TrainingManagementSystemServer.Service.ClassroomService;
 import lombok.RequiredArgsConstructor;
@@ -49,5 +50,9 @@ public class ClassroomController {
     @GetMapping("/api/classroom/{classId}/getAllPost")
     public ResponseEntity<Set<ClassRoomPostResDto>> getAllPost(@PathVariable Long classId){
         return classroomService.getAllPost(classId);
+    }
+    @GetMapping("/api/classroom/{trainerId}/getAllClassRoom")
+    public ResponseEntity<Set<BatchResDto>> getAllTrainerClass(@PathVariable Long trainerId){
+        return classroomService.getAllTrainerClass(trainerId);
     }
 }
