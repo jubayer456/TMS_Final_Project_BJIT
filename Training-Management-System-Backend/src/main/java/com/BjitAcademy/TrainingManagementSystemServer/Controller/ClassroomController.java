@@ -14,15 +14,19 @@ import java.util.Set;
 public class ClassroomController {
     private final ClassroomService classroomService;
     @PostMapping("/api/classroom/add-post")
-    public ResponseEntity<String> addPost(@RequestBody ClassRoomPostReqDto post){
+    public ResponseEntity<Object> addPost(@RequestBody ClassRoomPostReqDto post){
         return classroomService.addPost(post);
     }
     @PostMapping("/api/classroom/add-notice")
-    public ResponseEntity<String> addNotice(@RequestBody NoticeReqDto notice){
+    public ResponseEntity<Object> addNotice(@RequestBody NoticeReqDto notice){
         return classroomService.addNotice(notice);
     }
     @GetMapping("/api/classroom/{classId}/getAllNotice")
     public ResponseEntity<List<NoticeResDto>> getAllNotice(@PathVariable Long classId){
         return classroomService.getAllNotice(classId);
+    }
+    @PostMapping("/api/classroom/add-comment")
+    public ResponseEntity<String> addComment(@RequestBody PostCommentReqDto comment){
+        return classroomService.addComment(comment);
     }
 }
