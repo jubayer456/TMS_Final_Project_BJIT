@@ -13,5 +13,5 @@ public interface ClassroomService {
     ResponseEntity<String> addComment(PostCommentReqDto comment);
     ResponseEntity<String> updateComment(Long commentId, PostCommentReqDto comment);
     ResponseEntity<String> updatePost(Long postId, ClassRoomPostReqDto post);
-
+    ResponseEntity<String> removePost(Long postId);
 }

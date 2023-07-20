@@ -102,4 +102,16 @@ public class ClassroomServiceImp implements ClassroomService {
         postRepository.save(existPost);
         return new ResponseEntity<>("Successfully updated",HttpStatus.OK);
     }
+    @Override
+    public ResponseEntity<String> removePost(Long postId) {
+        //checking post is exist or not?
+        PostEntity post=postRepository.findByPostId(postId);
+        if ((post==null)){
+            throw new ClassRoomNotFoundException("post Not found for delete");
+        }
+        //delete the entity from the repository
+        postRepository.delete(post);
+        return new ResponseEntity<>("Successfully deleted",HttpStatus.OK);
+    }
+
 }

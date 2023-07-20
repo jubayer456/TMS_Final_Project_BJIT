@@ -37,4 +37,10 @@ public class ClassroomController {
     public ResponseEntity<String> updatePost(@PathVariable Long postId,@RequestBody ClassRoomPostReqDto post){
         return classroomService.updatePost(postId,post);
     }
+
+    @DeleteMapping("/api/classroom/remove-post/{postId}")
+    public ResponseEntity<String> removePost(@PathVariable Long postId){
+        return classroomService.removePost(postId);
+    }
+
 }
