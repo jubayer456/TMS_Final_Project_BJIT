@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 public class NoticeResDto {
     private Long noticeId;
     private Long trainerId;
-    private Long scheduleId;
-    private String msg;
+    private Long classRoomId;
+    private String trainerName;
+    private String title;
+    private String description;
 }

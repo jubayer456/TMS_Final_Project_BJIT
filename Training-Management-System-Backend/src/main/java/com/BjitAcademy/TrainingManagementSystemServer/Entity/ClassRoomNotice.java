@@ -21,6 +21,8 @@ public class ClassRoomNotice {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long noticeId;
     private Long trainerId;
-    private Long scheduleId;
-    private String msg;
+    private String trainerName;
+    private String title;
+    private String description;
+    private Long classRoomId;
 }

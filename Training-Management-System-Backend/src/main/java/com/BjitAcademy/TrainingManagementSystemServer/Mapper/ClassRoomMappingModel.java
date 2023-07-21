@@ -1,9 +1,12 @@
 package com.BjitAcademy.TrainingManagementSystemServer.Mapper;
 
 import com.BjitAcademy.TrainingManagementSystemServer.Dto.ClassRoom.*;
+import com.BjitAcademy.TrainingManagementSystemServer.Entity.ClassRoom;
 import com.BjitAcademy.TrainingManagementSystemServer.Entity.ClassRoomNotice;
 import com.BjitAcademy.TrainingManagementSystemServer.Entity.PostComment;
 import com.BjitAcademy.TrainingManagementSystemServer.Entity.PostEntity;
+
+import java.util.List;
 
 public class ClassRoomMappingModel {
     public static PostEntity postDtoToEntity(ClassRoomPostReqDto classRoomPostReqDto){
@@ -14,13 +17,14 @@ public class ClassRoomMappingModel {
                 .postFile(classRoomPostReqDto.getPostFile())
                 .build();
     }
-    public static ClassRoomPostResDto postEntityToDto(PostEntity postEntity){
+    public static ClassRoomPostResDto postEntityToDto(PostEntity postEntity, List<PostCommentResDto> comment){
         return ClassRoomPostResDto.builder()
                 .classRoomId(postEntity.getClassRoomId())
                 .postId(postEntity.getPostId())
                 .trainerId(postEntity.getTrainerId())
                 .msg(postEntity.getMsg())
                 .postFile(postEntity.getPostFile())
+                .comments(comment)
                 .build();
     }
     public static PostComment commentDtoEntity(PostCommentReqDto postCommentReqDto){
@@ -40,17 +44,29 @@ public class ClassRoomMappingModel {
     }
     public static ClassRoomNotice noticeDtoToEntity(NoticeReqDto notice){
         return ClassRoomNotice.builder()
-                .scheduleId(notice.getScheduleId())
+                .trainerName(notice.getTrainerName())
                 .trainerId(notice.getTrainerId())
-                .msg(notice.getMsg())
+                .description(notice.getDescription())
+                .title(notice.getTitle())
+                .classRoomId(notice.getClassRoomId())
                 .build();
     }
     public static NoticeResDto noticeEntityToDto(ClassRoomNotice notice){
         return NoticeResDto.builder()
                 .noticeId(notice.getNoticeId())
-                .scheduleId(notice.getScheduleId())
+                .trainerName(notice.getTrainerName())
                 .trainerId(notice.getTrainerId())
-                .msg(notice.getMsg())
+                .description(notice.getDescription())
+                .title(notice.getTitle())
+                .classRoomId(notice.getClassRoomId())
+                .build();
+    }
+    public static ClassRoomResponseDto classRoomEntityToDto(ClassRoom ClassRoom,List<ClassRoomPostResDto> posts,List<NoticeResDto> notice){
+        return ClassRoomResponseDto.builder()
+                .classRoomId(ClassRoom.getClassRoomId())
+                .classRoomName(ClassRoom.getClassRoomName())
+                .posts(posts)
+                .classRoomNotice(notice)
                 .build();
     }
 }

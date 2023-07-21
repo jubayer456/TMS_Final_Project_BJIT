@@ -22,7 +22,7 @@ import AssignmentSubmissions from '../Pages/DashBoard/AssignmentSub/AssignmentSu
 import ShowAllAssignmentSubmission from '../Pages/DashBoard/Assignmet/ShowAllAssignmentSubmission';
 import Trainers from '../Pages/DashBoard/Trainer/Trainers';
 import Trainees from '../Pages/DashBoard/Trainee/Trainees';
-import Classroom from '../Pages/DashBoard/ClassRoom/Classroom';
+import Classroom from '../Pages/DashBoard/ClassRoom/Classrooms';
 import TrainerClassRoom from '../Pages/DashBoard/ClassRoom/TrainerClassRoom';
 
 const router = createBrowserRouter([
@@ -50,8 +50,12 @@ const router = createBrowserRouter([
                 path: '/dashboard/registerTrainer',
                 element: <Trainers />
             },
+            // {
+            //     path: '/dashboard/classroom',
+            //     element: <Classroom />
+            // },
             {
-                path: '/dashboard/classroom',
+                path: '/dashboard/classroom/:classRoomId',
                 element: <Classroom />
             },
             {

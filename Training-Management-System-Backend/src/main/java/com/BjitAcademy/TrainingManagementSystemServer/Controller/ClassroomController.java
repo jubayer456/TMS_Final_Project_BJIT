@@ -55,4 +55,8 @@ public class ClassroomController {
     public ResponseEntity<Set<BatchResDto>> getAllTrainerClass(@PathVariable Long trainerId){
         return classroomService.getAllTrainerClass(trainerId);
     }
+    @GetMapping("/api/classroom/{classroomId}")
+    public ResponseEntity<ClassRoomResponseDto> getClassRoomDetails(@PathVariable Long classroomId){
+        return classroomService.getClassRoomDetails(classroomId);
+    }
 }

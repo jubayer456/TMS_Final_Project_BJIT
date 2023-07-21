@@ -42,7 +42,7 @@ public class SecurityConfig {
                 .permitAll().requestMatchers("/api/upload","/api/download/{fileName}")
                 .permitAll().requestMatchers("/api/classroom/{trainerId}/getAllClassRoom","/api/classroom/{classId}/getAllPost","/api/classroom/remove-comment/{postId}/{commentId}",
                         "/api/classroom/remove-post/{postId}","/api/classroom/update-post/{postId}","/api/classroom/update-comment/{commentId}",
-                        "/api/classroom/add-comment","/api/classroom/{classId}/getAllNotice","/api/classroom/add-notice","/api/classroom/add-post")
+                        "/api/classroom/add-comment","/api/classroom/{classId}/getAllNotice","/api/classroom/add-notice","/api/classroom/add-post","/api/classroom/{classroomId}")
                 .permitAll()
                 .anyRequest()
                 .authenticated()

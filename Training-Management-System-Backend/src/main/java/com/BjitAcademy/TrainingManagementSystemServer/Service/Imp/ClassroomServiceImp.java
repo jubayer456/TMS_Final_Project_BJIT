@@ -1,5 +1,6 @@
 package com.BjitAcademy.TrainingManagementSystemServer.Service.Imp;
 
+import com.BjitAcademy.TrainingManagementSystemServer.Dto.Authentication.SuccessResponseDto;
 import com.BjitAcademy.TrainingManagementSystemServer.Dto.Batch.BatchResDto;
 import com.BjitAcademy.TrainingManagementSystemServer.Dto.ClassRoom.*;
 import com.BjitAcademy.TrainingManagementSystemServer.Dto.Schedule.ScheduleResDto;
@@ -49,16 +50,26 @@ public class ClassroomServiceImp implements ClassroomService {
     }
     @Override
     public ResponseEntity<Object> addNotice(NoticeReqDto noticeReqDto) {
+        //checking classroom is present or not?
+        ClassRoom classRoom=classRoomRepository.findByClassRoomId(noticeReqDto.getClassRoomId());
+        if (classRoom==null){
+            throw new ClassRoomNotFoundException("ClassRoom is not found for notice");
+        }
         //converting NOTICE req dto to entity for db
         ClassRoomNotice notice=ClassRoomMappingModel.noticeDtoToEntity(noticeReqDto);
-        //save the notice in notice repository
-        noticeRepository.save(notice);
-        return new ResponseEntity<>("Successfully create notice",HttpStatus.OK);
+        //save the notice in classRoom notice List
+        classRoom.getClassRoomNotice().add(noticeRepository.save(notice));
+
+        classRoomRepository.save(classRoom);
+        SuccessResponseDto success= SuccessResponseDto.builder()
+                .msg("Successfully create notice")
+                .status(HttpStatus.OK.value()).build();
+        return new ResponseEntity<>(success,HttpStatus.OK);
     }
     @Override
     public ResponseEntity<List<NoticeResDto>> getAllNotice(Long classId) {
-        //get all the notice
-        List<ClassRoomNotice> notice=noticeRepository.findAll();
+        //get all the notice for classroom
+       List<ClassRoomNotice> notice=classRoomRepository.findByClassRoomId(classId).getClassRoomNotice();
         //convert the entity to response dto using mapper class named ClassRoomMappingModel
         List<NoticeResDto> noticeRes=notice.stream().map(ClassRoomMappingModel::noticeEntityToDto).toList();
         return new ResponseEntity<>(noticeRes,HttpStatus.OK);
@@ -149,7 +160,8 @@ public class ClassroomServiceImp implements ClassroomService {
                     .trainerId(postEntity.getTrainerId())
                     .postFile(postEntity.getPostFile())
                     .classRoomId(postEntity.getClassRoomId())
-                    .comments(comments).build();
+//                    .comments(comments)
+                    .build();
         }).collect(Collectors.toSet());
         return new ResponseEntity<>(allComments,HttpStatus.OK);
     }
@@ -178,4 +190,24 @@ public class ClassroomServiceImp implements ClassroomService {
         return  new ResponseEntity<>(classRooms,HttpStatus.OK);
     }
 
+    @Override
+    public ResponseEntity<ClassRoomResponseDto> getClassRoomDetails(Long classroomId) {
+        ClassRoom classRoom=classRoomRepository.findByClassRoomId(classroomId);
+        if (classRoom==null){
+            throw new ClassRoomNotFoundException("ClassRoom are Not found");
+        }
+        List<PostEntity> posts=classRoom.getPosts();
+        //get all the comment for specifics post and convert it response dto using mapper class named ClassRoomMappingModel
+        List<ClassRoomPostResDto> allPosts= posts.stream().map(postEntity -> {
+            //convert comment to post comment res dto
+            List<PostCommentResDto> comments=postEntity.getPostComments().stream().map(ClassRoomMappingModel::commentEntityToDto).toList();
+            return ClassRoomMappingModel.postEntityToDto(postEntity,comments);
+        }).toList();
+
+        List<ClassRoomNotice> notice=classRoom.getClassRoomNotice();
+        //convert the entity to response dto using mapper class named ClassRoomMappingModel
+        List<NoticeResDto> noticeRes=notice.stream().map(ClassRoomMappingModel::noticeEntityToDto).toList();
+        ClassRoomResponseDto classRoomResponse=ClassRoomMappingModel.classRoomEntityToDto(classRoom,allPosts,noticeRes);
+        return new ResponseEntity<>(classRoomResponse,HttpStatus.OK);
+    }
 }

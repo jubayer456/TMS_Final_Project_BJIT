@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -17,5 +18,5 @@ public class ClassRoomPostResDto {
     private Long trainerId;
     private String msg;
     private String postFile;
-    private Set<PostCommentResDto> comments;
+    private List<PostCommentResDto> comments;
 }

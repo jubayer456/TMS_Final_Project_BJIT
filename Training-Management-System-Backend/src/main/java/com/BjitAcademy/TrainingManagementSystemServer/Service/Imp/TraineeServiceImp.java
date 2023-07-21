@@ -108,7 +108,7 @@ public class TraineeServiceImp implements TraineeService {
     public ResponseEntity<Object> traineeDetails(Long traineeId) {
         TraineeEntity trainee = traineeRepository.findByTraineeId(traineeId);
         if (trainee == null) {
-            throw new UserNotFoundException("trainee is not found for update");
+            throw new UserNotFoundException("trainee is not found for details");
         }
         TraineeResDto traineeResDto=TraineeMappingModel.traineeEntityToDto(trainee,trainee.getUser());
         return new ResponseEntity<>(traineeResDto,HttpStatus.OK);

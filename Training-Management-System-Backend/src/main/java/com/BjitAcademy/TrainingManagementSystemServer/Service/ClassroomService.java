@@ -19,4 +19,6 @@ public interface ClassroomService {
     ResponseEntity<Set<ClassRoomPostResDto>> getAllPost(Long classId);
 
     ResponseEntity<Set<BatchResDto>> getAllTrainerClass(Long trainerId);
+
+    ResponseEntity<ClassRoomResponseDto> getClassRoomDetails(Long classroomId);
 }

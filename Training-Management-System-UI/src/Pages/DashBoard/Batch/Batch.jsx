@@ -12,6 +12,9 @@ const Batch = ({batch,index}) => {
     const   AssignSchedule=(batchId)=>{
         navigate(`/dashboard/batch/${batchId}/getAllSchedule`);
     }
+    const   handleClassRoom=(classRoomId)=>{
+        navigate(`/dashboard/classroom/${classRoomId}`);
+    }
     return (
         <div className="card w-96 bg-base-100 shadow-xl">
         <div className="card-body">
@@ -25,6 +28,7 @@ const Batch = ({batch,index}) => {
             <div>
             <label onClick={() => AssignTrainee(batch.batchId)} className="btn btn-sm btn-success text-base-100 mt-4 mx-1">Assign Trainee</label>
             <label onClick={() => AssignSchedule(batch.batchId)} className="btn btn-sm btn-success text-base-100 mt-4 mx-1">Assign Schedule</label>
+            <label onClick={() => handleClassRoom(batch.batchId)} className="btn btn-sm btn-success text-base-100 mt-4 mx-1">ClassRoom</label>
             </div>
         </div>
     </div>
