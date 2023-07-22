@@ -57,7 +57,7 @@ const TraineeProfile = () => {
                     console.log(response.data);
                     const updateData = response.data.name;
                     console.log(updateData);
-                    fetch(`http://localhost:8082/api/auth/updatePicture/${userId}`, {
+                    fetch(`http://localhost:8082/api/auth/updatePicture/${userDetails?.userId}`, {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json'

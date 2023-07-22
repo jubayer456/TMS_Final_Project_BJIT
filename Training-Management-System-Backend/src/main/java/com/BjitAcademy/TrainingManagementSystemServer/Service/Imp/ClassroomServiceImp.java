@@ -46,7 +46,12 @@ public class ClassroomServiceImp implements ClassroomService {
         classRoom.getPosts().add(postRepository.save(post));
         //save the classRoom entity to classRoom
         classRoomRepository.save(classRoom);
-        return new ResponseEntity<>("Successfully upload post", HttpStatus.OK);
+
+        SuccessResponseDto success=SuccessResponseDto.builder()
+                .msg("Successfully Post To the ClassRoom")
+                .status(HttpStatus.OK.value())
+                .build();
+        return new ResponseEntity<>(success, HttpStatus.OK);
     }
     @Override
     public ResponseEntity<Object> addNotice(NoticeReqDto noticeReqDto) {
@@ -87,7 +92,10 @@ public class ClassroomServiceImp implements ClassroomService {
         existPost.getPostComments().add(postCommentRepository.save(newComment));
        //save the post in post repository
         postRepository.save(existPost);
-        return new ResponseEntity<>("SuccessFully comment",HttpStatus.OK);
+        SuccessResponseDto success= SuccessResponseDto.builder()
+                .msg("Successfully create Comment")
+                .status(HttpStatus.OK.value()).build();
+        return new ResponseEntity<>(success,HttpStatus.OK);
     }
     @Override
     public ResponseEntity<Object> updateComment(Long commentId, PostCommentReqDto comment) {
@@ -111,10 +119,15 @@ public class ClassroomServiceImp implements ClassroomService {
         }
         //set the msg for update
         existPost.setMsg(post.getMsg());
-        existPost.setPostFile(post.getPostFile());
+//        existPost.setPostFile(post.getPostFile());
         //save it postRepository
         postRepository.save(existPost);
-        return new ResponseEntity<>("Successfully updated",HttpStatus.OK);
+
+        SuccessResponseDto success=SuccessResponseDto.builder()
+                .msg("Successfully Updated Post")
+                .status(HttpStatus.OK.value())
+                .build();
+        return new ResponseEntity<>(success, HttpStatus.OK);
     }
     @Override
     public ResponseEntity<Object> removePost(Long postId) {
@@ -125,7 +138,11 @@ public class ClassroomServiceImp implements ClassroomService {
         }
         //delete the entity from the repository
         postRepository.delete(post);
-        return new ResponseEntity<>("Successfully deleted",HttpStatus.OK);
+        SuccessResponseDto success=SuccessResponseDto.builder()
+                .msg("Successfully Deleted Post")
+                .status(HttpStatus.OK.value())
+                .build();
+        return new ResponseEntity<>(success, HttpStatus.OK);
     }
     @Override
     public ResponseEntity<Object> removeComment(Long postId,Long commentId) {
@@ -143,7 +160,11 @@ public class ClassroomServiceImp implements ClassroomService {
         postEntity.getPostComments().remove(existComment);
         //remove the comment from the comment repository
         postCommentRepository.delete(existComment);
-        return new ResponseEntity<>("Successfully deleted",HttpStatus.OK);
+        SuccessResponseDto success=SuccessResponseDto.builder()
+                .msg("Successfully Deleted Comment")
+                .status(HttpStatus.OK.value())
+                .build();
+        return new ResponseEntity<>(success, HttpStatus.OK);
     }
 
     @Override
@@ -207,6 +228,7 @@ public class ClassroomServiceImp implements ClassroomService {
         List<ClassRoomNotice> notice=classRoom.getClassRoomNotice();
         //convert the entity to response dto using mapper class named ClassRoomMappingModel
         List<NoticeResDto> noticeRes=notice.stream().map(ClassRoomMappingModel::noticeEntityToDto).toList();
+        //passing the notice and all post dto as a parameter of ClassRoomMapping model which is converting classRoomResponse Model for UI
         ClassRoomResponseDto classRoomResponse=ClassRoomMappingModel.classRoomEntityToDto(classRoom,allPosts,noticeRes);
         return new ResponseEntity<>(classRoomResponse,HttpStatus.OK);
     }

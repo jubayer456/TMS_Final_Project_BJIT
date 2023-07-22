@@ -18,6 +18,7 @@ const AllBatchTrainee = () => {
         queryFn: async () => {
             const res = await fetch(`http://localhost:8082/api/batch/${batchId}/getAllTrainee`);
             const data = await res.json();
+            console.log(data);
             return data
         }
     });

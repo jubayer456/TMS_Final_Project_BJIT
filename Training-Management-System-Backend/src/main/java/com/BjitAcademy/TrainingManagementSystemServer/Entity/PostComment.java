@@ -16,7 +16,10 @@ public class PostComment {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long commentId;
-    private Long traineeId;
-    private String msg;
     private Long postId;
+    private Long traineeId;
+    private String traineeName;
+    private String profilePicture;
+    private String commentDate;
+    private String msg;
 }

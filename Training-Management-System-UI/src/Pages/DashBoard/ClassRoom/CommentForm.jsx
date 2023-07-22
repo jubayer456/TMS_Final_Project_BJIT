@@ -1,25 +1,69 @@
 import React, { useState } from 'react';
+import { toast } from 'react-hot-toast';
 
-const CommentForm = ({ addComment }) => {
+const CommentForm = ({ addComment, refetch, setShowCommentForm, trainee, post }) => {
+  const { traineeId, profilePicture, fullName } = trainee;
   const [commentText, setCommentText] = useState('');
-  const [commentImage, setCommentImage] = useState(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!commentText.trim() && !commentImage) return; // Prevent adding empty comments
+    // if (!commentText.trim() ) return; // Prevent adding empty comments
 
-    const newComment = {
-      text: commentText,
-      image: commentImage,
-      date: new Date().toLocaleString(),
-    };
+    // const newComment = {
+    //   text: commentText,
 
-    addComment(newComment);
+    //   date: new Date().toLocaleString(),
+    // };
+
+    // addComment(newComment);
+
+
 
     // Reset form fields after submitting
-    setCommentText('');
-    setCommentImage(null);
+    // setCommentText('');
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+    const day = String(currentDate.getDate()).padStart(2, '0');
+    const formattedDate = `${year}-${month}-${day}`;
+
+    const commentData = {
+      postId:post.postId,
+      traineeId:traineeId,
+      profilePicture:profilePicture,
+      traineeName:fullName,
+      commentDate:formattedDate,
+      msg: commentText
+    }
+    console.log(commentData)
+    fetch('http://localhost:8082/api/classroom/add-comment', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+          // authorization: `Bearer ${localStorage.getItem('accessToken')}`
+      },
+      body: JSON.stringify(commentData)
+    })
+      .then(res => {
+          console.log(res);
+          // if (res.status === 401 || res.status === 403) {
+          //     toast.error(`${res.statusText} Access`);
+          //     localStorage.removeItem('accessToken');
+          //     navigate('/login');
+          // }
+          return res.json();
+      })
+      .then(data => {
+          if (data.status == 200) {
+              setShowCommentForm(false);
+              refetch();
+              toast.success(data.msg);
+          }
+          else {
+              toast.error(data.msg);
+          }
+      })
   };
 
   return (
@@ -31,13 +75,8 @@ const CommentForm = ({ addComment }) => {
         onChange={(e) => setCommentText(e.target.value)}
         placeholder="Add a comment..."
       />
-      {/* <input
-        type="file"
-        className="mt-2"
-        onChange={(e) => setCommentImage(e.target.files[0])}
-      /> */}
       <br />
-      <button type="submit"   className="bg-blue-500 text-slate-50 rounded mx-2 px-2 mb-4">
+      <button type="submit" className="bg-blue-500 text-slate-50 rounded mx-2 px-2 mb-4">
         Add Comment
       </button>
     </form>

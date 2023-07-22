@@ -43,6 +43,7 @@ public class ClassroomController {
     public ResponseEntity<Object> removePost(@PathVariable Long postId){
         return classroomService.removePost(postId);
     }
+
     @DeleteMapping("/api/classroom/remove-comment/{postId}/{commentId}")
     public ResponseEntity<Object> removeComment(@PathVariable Long postId,@PathVariable Long commentId){
         return classroomService.removeComment(postId,commentId);

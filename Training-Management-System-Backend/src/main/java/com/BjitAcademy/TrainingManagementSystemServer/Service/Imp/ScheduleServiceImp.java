@@ -14,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -104,10 +106,15 @@ public class ScheduleServiceImp implements ScheduleService {
         if (assignment==null){
             throw new AssignmentNotFoundException("Assignment are not found for submission");
         }
-//        AssignmentSubEntity assignmentSubEntity=assignmentSubRepository.findByTraineeId(asignSubReqDto.getTraineeId());
-//        if (assignmentSubEntity!=null){
-//            throw new TraineeAlreadyExistException("Trainee Already Submit their Assignment");
-//        }
+        AssignmentSubEntity assignmentSubEntity=assignmentSubRepository.findByTraineeId(asignSubReqDto.getTraineeId());
+        if (assignmentSubEntity!=null){
+            throw new TraineeAlreadyExistException("Trainee Already Submit their Assignment");
+        }
+        //for checking date ,,, using date formatter
+        DateTimeFormatter dateTimeFormatter=DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        if(LocalDate.parse((CharSequence)asignSubReqDto.getSubmissionDate() ,dateTimeFormatter).isAfter(LocalDate.parse((CharSequence)assignment.getDeadLine() ,dateTimeFormatter))){
+            throw new TraineeAlreadyExistException("Times up for submission");
+        }
         // assignment submission req dto to assignment submission entity using mapper class
         AssignmentSubEntity assignmentSub=AssignmentMappingModel.assignmentSubDtoToEntity(asignSubReqDto);
         //add assignment sub to assignment submission list

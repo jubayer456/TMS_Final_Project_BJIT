@@ -25,7 +25,7 @@ const ClassRoomNav = ({ setNoticeCreatdModal,classRoom,isLoading }) => {
          <span className="badge badge-sm indicator-item">{classRoom.classRoomNotice?.length}</span>
                         </div>
                     </label>
-                    <div tabIndex={0} className="mt-3 z-[10] card card-compact dropdown-content w-96 bg-base-100 shadow">
+                    <div tabIndex={0} className="mt-2 z-[10] card card-compact dropdown-content w-96 bg-base-100 shadow">
                         <div className="card-body">
                             {
                               classRoom?.classRoomNotice?.map((notice, index) => <Notice

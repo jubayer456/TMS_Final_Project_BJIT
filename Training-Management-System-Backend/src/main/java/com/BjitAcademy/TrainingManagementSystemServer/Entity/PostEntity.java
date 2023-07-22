@@ -20,6 +20,9 @@ public class PostEntity {
     private Long postId;
     private Long classRoomId;
     private Long trainerId;
+    private String trainerName;
+    private String profilePicture;
+    private String postDate;
     private String msg;
     private String postFile;
     @OneToMany(cascade = CascadeType.ALL)

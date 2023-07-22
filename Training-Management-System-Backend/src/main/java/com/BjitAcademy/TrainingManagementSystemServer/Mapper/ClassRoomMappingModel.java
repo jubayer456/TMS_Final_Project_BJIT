@@ -15,11 +15,17 @@ public class ClassRoomMappingModel {
                 .trainerId(classRoomPostReqDto.getTrainerId())
                 .msg(classRoomPostReqDto.getMsg())
                 .postFile(classRoomPostReqDto.getPostFile())
+                .postDate(classRoomPostReqDto.getPostDate())
+                .trainerName(classRoomPostReqDto.getTrainerName())
+                .profilePicture(classRoomPostReqDto.getProfilePicture())
                 .build();
     }
     public static ClassRoomPostResDto postEntityToDto(PostEntity postEntity, List<PostCommentResDto> comment){
         return ClassRoomPostResDto.builder()
                 .classRoomId(postEntity.getClassRoomId())
+                .profilePicture(postEntity.getProfilePicture())
+                .postDate(postEntity.getPostDate())
+                .trainerName(postEntity.getTrainerName())
                 .postId(postEntity.getPostId())
                 .trainerId(postEntity.getTrainerId())
                 .msg(postEntity.getMsg())
@@ -32,6 +38,9 @@ public class ClassRoomMappingModel {
                 .postId(postCommentReqDto.getPostId())
                 .traineeId(postCommentReqDto.getTraineeId())
                 .msg(postCommentReqDto.getMsg())
+                .commentDate(postCommentReqDto.getCommentDate())
+                .profilePicture(postCommentReqDto.getProfilePicture())
+                .traineeName(postCommentReqDto.getTraineeName())
                 .build();
     }
     public static PostCommentResDto commentEntityToDto(PostComment postComment){
@@ -40,6 +49,9 @@ public class ClassRoomMappingModel {
                 .postId(postComment.getPostId())
                 .traineeId(postComment.getTraineeId())
                 .msg(postComment.getMsg())
+                .commentDate(postComment.getCommentDate())
+                .profilePicture(postComment.getProfilePicture())
+                .traineeName(postComment.getTraineeName())
                 .build();
     }
     public static ClassRoomNotice noticeDtoToEntity(NoticeReqDto notice){

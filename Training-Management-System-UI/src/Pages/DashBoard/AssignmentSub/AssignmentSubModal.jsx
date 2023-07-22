@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
 
-const AssignmentSubModal = ({ assignSubModal, setAssignSubModal }) => {
+const AssignmentSubModal = ({ assignSubModal, setAssignSubModal,traineeId }) => {
     const { assignmentId, scheduleId, assignmentName, assignmentFile, deadLine,batchId } = assignSubModal;
     
     const { register, handleSubmit } = useForm({
@@ -91,7 +91,7 @@ const AssignmentSubModal = ({ assignSubModal, setAssignSubModal }) => {
                         </div>
                         <div className="input-box">
                             <label>Trainee Id:</label>
-                            <input type="text" {...register("traineeId")} disabled/>
+                            <input type="number" {...register("traineeId")} disabled/>
                         </div>
                         <div className="input-box">
                             <label>Assignment submission File:</label>

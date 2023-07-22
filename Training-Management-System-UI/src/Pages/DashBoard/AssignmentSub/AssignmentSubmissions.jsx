@@ -1,27 +1,40 @@
 import React, { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
-import { json, useParams } from 'react-router-dom';
 import Loading from '../../Shared/Loading';
 import AssignmentSub from './AssignmentSub';
 import AssignmentSubModal from './AssignmentSubModal';
+import { useUser } from '../../../Context/UserProvider';
 
 const AssignmentSubmissions = () => {
     const [assignSubModal, setAssignSubModal] = useState(null);
     const [user, setUser] = useState({});
+    const { state, dispatch } = useUser();
+    const {userDetails}=state;
+    console.log(userDetails);
+    console.log(user);
 
-    useEffect(()=>{
-        fetch(`http://localhost:8082/api/trainee/${userId}`)
-        .then(res=>res.json())
-        .then(data=>setUser(data))
-    },[user]);
-    const { data: assignmentSub = [], refetch, isLoading } = useQuery({
+    useEffect(() => {
+        if (userDetails?.userId) {
+          fetch(`http://localhost:8082/api/trainee/${userDetails.userId}`)
+            .then((res) => res.json())
+            .then((data) => setUser(data));
+        }
+      }, [userDetails?.userId]);
+    
+      // Conditionally call useQuery only when the user object is available
+      const { data: assignmentSub = [], refetch, isLoading } = useQuery({
         queryKey: ['getAllAssignmentSub'],
         queryFn: async () => {
-            const res = await fetch(`http://localhost:8082/api/schedule/${user?.batchId}/allAssignmentSub`);
+          if (user?.batchId) {
+            const res = await fetch(`http://localhost:8082/api/schedule/${user.batchId}/allAssignmentSub`);
             const data = await res.json();
-            return data
-        }
-    });
+            console.log(data);
+            return data;
+          }
+          return []; // Return an empty array if the user object doesn't have a batchId yet
+        },
+        enabled: !!user.batchId, // Enable the query only if user.batchId is available
+      });
     if (isLoading) {
         return <Loading></Loading>
     }
@@ -57,6 +70,7 @@ const AssignmentSubmissions = () => {
                     assignSubModal && <AssignmentSubModal
                         setAssignSubModal={setAssignSubModal}
                         assignSubModal={assignSubModal}
+                        traineeId={userDetails?.userId}
                     ></AssignmentSubModal>
                 }
             </div>

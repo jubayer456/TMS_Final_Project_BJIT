@@ -16,6 +16,9 @@ public class ClassRoomPostResDto {
     private Long postId;
     private Long classRoomId;
     private Long trainerId;
+    private String profilePicture;
+    private String trainerName;
+    private String postDate;
     private String msg;
     private String postFile;
     private List<PostCommentResDto> comments;

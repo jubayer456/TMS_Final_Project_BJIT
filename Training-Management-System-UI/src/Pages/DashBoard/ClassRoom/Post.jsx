@@ -2,72 +2,140 @@ import React, { useState } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import Comment from './Comment';
 import CommentForm from './CommentForm';
+import { toast } from 'react-hot-toast';
 
-const Post = ({ post }) => {
+const Post = ({ post,trainer,trainee,refetch }) => {
+  const {postId,classRoomId,profilePicture,postDate,msg,postFile,comments,trainerName}=post;
+
   const [isEditing, setIsEditing] = useState(false);
   const [editedPost, setEditedPost] = useState(post);
-  const [comments, setComments] = useState([]);
   const [showCommentForm, setShowCommentForm] = useState(false);
   const [showComments, setShowComments] = useState(true);
 
-  const addComment = (comment) => {
-    setComments([...comments, comment]);
-  };
 
   const handleEdit = () => {
     setIsEditing(true);
   };
 
-  const handleSave = () => {
+  const handleSave = post => {
     // Implement save post functionality here (e.g., update the post in the backend).
     // For this example, we'll just update the state with the edited post.
     setIsEditing(false);
-    setEditedPost(post);
+    console.log(editedPost);
+    const updateData = {
+      postId: post.postId,
+      classRoomId: post.classRoomId,
+      trainerId: trainer.trainerId,
+      msg: editedPost.msg,
+    };
+    console.log(updateData);
+    fetch(`http://localhost:8082/api/classroom/update-post/${post.postId}`, {
+      method: 'PUT',
+      headers: {
+          'Content-Type': 'application/json'
+          // authorization: `Bearer ${localStorage.getItem('accessToken')}`
+      },
+      body: JSON.stringify(updateData)
+  })
+      .then(res => {
+          console.log(res);
+          // if (res.status === 401 || res.status === 403) {
+          //     toast.error(`${res.statusText} Access`);
+          //     localStorage.removeItem('accessToken');
+          //     navigate('/login');
+          // }
+          return res.json();
+      })
+      .then(data => {
+          console.log(data);
+          if (data.status == 200) {
+              refetch();
+              toast.success(`succesfully post Created`)
+          }
+          else {
+              toast.error(data.msg);
+          }
+      })
   };
 
-  const handleDelete = () => {
-    // Implement delete post functionality here (e.g., delete the post in the backend).
-    // For this example, we'll just remove the post from the UI.
-    // You might need to add a confirmation dialog before deleting.
-    // Optionally, you can add a callback to inform the parent component about the delete action.
-    // For this example, we'll not include the callback.
-    // You can add the callback to the parent component to handle the deletion from the parent's state or backend.
-    // For now, we'll just log a message to indicate that the post is deleted.
-    console.log('Post deleted:', post.id);
+  const handleDelete = post => {
+    fetch(`http://localhost:8082/api/classroom/remove-post/${post.postId}`, {
+      method: 'DELETE',
+      headers: {
+          'Content-Type': 'application/json'
+          // authorization: `Bearer ${localStorage.getItem('accessToken')}`
+      }
+  })
+      .then(res => {
+          // if (res.status === 401 || res.status === 403) {
+          //     toast.error(`${res.statusText} Access`);
+          //     localStorage.removeItem('accessToken');
+          //     navigate('/login');
+          // }
+          return res.json();
+      })
+      .then(data => {
+          console.log(data);
+          if (data.status == 200) {
+              refetch();
+              toast.success(data.msg);
+          }
+          else {
+              toast.error(data.msg);
+          }
+      })
   };
 
-  const handleDeleteComment = (commentToDelete) => {
-    const updatedComments = comments.filter(
-      (comment) => comment !== commentToDelete
-    );
-    setComments(updatedComments);
+  const handleDeleteComment = comment => {
+    // const updatedComments = comments.filter(
+    //   (comment) => comment !== commentToDelete
+    // );
+    // setComments(updatedComments);
+    fetch(`http://localhost:8082/api/classroom/remove-comment/${postId}/${comment.commentId}`, {
+      method: 'DELETE',
+      headers: {
+          'Content-Type': 'application/json'
+          // authorization: `Bearer ${localStorage.getItem('accessToken')}`
+      }
+  })
+      .then(res => {
+          // if (res.status === 401 || res.status === 403) {
+          //     toast.error(`${res.statusText} Access`);
+          //     localStorage.removeItem('accessToken');
+          //     navigate('/login');
+          // }
+          return res.json();
+      })
+      .then(data => {
+          console.log(data);
+          if (data.status == 200) {
+              refetch();
+              toast.success(data.msg);
+          }
+          else {
+              toast.error(data.msg);
+          }
+      })
+
   };
 
   const handleUpdateComment = (commentToUpdate) => {
-    // Implement update comment functionality here (e.g., update the comment in the backend).
-    // For this example, we'll just update the comment in the state.
+
     const updatedComments = comments.map((comment) =>
-      comment === commentToUpdate ? { ...comment, isEditing: true } : comment
-    );
-    setComments(updatedComments);
+    comment === commentToUpdate ? { ...comment, isEditing: true } : comment
+  );
+  setComments(updatedComments);
   };
 
   const handleSaveComment = (commentToUpdate, updatedText) => {
-    // Implement save comment functionality here (e.g., update the comment in the backend).
-    // For this example, we'll just update the comment in the state.
-    const updatedComments = comments.map((comment) =>
-      comment === commentToUpdate
-        ? { ...comment, text: updatedText, isEditing: false }
-        : comment
-    );
-    setComments(updatedComments);
+
   };
 
   return (
     <div className="bg-white rounded-lg shadow-lg p-6 mb-4">
       <div className="flex items-center justify-between mb-4">
         <img
-          src={editedPost.imageUrl}
+          src={`http://localhost:8082/api/download/${profilePicture}`}
           alt="Post"
           className="w-16 h-16 object-cover rounded-full mr-4"
         />
@@ -76,16 +144,16 @@ const Post = ({ post }) => {
             <div className="mb-4">
               <textarea
                 className="w-full p-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
-                value={editedPost.content}
+                defaultValue={msg}
                 onChange={(e) =>
-                  setEditedPost({ ...editedPost, content: e.target.value })
+                  setEditedPost({ msg, msg: e.target.value })
                 }
               />
             </div>
           ) : (
             <>
-              <p className="text-gray-600 mb-2">{editedPost.content}</p>
-              <p className="text-gray-400 text-sm">{editedPost.date}</p>
+              <p className="text-gray-600 mb-2">{msg}</p>
+              <strong className='mr-2'>{trainerName}</strong><span className="text-gray-400 text-sm">{postDate}</span>
             </>
           )}
         </div>
@@ -94,7 +162,7 @@ const Post = ({ post }) => {
             <>
               <button
                 className="text-blue-500 mr-2"
-                onClick={handleSave}
+                onClick={()=>handleSave(post)}
                 title="Save"
               >
                 Save
@@ -107,7 +175,7 @@ const Post = ({ post }) => {
                 Cancel
               </button>
             </>
-          ) : (
+          ) : ( trainer &&
             <>
               <button
                 className="text-blue-500 mr-2"
@@ -118,7 +186,7 @@ const Post = ({ post }) => {
               </button>
               <button
                 className="text-red-500"
-                onClick={handleDelete}
+                onClick={()=>handleDelete(post)}
                 title="Delete"
               >
                 <FaTrash />
@@ -127,7 +195,7 @@ const Post = ({ post }) => {
           )}
         </div>
       </div>
-      {showCommentForm && <CommentForm addComment={addComment} />}
+      {showCommentForm && <CommentForm refetch={refetch} setShowCommentForm={setShowCommentForm} trainee={trainee} post={post}/>}
       <div className="w-full mb-2">
         <button
                  className="bg-blue-500 text-slate-50 rounded mx-2 px-2"
@@ -175,6 +243,7 @@ const Post = ({ post }) => {
               <Comment
                 key={index}
                 comment={comment}
+                trainee={trainee}
                 onDelete={() => handleDeleteComment(comment)}
                 onUpdate={() => handleUpdateComment(comment)}
               />
