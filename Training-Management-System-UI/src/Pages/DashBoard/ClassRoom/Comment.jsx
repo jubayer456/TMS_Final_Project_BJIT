@@ -32,7 +32,6 @@ const Comment = ({ comment, onDelete, onUpdate, trainee }) => {
               <FaTrash />
             </button>
           </div>
-
         }
       </div>
     </div>

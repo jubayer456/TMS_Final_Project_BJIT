@@ -10,10 +10,20 @@ const TrainerClassRoom = () => {
     const { data: classes = [], refetch, isLoading } = useQuery({
         queryKey: ['getAllTrainerClass'],
         queryFn: async () => {
-            const res = await fetch(`http://localhost:8082/api/classroom/${userDetails?.userId}/getAllClassRoom`);
+            const url = `http://localhost:8082/api/classroom/${userDetails?.userId}/getAllClassRoom`;
+
+            const headers = {
+                Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+            };
+            const res = await fetch(url, { headers });
+            if (res.status === 401 || res.status === 403) {
+                toast.error(`Access denied please login again`);
+                localStorage.removeItem('accessToken');
+                localStorage.removeItem('myAppState');
+                navigate('/login');
+            }
             const data = await res.json();
-            console.log(data);
-            return data
+            return data;
         }
     });
     return (

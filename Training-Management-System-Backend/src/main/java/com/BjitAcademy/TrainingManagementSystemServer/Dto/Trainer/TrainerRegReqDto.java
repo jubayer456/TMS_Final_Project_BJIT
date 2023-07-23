@@ -22,5 +22,5 @@ public class TrainerRegReqDto {
     private String joiningDate;
     private Integer totalYrsExp;
     private String expertises;
-    private  final String role="trainer";
+    private  final String role="TRAINER";
 }

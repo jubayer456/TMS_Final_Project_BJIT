@@ -3,10 +3,11 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 const AssignmentSubModal = ({ assignSubModal, setAssignSubModal,traineeId }) => {
     const { assignmentId, scheduleId, assignmentName, assignmentFile, deadLine,batchId } = assignSubModal;
-    
+    const navigate=useNavigate();
     const { register, handleSubmit } = useForm({
         defaultValues: {
             assignmentId: assignmentId,
@@ -40,18 +41,19 @@ const AssignmentSubModal = ({ assignSubModal, setAssignSubModal,traineeId }) => 
                     fetch(`http://localhost:8082/api/schedule/add-assignmentSub`, {
                         method: 'POST',
                         headers: {
-                            'Content-Type': 'application/json'
-                            // authorization: `Bearer ${localStorage.getItem('accessToken')}`
+                            'Content-Type': 'application/json',
+                            authorization: `Bearer ${localStorage.getItem('accessToken')}`
                         },
                         body: JSON.stringify(assignmentSubData)
                     })
                         .then(res => {
                             console.log(res);
-                            // if (res.status === 401 || res.status === 403) {
-                            //     toast.error(`${res.statusText} Access`);
-                            //     localStorage.removeItem('accessToken');
-                            //     navigate('/login');
-                            // }
+                            if (res.status === 401 || res.status === 403) {
+                                toast.error(`Access denied please login again`);
+                                localStorage.removeItem('accessToken');
+                                localStorage.removeItem('myAppState');
+                                navigate('/login');
+                            }
                             return res.json();
                         })
                         .then(data => {
@@ -61,19 +63,15 @@ const AssignmentSubModal = ({ assignSubModal, setAssignSubModal,traineeId }) => 
                                 toast.success(`succesfully Assignment Submitted`)
                             }
                             else {
-                                setAssignSubModal(false);
                                 toast.error(data.msg);
                             }
                         })
                 }
                 else {
-                    setAssignSubModal(false);
                     toast.error(response.data.msg);
                 }
             })
             .catch((error) => {
-                setAssignSubModal(false)
-                console.log(error);
                 toast.error("Server Error for Uploading Image");
             });
     };

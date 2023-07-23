@@ -6,10 +6,6 @@ import AdminProfile from '../Pages/DashBoard/AdminProfile/AdminProfile'
 import TrainerProfile from '../Pages/DashBoard/TrainerProfile/TrainerProfile'
 import TraineeProfile from '../Pages/DashBoard/TraineeProfile/TraineeProfile'
 import { createBrowserRouter } from 'react-router-dom';
-// import TraineeRegister from '../Pages/DashBoard/Register/TraineeRegister';
-// import TrainerRegister from '../Pages/DashBoard/Register/TrainerRegister';
-// import AllTrainer from '../Pages/DashBoard/Register/AllTrainer';
-// import AllTrainees from '../Pages/DashBoard/Register/AllTrainees';
 import Courses from '../Pages/DashBoard/Course/Courses';
 import NotFound from '../Pages/Shared/NotFound';
 import BatchTrainee from '../Pages/DashBoard/Batch/BatchTrainee';
@@ -24,6 +20,7 @@ import Trainers from '../Pages/DashBoard/Trainer/Trainers';
 import Trainees from '../Pages/DashBoard/Trainee/Trainees';
 import Classroom from '../Pages/DashBoard/ClassRoom/Classrooms';
 import TrainerClassRoom from '../Pages/DashBoard/ClassRoom/TrainerClassRoom';
+import RequireAuth from '../Pages/Shared/RequireAuth';
 
 const router = createBrowserRouter([
     {
@@ -40,7 +37,7 @@ const router = createBrowserRouter([
     },
     {
         path: '/dashboard',
-        element: <DashboardLayout></DashboardLayout>,
+        element: <RequireAuth><DashboardLayout/></RequireAuth>,
         children: [
             {
                 path: '/dashboard',
@@ -50,10 +47,6 @@ const router = createBrowserRouter([
                 path: '/dashboard/registerTrainer',
                 element: <Trainers />
             },
-            // {
-            //     path: '/dashboard/classroom',
-            //     element: <Classroom />
-            // },
             {
                 path: '/dashboard/classroom/:classRoomId',
                 element: <Classroom />
@@ -76,7 +69,7 @@ const router = createBrowserRouter([
             },
             {
                 path: '/dashboard/trainee',
-                element: <TraineeProfile />
+                element:<TraineeProfile />
             },
             {
                 path: '/dashboard/course',

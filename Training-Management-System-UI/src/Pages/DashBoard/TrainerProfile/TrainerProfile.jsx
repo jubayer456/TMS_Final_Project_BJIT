@@ -14,10 +14,20 @@ const TrainerProfile = () => {
     const { data: trainer, refetch, isLoading } = useQuery({
         queryKey: ['getTrainer'],
         queryFn: async () => {
-            const res = await fetch(`http://localhost:8082/api/trainer/${userDetails?.userId}`);
+            const url =`http://localhost:8082/api/trainer/${userDetails?.userId}`;
+
+            const headers = {
+                Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+            };
+            const res = await fetch(url, { headers });
+            if (res.status === 401 || res.status === 403) {
+                toast.error(`Access denied please login again`);
+                localStorage.removeItem('accessToken');
+                localStorage.removeItem('myAppState');
+                navigate('/login');
+            }
             const data = await res.json();
-            console.log(data);
-            return data
+            return data;
         }
     });
     
@@ -36,7 +46,8 @@ const TrainerProfile = () => {
         }
          axios.put(`http://localhost:8082/api/trainer`, updatedData,{
                 headers: {
-                  'Content-Type': 'application/json'
+                  'Content-Type': 'application/json',
+                  authorization: `Bearer ${localStorage.getItem('accessToken')}`
                 }
             }).then((response) => {
                 toast.success("Successfully Updated");
@@ -53,29 +64,19 @@ const TrainerProfile = () => {
         axios.post('http://localhost:8082/api/upload', formData)
             .then((response) => {
                 if (response.status == 200) {
-                    console.log(response.data);
                     const updateData = response.data.name;
-                    console.log(updateData);
                     fetch(`http://localhost:8082/api/auth/updatePicture/${userDetails?.userId}`, {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json'
-                            // authorization: `Bearer ${localStorage.getItem('accessToken')}`
                         },
                         body: updateData
                     })
-                        .then(res => {
-                            console.log(res);
-                            // if (res.status === 401 || res.status === 403) {
-                            //     toast.error(`${res.statusText} Access`);
-                            //     localStorage.removeItem('accessToken');
-                            //     navigate('/login');
-                            // }
-                            return res.json();
-                        })
+                        .then(res => res.json())
                         .then(data => {
                             console.log(data);
                             if (data.status == 200) {
+                                refetch();
                                 toast.success(`succesfully Profile Picture Updated`)
                             }
                             else {

@@ -26,24 +26,8 @@ public class SecurityConfig {
                 .csrf()
                 .disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/api/admin","/api/admin/AllUser","/api/admin/{adminId}")
-                .permitAll().requestMatchers("/api/trainee","/api/trainee/getAll","/api/trainee/{traineeId}")
-                .permitAll().requestMatchers("/api/trainer","/api/trainer/getAll","/api/trainer/{trainerId}")
-                .permitAll()
-                .requestMatchers("/api/auth/login","/api/auth/changePass/{userId}","/api/auth/updatePicture/{userId}","/api/auth/{userId}")
-                .permitAll() .requestMatchers("/api/auth/trainee","/api/trainee/{traineeId}","/api/trainee/getAll")
-                .permitAll().requestMatchers("/api/course/save","/api/course/{courseId}","/api/course/getAll","/api/course/{courseId}")
-                .permitAll()
-                .requestMatchers("/api/batch/save","/api/batch/{batchId}","/api/batch/getAll","/api/batch/add-trainee","/api/batch/remove-trainee/{traineeId}",
-                        "/api/batch/add-schedule","/api/batch/remove-schedule/{scheduleId}","/api/batch/{batchId}/getAllSchedule","/api/batch/{batchId}/getAllTrainee"
-                )
-                .permitAll().requestMatchers("/api/schedule/{scheduleId}/add-assignment","/api/schedule/{trainerId}","/api/schedule/{assignmentId}","/api/schedule/{assignmentId}","/api/schedule/add-assignmentSub","/api/schedule/{scheduleId}/allAssignment",
-                        "/api/schedule/{scheduleId}/{assignmentId}","/api/schedule/{batchId}/allAssignmentSub","/api/schedule/{assignmentId}/{submissionId}")
-                .permitAll().requestMatchers("/api/upload","/api/download/{fileName}")
-                .permitAll().requestMatchers("/api/classroom/{trainerId}/getAllClassRoom","/api/classroom/{classId}/getAllPost","/api/classroom/remove-comment/{postId}/{commentId}",
-                        "/api/classroom/remove-post/{postId}","/api/classroom/update-post/{postId}","/api/classroom/update-comment/{commentId}",
-                        "/api/classroom/add-comment","/api/classroom/{classId}/getAllNotice","/api/classroom/add-notice","/api/classroom/add-post","/api/classroom/{classroomId}")
-                .permitAll()
+                .requestMatchers("/api/auth/login","/api/auth/updatePicture/{userId}","/api/download/{fileName}","/api/upload").permitAll()
+                .requestMatchers("/api/auth/{userId}","/api/classroom/{classroomId}").hasAnyAuthority("admin","trainee","trainer")
                 .anyRequest()
                 .authenticated()
                 .and()

@@ -3,13 +3,13 @@ import Loading from "../../Shared/Loading";
 import ConfirmationModal from "../../Shared/ConfirmationModal";
 import { toast } from 'react-hot-toast';
 import Schedule from './Schedule';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useState } from 'react';
 
 const AllBatchSchedule = () => {
     const { batchId } = useParams();
     const [deletingSchedule, setDeletingScheduling] = useState(null);
-
+    const navigate=useNavigate();
     const closeModal = () => {
         setDeletingScheduling(null);
     }
@@ -17,11 +17,20 @@ const AllBatchSchedule = () => {
     const { data: schedules = [], refetch, isLoading } = useQuery({
         queryKey: ['getAllSchedule'],
         queryFn: async () => {
-            console.log(batchId);
-            const res = await fetch(`http://localhost:8082/api/batch/${batchId}/getAllSchedule`);
+            const url =`http://localhost:8082/api/batch/${batchId}/getAllSchedule`;
+
+            const headers = {
+                Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+            };
+            const res = await fetch(url, { headers });
+            if (res.status === 401 || res.status === 403) {
+                toast.error(`Access denied please login again`);
+                localStorage.removeItem('accessToken');
+                localStorage.removeItem('myAppState');
+                navigate('/login');
+            }
             const data = await res.json();
-            console.log(data);
-            return data
+            return data;
         }
     });
     if (isLoading) {
@@ -31,16 +40,17 @@ const AllBatchSchedule = () => {
         fetch(`http://localhost:8082/api/batch/remove-schedule/${schedule.scheduleId}`, {
             method: 'DELETE',
             headers: {
-                'Content-Type': 'application/json'
-                // authorization: `Bearer ${localStorage.getItem('accessToken')}`
+                'Content-Type': 'application/json',
+                authorization: `Bearer ${localStorage.getItem('accessToken')}`
             }
         })
             .then(res => {
-                // if (res.status === 401 || res.status === 403) {
-                //     toast.error(`${res.statusText} Access`);
-                //     localStorage.removeItem('accessToken');
-                //     navigate('/login');
-                // }
+                if (res.status === 401 || res.status === 403) {
+                    toast.error(`Access denied please login again`);
+                    localStorage.removeItem('accessToken');
+                    localStorage.removeItem('myAppState');
+                    navigate('/login');
+                }
                 return res.json();
             })
             .then(data => {

@@ -1,5 +1,5 @@
 import React from 'react';
-
+import img from '../../../assets/18942381.png'
 const Trainee = ({ trainee, index, setDeletingTrainee }) => {
   const { traineeId, email, fullName, profilePicture, contactNumber, batchId } = trainee;
 
@@ -9,8 +9,11 @@ const Trainee = ({ trainee, index, setDeletingTrainee }) => {
         <div className="flex items-center space-x-3">
           <div className="avatar">
             <div className="mask mask-squircle w-12 h-12">
-              <img src={profilePicture} alt="Avatar Tailwind CSS Component" />
-            </div>
+              {
+                profilePicture ? <img src={`http://localhost:8082/api/download/${profilePicture}`} alt="Trainee Profile Picture" />:
+                <img src={img} alt="Trainee default Profile Picture" />
+              }
+              </div>
           </div>
           <div>
             <div className="font-bold">{fullName}</div>

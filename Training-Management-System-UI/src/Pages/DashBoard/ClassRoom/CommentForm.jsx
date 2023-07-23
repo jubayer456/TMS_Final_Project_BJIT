@@ -1,27 +1,15 @@
 import React, { useState } from 'react';
 import { toast } from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 const CommentForm = ({ addComment, refetch, setShowCommentForm, trainee, post }) => {
   const { traineeId, profilePicture, fullName } = trainee;
   const [commentText, setCommentText] = useState('');
+  const navigate=useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // if (!commentText.trim() ) return; // Prevent adding empty comments
-
-    // const newComment = {
-    //   text: commentText,
-
-    //   date: new Date().toLocaleString(),
-    // };
-
-    // addComment(newComment);
-
-
-
-    // Reset form fields after submitting
-    // setCommentText('');
     const currentDate = new Date();
     const year = currentDate.getFullYear();
     const month = String(currentDate.getMonth() + 1).padStart(2, '0');
@@ -40,18 +28,19 @@ const CommentForm = ({ addComment, refetch, setShowCommentForm, trainee, post })
     fetch('http://localhost:8082/api/classroom/add-comment', {
       method: 'POST',
       headers: {
-          'Content-Type': 'application/json'
-          // authorization: `Bearer ${localStorage.getItem('accessToken')}`
+          'Content-Type': 'application/json',
+          authorization: `Bearer ${localStorage.getItem('accessToken')}`
       },
       body: JSON.stringify(commentData)
     })
       .then(res => {
           console.log(res);
-          // if (res.status === 401 || res.status === 403) {
-          //     toast.error(`${res.statusText} Access`);
-          //     localStorage.removeItem('accessToken');
-          //     navigate('/login');
-          // }
+          if (res.status === 401 || res.status === 403) {
+            toast.error(`Access denied please login again`);
+              localStorage.removeItem('accessToken');
+              localStorage.removeItem('myAppState');
+              navigate('/login');
+          }
           return res.json();
       })
       .then(data => {

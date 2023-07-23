@@ -1,20 +1,27 @@
 import React, { useEffect, useState } from 'react';
-import img from '../IMG_20230614.jpg'
 import { useForm } from 'react-hook-form';
 import { useQuery } from 'react-query';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { useUser } from '../../../Context/UserProvider';
+import { useNavigate } from 'react-router-dom';
 
 const AdminProfile = () => {
     const { state, dispatch } = useUser();
     const {userDetails}=state;
+    const navigate=useNavigate();
     const { register, handleSubmit } = useForm({
     });
     const { data: admin, refetch, isLoading } = useQuery({
         queryKey: ['getAdmin'],
         queryFn: async () => {
             const res = await fetch(`http://localhost:8082/api/admin/${userDetails?.userId}`);
+            if (res.status === 401 || res.status === 403) {
+                toast.error(`Access denied please login again`);
+                localStorage.removeItem('accessToken');
+                localStorage.removeItem('myAppState');
+                navigate('/login');
+            }
             const data = await res.json();
             return data
         }
@@ -32,18 +39,19 @@ const AdminProfile = () => {
             fetch(`http://localhost:8082/api/admin/${userDetails?.userId}`, {
                 method: 'PUT',
                 headers: {
-                    'Content-Type': 'application/json'
-                    // authorization: `Bearer ${localStorage.getItem('accessToken')}`
+                    'Content-Type': 'application/json',
+                    authorization: `Bearer ${localStorage.getItem('accessToken')}`
                 },
                 body: JSON.stringify(updatedData)
             })
                 .then(res => {
                     console.log(res);
-                    // if (res.status === 401 || res.status === 403) {
-                    //     toast.error(`${res.statusText} Access`);
-                    //     localStorage.removeItem('accessToken');
-                    //     navigate('/login');
-                    // }
+                    if (res.status === 401 || res.status === 403) {
+                        toast.error(`Access denied`);
+                        localStorage.removeItem('accessToken');
+                        localStorage.removeItem('myAppState');
+                        navigate('/login');
+                    }
                     return res.json();
                 })
                 .then(data => {
@@ -58,7 +66,7 @@ const AdminProfile = () => {
                 })
     
         }        
-    const updateProfilePic = data => {
+     const updateProfilePic = data => {
         const file = data.profilePicture[0];
         const formData = new FormData();
         formData.append('file', file);
@@ -69,23 +77,25 @@ const AdminProfile = () => {
                     fetch(`http://localhost:8082/api/auth/updatePicture/${userDetails?.userId}`, {
                         method: 'PUT',
                         headers: {
-                            'Content-Type': 'application/json'
-                            // authorization: `Bearer ${localStorage.getItem('accessToken')}`
+                            'Content-Type': 'application/json',
+                            authorization: `Bearer ${localStorage.getItem('accessToken')}`
                         },
                         body: updateData
                     })
                         .then(res => {
-                            // if (res.status === 401 || res.status === 403) {
-                            //     toast.error(`${res.statusText} Access`);
-                            //     localStorage.removeItem('accessToken');
-                            //     navigate('/login');
-                            // }
+                            if (res.status === 401 || res.status === 403) {
+                                toast.error(`Access denied`);
+                                localStorage.removeItem('accessToken');
+                                localStorage.removeItem('myAppState');
+                                navigate('/login');
+                            }
                             return res.json();
                         })
                         .then(data => {
                             console.log(data);
                             if (data.status == 200) {
-                                toast.success(`succesfully AProfile Picture Updated`)
+                                refetch();
+                                toast.success(`succesfully Profile Picture Updated`)
                             }
                             else {
                                 toast.error(data.msg);

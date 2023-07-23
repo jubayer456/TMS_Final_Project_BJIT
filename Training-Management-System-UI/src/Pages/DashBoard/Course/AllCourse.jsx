@@ -16,9 +16,19 @@ const AllCourse = () => {
     const { data: courses = [], refetch, isLoading } = useQuery({
         queryKey: ['getAllCourse'],
         queryFn: async () => {
-            const res = await fetch(`http://localhost:8082/api/course/getAll`);
+            let url = `http://localhost:8082/api/course/getAll`;
+            const headers = {
+                Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+            };
+            const res = await fetch(url, { headers });
+            if (res.status === 401 || res.status === 403) {
+                toast.error(`Access denied`);
+                localStorage.removeItem('accessToken');
+                localStorage.removeItem('myAppState');
+                navigate('/login');
+            }
             const data = await res.json();
-            return data
+            return data;
         }
     });
     if (isLoading) {
@@ -28,16 +38,17 @@ const AllCourse = () => {
         fetch(`http://localhost:8082/api/course/${course.courseId}`, {
             method: 'DELETE',
             headers: {
-                'Content-Type': 'application/json'
-                // authorization: `Bearer ${localStorage.getItem('accessToken')}`
+                'Content-Type': 'application/json',
+                authorization: `Bearer ${localStorage.getItem('accessToken')}`
             }
         })
             .then(res => {
-                // if (res.status === 401 || res.status === 403) {
-                //     toast.error(`${res.statusText} Access`);
-                //     localStorage.removeItem('accessToken');
-                //     navigate('/login');
-                // }
+                if (res.status === 401 || res.status === 403) {
+                    toast.error(`Access denied`);
+                    localStorage.removeItem('accessToken');
+                    localStorage.removeItem('myAppState');
+                    navigate('/login');
+                }
                 return res.json();
             })
             .then(data => {

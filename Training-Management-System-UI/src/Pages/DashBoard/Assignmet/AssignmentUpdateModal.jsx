@@ -20,7 +20,6 @@ const AssignmentUpdateModal = ({ setAssignUpdatedModal, assignUpdateModal }) => 
 
 
     const onSubmit = data => {
-
         const file = data.assignmentFile[0];
         const formData = new FormData();
         console.log(file);
@@ -28,7 +27,6 @@ const AssignmentUpdateModal = ({ setAssignUpdatedModal, assignUpdateModal }) => 
         axios.post('http://localhost:8082/api/upload', formData)
             .then((response) => {
                 if (response.status == 200) {
-                    console.log(response.data);
                     const assignmentData = {
                         scheduleId: parseInt(scheduleId),
                         assignmentName: data.assignmentName,
@@ -39,18 +37,19 @@ const AssignmentUpdateModal = ({ setAssignUpdatedModal, assignUpdateModal }) => 
                     fetch(`http://localhost:8082/api/schedule/${assignmentId}`, {
                         method: 'PUT',
                         headers: {
-                            'Content-Type': 'application/json'
-                            // authorization: `Bearer ${localStorage.getItem('accessToken')}`
+                            'Content-Type': 'application/json',
+                             authorization: `Bearer ${localStorage.getItem('accessToken')}`
                         },
                         body: JSON.stringify(assignmentData)
                     })
                         .then(res => {
                             console.log(res);
-                            // if (res.status === 401 || res.status === 403) {
-                            //     toast.error(`${res.statusText} Access`);
-                            //     localStorage.removeItem('accessToken');
-                            //     navigate('/login');
-                            // }
+                            if (res.status === 401 || res.status === 403) {
+                                toast.error(`Access denied please login again`);
+                                localStorage.removeItem('accessToken');
+                                localStorage.removeItem('myAppState');
+                                navigate('/login');
+                            }
                             return res.json();
                         })
                         .then(data => {
@@ -75,45 +74,6 @@ const AssignmentUpdateModal = ({ setAssignUpdatedModal, assignUpdateModal }) => 
                 toast.error("Server Error for Uploading Image");
             });
     };
-
-    // const handleSubmit = (e) => {
-    //     e.preventDefault();
-    //     const assignmentData = {
-    //         scheduleId: e.target.scheduleId.value,
-    //         assignmentName: e.target.assignmentName.value,
-    //         assignmentFile: e.target.assignmentFile.value,
-    //         deadLine: e.target.deadLine.value
-    //     }
-    //     console.log(assignmentData);
-    //     fetch(`http://localhost:8082/api/schedule/${assignmentId}`, {
-    //         method: 'PUT',
-    //         headers: {
-    //             'Content-Type': 'application/json'
-    //             // authorization: `Bearer ${localStorage.getItem('accessToken')}`
-    //         },
-    //         body: JSON.stringify(assignmentData)
-    //     })
-    //     .then(data => {
-    //             console.log(data);
-    //             if (data.status == 200) {
-    //                 setAssignUpdatedModal(false);
-    //                 toast.success(`succesfully Assignment Created`)
-    //             }
-    //             else {
-    //                 setAssignUpdatedModal(false);
-    //                 toast.error(data.msg);
-    //             }
-    //         })    .then(res => {
-    //             console.log(res);
-    //             // if (res.status === 401 || res.status === 403) {
-    //             //     toast.error(`${res.statusText} Access`);
-    //             //     localStorage.removeItem('accessToken');
-    //             //     navigate('/login');
-    //             // }
-    //             return res.json();
-    //         })
-
-    // }
     return (
         <div>
             <input type="checkbox" id="assignment-updated-modal" className="modal-toggle" />
@@ -132,7 +92,6 @@ const AssignmentUpdateModal = ({ setAssignUpdatedModal, assignUpdateModal }) => 
                         </div>
                         <div className="input-box">
                             <label>AssignmentFile:</label>
-                            {/* <input type="file" {...register("assignmentFile", { required: true })} /> */}
                             <input type="file" {...register("assignmentFile", { required: true })} />
                         </div>
                         <div className="input-box">

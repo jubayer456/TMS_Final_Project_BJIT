@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import AllAssignment from './AllAssignment';
-import AssignmentCreatedModal from './AssignmentCreatedModal';
 import AssignmentCreatedModalTest from './AssignmentCreatedModalTest';
 
 

@@ -20,7 +20,6 @@ const AssignmentCreatedModalTest = ({ setCreatedModal }) => {
         axios.post('http://localhost:8082/api/upload', formData)
             .then((response) => {
                 if (response.status == 200) {
-                    console.log(response.data);
                     const assignmentData = {
                         scheduleId: parseInt(scheduleId),
                         assignmentName: data.assignmentName,
@@ -31,39 +30,38 @@ const AssignmentCreatedModalTest = ({ setCreatedModal }) => {
                     fetch(`http://localhost:8082/api/schedule/${scheduleId}/add-assignment`, {
                         method: 'POST',
                         headers: {
-                            'Content-Type': 'application/json'
-                            // authorization: `Bearer ${localStorage.getItem('accessToken')}`
+                            'Content-Type': 'application/json',
+                            authorization: `Bearer ${localStorage.getItem('accessToken')}`
                         },
                         body: JSON.stringify(assignmentData)
                     })
                         .then(res => {
-                            console.log(res);
-                            // if (res.status === 401 || res.status === 403) {
-                            //     toast.error(`${res.statusText} Access`);
-                            //     localStorage.removeItem('accessToken');
-                            //     navigate('/login');
-                            // }
+                            if (res.status === 401 || res.status === 403) {
+                                toast.error(`Access denied please login again`);
+                                localStorage.removeItem('accessToken');
+                                localStorage.removeItem('myAppState');
+                                navigate('/login');
+                            }
                             return res.json();
                         })
                         .then(data => {
                             console.log(data);
                             if (data.status == 200) {
-                                setCreatedModal(false);
+                                // setCreatedModal(false);
                                 toast.success(`succesfully Assignment Created`)
                             }
                             else {
-                                setCreatedModal(false);
+                                // setCreatedModal(false);
                                 toast.error(data.msg);
                             }
                         })
                 }
                 else {
-                    setCreatedModal(false);
+                    // setCreatedModal(false);
                     toast.error(response.data.msg);
                 }
             })
             .catch((error) => {
-                console.log(error);
                 toast.error("Server Error for Uploading Image");
             });
     };

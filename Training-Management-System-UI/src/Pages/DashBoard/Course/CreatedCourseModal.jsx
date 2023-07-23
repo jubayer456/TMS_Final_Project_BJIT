@@ -17,29 +17,28 @@ const CreatedCourseModal = ({setCourseModal}) => {
          fetch('http://localhost:8082/api/course/save', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
-                // authorization: `Bearer ${localStorage.getItem('accessToken')}`
+                'Content-Type': 'application/json',
+                authorization: `Bearer ${localStorage.getItem('accessToken')}`
             },
             body: JSON.stringify(courseData)
         })
             .then(res => {
                 console.log(res);
-                // if (res.status === 401 || res.status === 403) {
-                //     toast.error(`${res.statusText} Access`);
-                //     localStorage.removeItem('accessToken');
-                //     navigate('/login');
-                // }
+                if (res.status === 401 || res.status === 403) {
+                    toast.error(`Access denied`);
+                    localStorage.removeItem('accessToken');
+                    localStorage.removeItem('myAppState');
+                    navigate('/login');
+                }
                 return res.json();
             })
             .then(data => {
                 console.log(data);
                 if (data.status == 200) {
-                    // navigate('/dashboard/course');
-                    setCourseModal(false);
+                    // setCourseModal(false);
                     toast.success(`succesfully course Created`)
                 }
                 else {
-                    setCourseModal(false)
                     toast.error(data.msg);
                 }
             }) 

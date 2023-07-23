@@ -12,10 +12,22 @@ const AllAssignment = () => {
     const { data: assignments = [], refetch, isLoading } = useQuery({
         queryKey: ['getAllAssignment'],
         queryFn: async () => {
-            const res = await fetch(`http://localhost:8082/api/schedule/${scheduleId}/allAssignment`);
+            const url = `http://localhost:8082/api/schedule/${scheduleId}/allAssignment`;
+
+            const headers = {
+                Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+            };
+            const res = await fetch(url, { headers });
+            if (res.status === 401 || res.status === 403) {
+                toast.error(`Access denied please login again`);
+                localStorage.removeItem('accessToken');
+                localStorage.removeItem('myAppState');
+                navigate('/login');
+            }
             const data = await res.json();
-            return data
+            return data;
         }
+
     });
     if (isLoading) {
         return <Loading></Loading>

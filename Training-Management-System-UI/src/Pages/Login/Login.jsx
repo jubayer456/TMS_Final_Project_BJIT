@@ -7,7 +7,6 @@ const Login = () => {
     const { register, formState: { errors }, handleSubmit } = useForm();
     const navigate = useNavigate();
     const { state, dispatch } = useUser();
-    console.log(state.userDetails );
     const setUserDetails = (user) => {
         dispatch({
           type: 'SET_USER_DETAILS',
@@ -33,8 +32,7 @@ const Login = () => {
                
             })
             .catch(e=> {
-                console.log(e);
-                toast.error("Failed to login", e);
+                toast.error("Failed to login,,, please enter a valid Password And email", e);
           });
     };
     return (

@@ -4,20 +4,35 @@ import Loading from '../../Shared/Loading';
 import AssignmentSub from './AssignmentSub';
 import AssignmentSubModal from './AssignmentSubModal';
 import { useUser } from '../../../Context/UserProvider';
+import { useNavigate } from 'react-router-dom';
 
 const AssignmentSubmissions = () => {
     const [assignSubModal, setAssignSubModal] = useState(null);
-    const [user, setUser] = useState({});
+    const navigate=useNavigate();
+    const [user, setUser] = useState('');
     const { state, dispatch } = useUser();
     const {userDetails}=state;
-    console.log(userDetails);
-    console.log(user);
-
+    // console.log(user);
     useEffect(() => {
         if (userDetails?.userId) {
-          fetch(`http://localhost:8082/api/trainee/${userDetails.userId}`)
-            .then((res) => res.json())
-            .then((data) => setUser(data));
+          fetch(`http://localhost:8082/api/trainee/${userDetails?.userId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                authorization: `Bearer ${localStorage.getItem('accessToken')}`
+            }
+        })
+            .then((res) =>{ 
+                if (res.status === 401 || res.status === 403) {
+                    toast.error(`Access denied please login again`);
+                    localStorage.removeItem('accessToken');
+                    localStorage.removeItem('myAppState');
+                    navigate('/login');
+                }
+               return res.json();})
+            .then((data) => {
+                console.log(data);
+                setUser(data)});
         }
       }, [userDetails?.userId]);
     
@@ -26,15 +41,25 @@ const AssignmentSubmissions = () => {
         queryKey: ['getAllAssignmentSub'],
         queryFn: async () => {
           if (user?.batchId) {
-            const res = await fetch(`http://localhost:8082/api/schedule/${user.batchId}/allAssignmentSub`);
+            const url = `http://localhost:8082/api/schedule/${user?.batchId}/allAssignmentSub`;
+
+            const headers = {
+                Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+            };
+            const res = await fetch(url, { headers });
+            if (res.status === 401 || res.status === 403) {
+                toast.error(`Access denied`);
+                localStorage.removeItem('accessToken');
+                localStorage.removeItem('myAppState');
+                navigate('/login');
+            }
             const data = await res.json();
-            console.log(data);
             return data;
           }
-          return []; // Return an empty array if the user object doesn't have a batchId yet
-        },
-        enabled: !!user.batchId, // Enable the query only if user.batchId is available
-      });
+        //   return []; // Return an empty array if the user object doesn't have a batchId yet
+        // },
+        // enabled: !!user.batchId, // Enable the query only if user.batchId is available
+      }});
     if (isLoading) {
         return <Loading></Loading>
     }

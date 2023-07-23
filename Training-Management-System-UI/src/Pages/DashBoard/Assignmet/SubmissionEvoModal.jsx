@@ -21,18 +21,19 @@ const SubmissionEvoModal = ({setAsignEvoModel,asignEvoModel,refetch}) => {
         fetch(`http://localhost:8082/api/schedule/${assignmentId}/${asgSubId}`, {
             method: 'PUT',
             headers: {
-                'Content-Type': 'application/json'
-                // authorization: `Bearer ${localStorage.getItem('accessToken')}`
+                'Content-Type': 'application/json',
+                authorization: `Bearer ${localStorage.getItem('accessToken')}`
             },
             body: JSON.stringify(evoData)
         })
             .then(res => {
                 console.log(res);
-                // if (res.status === 401 || res.status === 403) {
-                //     toast.error(`${res.statusText} Access`);
-                //     localStorage.removeItem('accessToken');
-                //     navigate('/login');
-                // }
+                if (res.status === 401 || res.status === 403) {
+                    toast.error(`Access denied please login again`);
+                    localStorage.removeItem('accessToken');
+                    localStorage.removeItem('myAppState');
+                    navigate('/login');
+                }
                 return res.json();
             })
             .then(data => {

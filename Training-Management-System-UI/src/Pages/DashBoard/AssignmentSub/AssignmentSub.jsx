@@ -6,7 +6,6 @@ import {  useNavigate } from 'react-router-dom';
 const AssignmentSub = ({ assignment, setAssignSubModal }) => {
     const {assignmentId, scheduleId, assignmentName, assignmentFile, deadLine } = assignment;
 
-    const navigate = useNavigate();
     const handleDownload=assignmentFile=>{
         console.log(assignmentFile);
         fetch(`http://localhost:8082/api/download/${assignmentFile}`)

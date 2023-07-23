@@ -21,7 +21,8 @@ const CreateTraierModal = ({setTrainerModal,refetch}) => {
         }
          axios.post("http://localhost:8082/api/trainer", registerData,{
                 headers: {
-                  'Content-Type': 'application/json'
+                  'Content-Type': 'application/json',
+                   authorization: `Bearer ${localStorage.getItem('accessToken')}`
                 }
             }).then((response) => {
                 refetch();

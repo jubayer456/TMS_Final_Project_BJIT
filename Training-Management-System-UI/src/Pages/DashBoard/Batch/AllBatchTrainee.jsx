@@ -15,11 +15,22 @@ const AllBatchTrainee = () => {
 
     const { data: trainees = [], refetch, isLoading } = useQuery({
         queryKey: ['getAllBatchTrainee'],
+
         queryFn: async () => {
-            const res = await fetch(`http://localhost:8082/api/batch/${batchId}/getAllTrainee`);
+            const url = `http://localhost:8082/api/batch/${batchId}/getAllTrainee`;
+
+            const headers = {
+                Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+            };
+            const res = await fetch(url, { headers });
+            if (res.status === 401 || res.status === 403) {
+                toast.error(`Access denied please login again`);
+                localStorage.removeItem('accessToken');
+                localStorage.removeItem('myAppState');
+                navigate('/login');
+            }
             const data = await res.json();
-            console.log(data);
-            return data
+            return data;
         }
     });
     if (isLoading) {
@@ -29,16 +40,17 @@ const AllBatchTrainee = () => {
         fetch(`http://localhost:8082/api/batch/remove-trainee/${trainee.traineeId}`, {
             method: 'DELETE',
             headers: {
-                'Content-Type': 'application/json'
-                // authorization: `Bearer ${localStorage.getItem('accessToken')}`
+                'Content-Type': 'application/json',
+                authorization: `Bearer ${localStorage.getItem('accessToken')}`
             }
         })
             .then(res => {
-                // if (res.status === 401 || res.status === 403) {
-                //     toast.error(`${res.statusText} Access`);
-                //     localStorage.removeItem('accessToken');
-                //     navigate('/login');
-                // }
+                if (res.status === 401 || res.status === 403) {
+                    toast.error(`Access denied please login again`);
+                    localStorage.removeItem('accessToken');
+                    localStorage.removeItem('myAppState');
+                    navigate('/login');
+                }
                 return res.json();
             })
             .then(data => {

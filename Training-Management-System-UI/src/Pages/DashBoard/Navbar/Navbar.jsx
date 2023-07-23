@@ -1,17 +1,33 @@
 import React, { useEffect, useState } from 'react';
 import { useUser } from '../../../Context/UserProvider';
 import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
 
 const Navbar = () => {
     const { state, dispatch } = useUser();
     const [user,setUser]=useState({});
     const {userDetails}=state;
+    const navigate=useNavigate();
     useEffect(()=>{
-        fetch(`http://localhost:8082/api/auth/${userDetails?.userId}`)
-        .then(res=>res.json())
+        fetch(`http://localhost:8082/api/auth/${userDetails?.userId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                authorization: `Bearer ${localStorage.getItem('accessToken')}`
+            },
+        })
+        .then(res => {
+            if (res.status === 401 || res.status === 403) {
+                toast.error(`Access denied please login again`);
+                localStorage.removeItem('accessToken');
+                localStorage.removeItem('myAppState');
+                navigate('/login');
+            }
+            return res.json();
+        })
         .then(data=>setUser(data))
     },[]);
-    const navigate=useNavigate();
+    
     const handleLogout = () => {
         dispatch({ type: 'LOGOUT' });
         localStorage.removeItem('accessToken');

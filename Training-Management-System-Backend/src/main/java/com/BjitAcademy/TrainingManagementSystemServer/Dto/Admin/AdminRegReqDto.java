@@ -17,5 +17,5 @@ public class AdminRegReqDto {
     private String profilePicture;
     private String contactNumber;
     private String gender;
-    private  final String role="admin";
+    private  final String role="ADMIN";
 }

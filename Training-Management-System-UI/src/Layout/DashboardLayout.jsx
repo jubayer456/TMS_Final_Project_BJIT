@@ -12,10 +12,19 @@ const DashboardLayout = () => {
     const { data: trainee, refetch, isLoading } = useQuery({
         queryKey: ['getTraineeBatch'],
         queryFn: async () => {
-            const res = await fetch(`http://localhost:8082/api/trainee/${userDetails?.userId}`);
+            const url = `http://localhost:8082/api/trainee/${userDetails?.userId}`;
+            const headers = {
+                Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+            };
+            const res = await fetch(url, { headers });
+            if (res.status === 401 || res.status === 403) {
+                toast.error(`${res.statusText} Access`);
+                localStorage.removeItem('accessToken');
+                localStorage.removeItem('myAppState');
+                navigate('/login');
+            }
             const data = await res.json();
-            console.log(data);
-            return data
+            return data;
         }
     });
 

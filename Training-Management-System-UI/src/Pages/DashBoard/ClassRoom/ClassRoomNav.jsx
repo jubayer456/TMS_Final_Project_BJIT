@@ -11,7 +11,6 @@ const ClassRoomNav = ({ setNoticeCreatdModal,classRoom,isLoading }) => {
     if (isLoading) {
         return <Loading></Loading>
     }
-    console.log(classRoom);
     return (
         <div className="navbar bg-green-300">
             <div className="flex-1">

@@ -18,9 +18,20 @@ const Classrooms = () => {
     const { data: classRoom, refetch, isLoading } = useQuery({
         queryKey: ['getClassRoom'],
         queryFn: async () => {
-            const res = await fetch(`http://localhost:8082/api/classroom/${classRoomId}`);
+            const url = `http://localhost:8082/api/classroom/${classRoomId}`;
+
+            const headers = {
+                Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+            };
+            const res = await fetch(url, { headers });
+            if (res.status === 401 || res.status === 403) {
+                toast.error(`Access denied please login again`);
+                localStorage.removeItem('accessToken');
+                localStorage.removeItem('myAppState');
+                navigate('/login');
+            }
             const data = await res.json();
-            return data
+            return data;
         }
     });
     const [trainee, setTrainee] = useState(false);
@@ -28,12 +39,24 @@ const Classrooms = () => {
 
     useEffect(() => {
         if (userDetails?.userId && userDetails?.role == 'trainee') {
-            fetch(`http://localhost:8082/api/trainee/${userDetails.userId}`)
+            fetch(`http://localhost:8082/api/trainee/${userDetails.userId}`,{
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    authorization: `Bearer ${localStorage.getItem('accessToken')}`
+                }
+            })
                 .then((res) => res.json())
                 .then((data) => setTrainee(data));
         }
         else if (userDetails?.userId && userDetails?.role == 'trainer') {
-            fetch(`http://localhost:8082/api/trainer/${userDetails.userId}`)
+            fetch(`http://localhost:8082/api/trainer/${userDetails.userId}`,{
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    authorization: `Bearer ${localStorage.getItem('accessToken')}`
+                }
+            })
                 .then((res) => res.json())
                 .then((data) => setTrainer(data));
         }
@@ -62,18 +85,18 @@ const Classrooms = () => {
         fetch('http://localhost:8082/api/classroom/add-post', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
-                // authorization: `Bearer ${localStorage.getItem('accessToken')}`
+                'Content-Type': 'application/json',
+                authorization: `Bearer ${localStorage.getItem('accessToken')}`
             },
             body: JSON.stringify(postData)
         })
             .then(res => {
-                console.log(res);
-                // if (res.status === 401 || res.status === 403) {
-                //     toast.error(`${res.statusText} Access`);
-                //     localStorage.removeItem('accessToken');
-                //     navigate('/login');
-                // }
+                if (res.status === 401 || res.status === 403) {
+                    toast.error(`${res.statusText} Access`);
+                    localStorage.removeItem('accessToken');
+                    localStorage.removeItem('myAppState');
+                    navigate('/login');
+                }
                 return res.json();
             })
             .then(data => {

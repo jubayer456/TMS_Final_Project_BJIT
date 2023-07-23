@@ -25,5 +25,5 @@ public class TraineeRegReqDto {
     private String educationalInstitute;
     private Integer passingYear;
     private Double cgpa;
-    private  final String role="trainee";
+    private  final String role="TRAINEE";
 }

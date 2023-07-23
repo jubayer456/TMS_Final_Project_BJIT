@@ -3,6 +3,7 @@ import { FaEdit, FaTrash } from 'react-icons/fa';
 import Comment from './Comment';
 import CommentForm from './CommentForm';
 import { toast } from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 const Post = ({ post,trainer,trainee,refetch }) => {
   const {postId,classRoomId,profilePicture,postDate,msg,postFile,comments,trainerName}=post;
@@ -11,15 +12,13 @@ const Post = ({ post,trainer,trainee,refetch }) => {
   const [editedPost, setEditedPost] = useState(post);
   const [showCommentForm, setShowCommentForm] = useState(false);
   const [showComments, setShowComments] = useState(true);
-
+  const navigate=useNavigate();
 
   const handleEdit = () => {
     setIsEditing(true);
   };
 
   const handleSave = post => {
-    // Implement save post functionality here (e.g., update the post in the backend).
-    // For this example, we'll just update the state with the edited post.
     setIsEditing(false);
     console.log(editedPost);
     const updateData = {
@@ -32,22 +31,21 @@ const Post = ({ post,trainer,trainee,refetch }) => {
     fetch(`http://localhost:8082/api/classroom/update-post/${post.postId}`, {
       method: 'PUT',
       headers: {
-          'Content-Type': 'application/json'
-          // authorization: `Bearer ${localStorage.getItem('accessToken')}`
+          'Content-Type': 'application/json',
+          authorization: `Bearer ${localStorage.getItem('accessToken')}`
       },
       body: JSON.stringify(updateData)
   })
       .then(res => {
-          console.log(res);
-          // if (res.status === 401 || res.status === 403) {
-          //     toast.error(`${res.statusText} Access`);
-          //     localStorage.removeItem('accessToken');
-          //     navigate('/login');
-          // }
+          if (res.status === 401 || res.status === 403) {
+              toast.error(`Access denied please login again`);
+              localStorage.removeItem('accessToken');
+              localStorage.removeItem('myAppState');
+              navigate('/login');
+          }
           return res.json();
       })
       .then(data => {
-          console.log(data);
           if (data.status == 200) {
               refetch();
               toast.success(`succesfully post Created`)
@@ -62,20 +60,20 @@ const Post = ({ post,trainer,trainee,refetch }) => {
     fetch(`http://localhost:8082/api/classroom/remove-post/${post.postId}`, {
       method: 'DELETE',
       headers: {
-          'Content-Type': 'application/json'
-          // authorization: `Bearer ${localStorage.getItem('accessToken')}`
+          'Content-Type': 'application/json',
+          authorization: `Bearer ${localStorage.getItem('accessToken')}`
       }
   })
       .then(res => {
-          // if (res.status === 401 || res.status === 403) {
-          //     toast.error(`${res.statusText} Access`);
-          //     localStorage.removeItem('accessToken');
-          //     navigate('/login');
-          // }
+          if (res.status === 401 || res.status === 403) {
+            toast.error(`Access denied please login again`);
+              localStorage.removeItem('accessToken');
+              localStorage.removeItem('myAppState');
+              navigate('/login');
+          }
           return res.json();
       })
       .then(data => {
-          console.log(data);
           if (data.status == 200) {
               refetch();
               toast.success(data.msg);
@@ -87,23 +85,20 @@ const Post = ({ post,trainer,trainee,refetch }) => {
   };
 
   const handleDeleteComment = comment => {
-    // const updatedComments = comments.filter(
-    //   (comment) => comment !== commentToDelete
-    // );
-    // setComments(updatedComments);
     fetch(`http://localhost:8082/api/classroom/remove-comment/${postId}/${comment.commentId}`, {
       method: 'DELETE',
       headers: {
-          'Content-Type': 'application/json'
-          // authorization: `Bearer ${localStorage.getItem('accessToken')}`
+          'Content-Type': 'application/json',
+          authorization: `Bearer ${localStorage.getItem('accessToken')}`
       }
   })
       .then(res => {
-          // if (res.status === 401 || res.status === 403) {
-          //     toast.error(`${res.statusText} Access`);
-          //     localStorage.removeItem('accessToken');
-          //     navigate('/login');
-          // }
+          if (res.status === 401 || res.status === 403) {
+              toast.error(`Access denied please login again`);
+              localStorage.removeItem('accessToken');
+              localStorage.removeItem('myAppState');
+              navigate('/login');
+          }
           return res.json();
       })
       .then(data => {
@@ -120,15 +115,9 @@ const Post = ({ post,trainer,trainee,refetch }) => {
   };
 
   const handleUpdateComment = (commentToUpdate) => {
-
-    const updatedComments = comments.map((comment) =>
-    comment === commentToUpdate ? { ...comment, isEditing: true } : comment
-  );
-  setComments(updatedComments);
   };
 
   const handleSaveComment = (commentToUpdate, updatedText) => {
-
   };
 
   return (
