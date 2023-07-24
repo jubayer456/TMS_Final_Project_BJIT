@@ -35,11 +35,11 @@ const AssignTraineeModal = ({setTraineeModal}) => {
             .then(data => {
                 console.log(data);
                 if (data.status == 200) {
-                    setTraineeModal(false);
+                    // setTraineeModal(false);
                     toast.success(`succesfully Trainee Inserted`)
                 }
                 else {
-                    setTraineeModal(false);
+                    // setTraineeModal(false);
                     toast.error(data.msg);
                 }
             }) 

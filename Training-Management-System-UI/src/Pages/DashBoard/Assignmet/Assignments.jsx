@@ -6,10 +6,10 @@ import AssignmentCreatedModalTest from './AssignmentCreatedModalTest';
 const Assignments = () => {
     const [createdModal, setCreatedModal] = useState(false);
     return (
-        <div className="m-2 p-4">
-            <div>
+        <div className="p-4 m-2">
+          <div className="bg-white rounded-lg shadow-lg p-6 mb-4 min-h-screen">
                 <div className=" ">
-                    <label htmlFor="assignment-created-modal" onClick={() => setCreatedModal(true)} className="btn btn-primary btn-sm">Create Assignment</label>
+                    <label htmlFor="assignment-created-modal" onClick={() => setCreatedModal(true)} className="btn btn-primary btn-sm text-white">Create Assignment</label>
                 </div>
                 <div className="divider"></div>
                 <><AllAssignment />

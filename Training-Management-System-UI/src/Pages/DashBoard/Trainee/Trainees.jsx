@@ -66,13 +66,13 @@ const Trainees = () => {
     }
     return (
         <div className="m-2 p-4">
-            <div>
+            <div className='bg-white rounded-lg shadow-lg p-6 mb-4 min-h-screen'>
                 <div className=" ">
-                    <label htmlFor="trainee-create-modal" onClick={() => setTraineeModal(true)} className="btn btn-primary btn-sm">Create Trainee</label>
+                    <label htmlFor="trainee-create-modal" onClick={() => setTraineeModal(true)} className="btn btn-primary btn-sm text-white">Create Trainee</label>
                 </div>
-                <div className="divider"></div>
+                <div className="divider m-1"></div>
                 <div>
-                    <h1 className='text-3xl py-5 text-center'>All Trainees</h1>
+                    <h1 className='text-3xl mb-5 text-center'>All Trainees</h1>
                     <div className="overflow-x-auto">
                         <table className="table">
                             <thead>

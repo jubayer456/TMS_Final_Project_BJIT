@@ -65,7 +65,8 @@ const AssignmentSubmissions = () => {
     }
 
     return (
-        <div className='m-2 p-4'>
+        <div className='p-4 m-2'>
+                <div className='bg-white rounded-lg shadow-lg p-6 mb-4  min-h-screen'>
             <h1 className='text-3xl pb-3 text-center'>Assignment Submission Page</h1>
             <div>
                 <div className="overflow-x-auto">
@@ -100,6 +101,8 @@ const AssignmentSubmissions = () => {
                 }
             </div>
         </div>
+        </div>
+       
     );
 };
 

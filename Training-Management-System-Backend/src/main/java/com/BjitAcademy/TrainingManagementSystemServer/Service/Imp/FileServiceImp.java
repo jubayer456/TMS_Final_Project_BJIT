@@ -53,8 +53,11 @@ public class FileServiceImp implements FileService {
 
     @Override
     public byte[] downloadImageFromFileSystem(String fileName) throws IOException {
+//        takes the fileName as input and returns a byte array (byte[])
         Optional<FileDataEntity> fileData = fileRepository.findByName(fileName);
+//        findByName that searches for a record in the database based on the given fileName.
         String filePath=fileData.get().getFilePath();
+//        this line is parsing the type property from the FileDataEntity object into a MediaType object
         byte[] images = Files.readAllBytes(new File(filePath).toPath());
         return images;
     }

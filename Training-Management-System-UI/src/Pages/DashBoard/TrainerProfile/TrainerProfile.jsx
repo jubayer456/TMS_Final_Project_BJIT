@@ -95,7 +95,8 @@ const TrainerProfile = () => {
     };
     
     return (
-        <div>
+     <div className='p-4 m-2'>
+           <div className='bg-white rounded-lg shadow-lg p-6 mb-4 min-h-screen'>
         <h1 className='text-3xl py-4 text-center'>My Profile</h1>
         <div className='hero-content flex-col lg:flex-row-reverse justify-between items-start'>
 
@@ -172,6 +173,7 @@ const TrainerProfile = () => {
             </form>
         </div>
     </div>
+     </div>
     );
 };
 

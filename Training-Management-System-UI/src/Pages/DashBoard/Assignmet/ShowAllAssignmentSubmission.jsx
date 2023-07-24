@@ -37,8 +37,8 @@ const ShowAllAssignmentSubmission = () => {
         return <Loading></Loading>
     }
     return (
-        <div className='m-2 p-4'>
-            <h1 className='text-3xl py-5 text-center'>All submission List </h1>
+        <div className='bg-white rounded-lg shadow-lg p-6 mb-4 min-h-screen'>
+            <h1 className='text-3xl mb-5 text-center'>All submission List </h1>
             <div>
                 <div className="overflow-x-auto">
                     <table className="table">

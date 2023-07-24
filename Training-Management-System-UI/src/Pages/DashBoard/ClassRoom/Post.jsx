@@ -13,7 +13,7 @@ const Post = ({ post,trainer,trainee,refetch }) => {
   const [showCommentForm, setShowCommentForm] = useState(false);
   const [showComments, setShowComments] = useState(true);
   const navigate=useNavigate();
-
+  console.log(post);
   const handleEdit = () => {
     setIsEditing(true);
   };
@@ -120,6 +120,27 @@ const Post = ({ post,trainer,trainee,refetch }) => {
   const handleSaveComment = (commentToUpdate, updatedText) => {
   };
 
+  const handleDownload=postFile=>{
+    fetch(`http://localhost:8082/api/download/${postFile}`)
+   .then((response) => response.blob())
+   .then((blob) => {
+    // Create a URL object from the file blob
+    const url = window.URL.createObjectURL(blob);
+    
+    // Create a temporary link element
+    const link = document.createElement('a');
+    link.href = url;
+    link.download =postFile; // Specify the desired file name here
+    link.click();
+    
+    // Cleanup by revoking the object URL
+    window.URL.revokeObjectURL(url);
+  })
+  .catch((error) => {
+    console.error('Error downloading the file:', error);
+  });
+}
+
   return (
     <div className="bg-white rounded-lg shadow-lg p-6 mb-4">
       <div className="flex items-center justify-between mb-4">
@@ -142,6 +163,9 @@ const Post = ({ post,trainer,trainee,refetch }) => {
           ) : (
             <>
               <p className="text-gray-600 mb-2">{msg}</p>
+              {
+                postFile && <p className='underline italic hover:text-blue-500 cursor-pointer' onClick={() => handleDownload(postFile)}>{postFile}</p>
+              }
               <strong className='mr-2'>{trainerName}</strong><span className="text-gray-400 text-sm">{postDate}</span>
             </>
           )}

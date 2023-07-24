@@ -32,7 +32,8 @@ const TrainerSchedules = () => {
         return <Loading></Loading>
     }
     return (
-        <div className='m-2 p-4'>
+        <div className='bg-white rounded-lg shadow-lg p-6 mb-4 min-h-screen'>
+            <h1 className='text-3xl bold text-center p-6 mb-4'>All Courses</h1>
             <div className='grid md:grid-cols-2 grid-col-1 gap-10 justify-items-center'>
                 {
                     trainerSchedules.map((schedule, index) => < TrainerSchedule

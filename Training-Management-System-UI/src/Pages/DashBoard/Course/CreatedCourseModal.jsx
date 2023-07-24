@@ -48,7 +48,7 @@ const CreatedCourseModal = ({setCourseModal}) => {
         <input type="checkbox" id="course-create-modal" className="modal-toggle" />
         <div className="modal">
             <div className="modal-box">
-            < header>Course Creation Form</header>
+            < header className='text-center text-2xl text-blue-500'>Course Creation Form</header>
 
             <button onClick={()=>setCourseModal(false)} className="btn btn-md btn-circle btn-ghost absolute right-2 top-2">✕</button>
             <form onSubmit={handleSubmit} className="form">

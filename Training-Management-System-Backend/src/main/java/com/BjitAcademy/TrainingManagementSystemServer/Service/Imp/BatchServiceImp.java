@@ -149,7 +149,6 @@ public class BatchServiceImp implements BatchService {
                 .build();
         return new ResponseEntity<>(success, HttpStatus.OK);
     }
-
     @Override
     public ResponseEntity<Object> addScheduleToBatch(ScheduleReqDto scheduleReqDto) {
         BatchEntity batch=batchesRepository.findByBatchId(scheduleReqDto.getBatchId());
@@ -224,5 +223,39 @@ public class BatchServiceImp implements BatchService {
         Set<TraineeResDto> trainees=batch.getTrainees().stream().map(traineeEntity -> TraineeMappingModel.traineeEntityToDto(traineeEntity,traineeEntity.getUser())).collect(Collectors.toSet());
         return new ResponseEntity<>(trainees,HttpStatus.OK);
     }
+
+    @Override
+    public ResponseEntity<Object> updateScheduleFromBatch(Long scheduleId, ScheduleReqDto scheduleReqDto) {
+        BatchEntity batch=batchesRepository.findByBatchId(scheduleReqDto.getBatchId());
+        if(batch==null){
+            throw new BatchNotFoundException("Batch not found for Insert Scheduling");
+        }
+        CourseEntity course=courseRepository.findByCourseId(scheduleReqDto.getCourseId());
+        if(course==null){
+            throw new CourseNotFoundException("Course are not found for Scheduling");
+        }
+        //for checking date ,,, using date formatter
+        DateTimeFormatter dateTimeFormatter=DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        //checking valid starting date and ending date
+        if((LocalDate.parse((CharSequence) batch.getStartingDate(),dateTimeFormatter).isAfter(LocalDate.parse((CharSequence) scheduleReqDto.getEndingDate(),dateTimeFormatter)) )||
+                (LocalDate.parse((CharSequence)scheduleReqDto.getEndingDate(),dateTimeFormatter).isAfter(LocalDate.parse((CharSequence)  batch.getEndingDate(),dateTimeFormatter))
+                )){
+            throw new ScheduleNotFoundException("please enter a valid date range");
+        }
+        //find the schedule based on scheduleId
+        ScheduleEntity existSchedule=scheduleRepository.findByScheduleId(scheduleId);
+        //set the updated schedule
+        existSchedule.setStartingDate(scheduleReqDto.getStartingDate());
+        existSchedule.setEndingDate(scheduleReqDto.getEndingDate());
+        //save the updated schedule to the repository
+        scheduleRepository.save(existSchedule);
+        //give success msg to UI with status code
+        SuccessResponseDto success=SuccessResponseDto.builder()
+                .msg("Successfully update schedule for batch")
+                .status(HttpStatus.OK.value())
+                .build();
+        return new ResponseEntity<>(success, HttpStatus.OK);
+    }
+
 
 }

@@ -5,10 +5,12 @@ import { toast } from 'react-hot-toast';
 import Schedule from './Schedule';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useState } from 'react';
+import ScheduleUpdateModal from './ScheduleUpdateModal';
 
 const AllBatchSchedule = () => {
     const { batchId } = useParams();
     const [deletingSchedule, setDeletingScheduling] = useState(null);
+    const[scheduleUpdateModal,setScheduleUpdateModal]=useState(false);
     const navigate=useNavigate();
     const closeModal = () => {
         setDeletingScheduling(null);
@@ -66,8 +68,8 @@ const AllBatchSchedule = () => {
     }
 
     return (
-             <div className='m-2'>
-        <h1 className='text-3xl pb-3 text-center'>All Schedules</h1>
+        <div className='m-2'>
+        <h1 className='text-3xl pb-3 text-center mb-3'>All Schedules</h1>
         <div>
             <div className="overflow-x-auto">
                 <table className="table">
@@ -88,6 +90,7 @@ const AllBatchSchedule = () => {
                             index={index + 1}
                             schedule={schedule}
                             setDeletingScheduling={setDeletingScheduling}
+                            setScheduleUpdateModal={setScheduleUpdateModal}
                         ></Schedule>)
                     }
                     </tbody>
@@ -101,7 +104,12 @@ const AllBatchSchedule = () => {
                     successButtonName="Delete"
                     modalData={deletingSchedule}
                     closeModal={closeModal}>
-                </ConfirmationModal>
+                </ConfirmationModal>||
+
+                scheduleUpdateModal && <ScheduleUpdateModal
+                setScheduleUpdateModal={setScheduleUpdateModal}
+                scheduleUpdateModal={scheduleUpdateModal}
+                ></ScheduleUpdateModal>
             }
         </div>
     </div>

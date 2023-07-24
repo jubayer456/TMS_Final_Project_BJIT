@@ -57,6 +57,11 @@ public class BatchController {
     public ResponseEntity<Object> removeScheduleFromBatch(@PathVariable Long scheduleId){
         return batchService.removeScheduleFromBatch(scheduleId);
     }
+    @PutMapping("/api/batch/update-schedule/{scheduleId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Object> updateScheduleFromBatch(@PathVariable Long scheduleId,@RequestBody ScheduleReqDto scheduleReqDto){
+        return batchService.updateScheduleFromBatch(scheduleId,scheduleReqDto);
+    }
     @GetMapping("/api/batch/{batchId}/getAllSchedule")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Set<BatchScheduleResDto>> getAllBatchSchedule(@PathVariable Long batchId){

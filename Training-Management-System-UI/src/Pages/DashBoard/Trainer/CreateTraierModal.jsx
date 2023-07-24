@@ -26,7 +26,7 @@ const CreateTraierModal = ({setTrainerModal,refetch}) => {
                 }
             }).then((response) => {
                 refetch();
-                setTrainerModal(false);
+                // setTrainerModal(false);
                 toast.success("Successfully Registerd Trainer");
               }) 
               .catch((error) => toast.error(error.response.data.msg));
@@ -109,7 +109,7 @@ const CreateTraierModal = ({setTrainerModal,refetch}) => {
                         </div>
                     </div>
                 </div>
-                <button htmlFor="trainer-create-modal" type='submit'>Submit</button>
+                <button htmlFor="trainer-create-modal" className='text-white btn btn-primary' type='submit'>Submit</button>
             </form>
             </div>
         </div>

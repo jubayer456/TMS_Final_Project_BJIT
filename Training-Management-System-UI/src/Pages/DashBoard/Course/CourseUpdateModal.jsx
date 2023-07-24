@@ -51,8 +51,7 @@ const CourseUpdateModal = ({ setCourseUpdateModal, courseUpdateModal }) => {
             <input type="checkbox" id="course-update-modal" className="modal-toggle" />
             <div className="modal">
                 <div className="modal-box">
-                    < header>Course Update Form</header>
-
+                    < header className='text-center text-2xl text-blue-500'>Course Update Form</header>
                     <button onClick={() => setCourseUpdateModal(false)} className="btn btn-md btn-circle btn-ghost absolute right-2 top-2">✕</button>
                     <form onSubmit={handleSubmit} className="form">
                         <div className="input-box">

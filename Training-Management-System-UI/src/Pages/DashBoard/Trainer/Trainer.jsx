@@ -1,10 +1,11 @@
 import React from 'react';
+import { FaTrash } from 'react-icons/fa';
 
 const Trainer = ({ trainer, index, setDeletingTrainer }) => {
     const { trainerId, email, fullName, profilePicture, contactNumber, designation, expertises } = trainer;
 
     return (
-        <tr>
+        <tr className='hover:bg-slate-100 font-medium'>
             <td>
                 <div className="flex items-center space-x-3">
                     <div className="avatar">
@@ -13,17 +14,17 @@ const Trainer = ({ trainer, index, setDeletingTrainer }) => {
                         </div>
                     </div>
                     <div>
-                        <div className="font-bold">{fullName}</div>
-                        <div className="text-sm opacity-50">{trainerId}</div>
+                        <div className="font-bold font-bold text-blue-500">{fullName}</div>
+                        <div className="text-sm opacity-50 ">{trainerId}</div>
                     </div>
                 </div>
             </td>
             <td>{email}</td>
             <td>{contactNumber}</td>
-            <td>{designation}</td>
+            <td className='text-sm text-gray-700'><span className='text-xs font-bold rounded-lg bg-green-200 bg-opacity-500 p-2'>{designation}</span></td>
             <td>{expertises}</td>
             <th>
-                <label onClick={() => setDeletingTrainer(trainer)} htmlFor="confirmation-modal" className="btn btn-sm btn-error text-base-100">Delete</label>
+                <label onClick={() => setDeletingTrainer(trainer)} htmlFor="confirmation-modal" className="btn btn-sm btn-error text-base-100"> <FaTrash></FaTrash></label>
             </th>
         </tr>
     );

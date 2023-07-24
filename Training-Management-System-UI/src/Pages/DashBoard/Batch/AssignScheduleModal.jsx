@@ -36,11 +36,11 @@ const AssignScheduleModal = ({ setScheduleModal }) => {
             })
             .then(data => {
                 if (data.status == 200) {
-                    setScheduleModal(false);
+                    // setScheduleModal(false);
                     toast.success(`succesfully course Created`)
                 }
                 else {
-                    setScheduleModal(false);
+                    // setScheduleModal(false);
                     toast.error(data.msg);
                 }
             })

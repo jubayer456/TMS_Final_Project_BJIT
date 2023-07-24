@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useUser } from '../../../Context/UserProvider';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
-
+import bjit from '../../../assets/BJIT.png'
 const Navbar = () => {
     const { state, dispatch } = useUser();
     const [user,setUser]=useState({});
@@ -35,12 +35,15 @@ const Navbar = () => {
             navigate('/login');
       };
     return (
-        <div className="navbar bg-base-100">
+        <div className="navbar bg-sky-500 text-white font-medium">
             <div className="flex-1">
                 <label htmlFor="drawer-content" tabIndex={1} className="btn btn-ghost lg:hidden">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" /></svg>
                 </label>
-                <a className="btn btn-ghost normal-case text-xl text-bold">{user?.role}</a>
+                <div className="w-10 rounded-full">
+                    <img src={bjit} />
+                </div>
+                <a className=" ms-3 normal-case text-xl text-bold ">Trainning Management System</a>
             </div>
             <div className="flex-none gap-2">
                 <p className='text-bold'>{user?.fullName}</p>
@@ -50,11 +53,10 @@ const Navbar = () => {
                             <img src={`http://localhost:8082/api/download/${user?.profilePicture}`} />
                         </div>
                     </label>
-                    <ul tabIndex={0} className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52">
+                    <ul tabIndex={0} className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-sky-500 rounded-box w-52">
                         <li>
                             <Link to={`/dashboard/${userDetails?.role}`} className="justify-between">
                                 Profile
-                                <span className="badge">New</span>
                             </Link>
                         </li>
                         <li><a onClick={()=>handleLogout()}>Logout</a></li>

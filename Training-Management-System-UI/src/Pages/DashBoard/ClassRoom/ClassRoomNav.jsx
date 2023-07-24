@@ -4,7 +4,7 @@ import { useQuery } from 'react-query';
 import Notice from './Notice';
 import { useUser } from '../../../Context/UserProvider';
 
-const ClassRoomNav = ({ setNoticeCreatdModal,classRoom,isLoading }) => {
+const ClassRoomNav = ({ setNoticeCreatdModal,classRoom,isLoading,setPostModal,trainer }) => {
 
     const { state, dispatch } = useUser();
     const { userDetails } = state;
@@ -12,7 +12,7 @@ const ClassRoomNav = ({ setNoticeCreatdModal,classRoom,isLoading }) => {
         return <Loading></Loading>
     }
     return (
-        <div className="navbar bg-green-300">
+        <div className="navbar bg-slate-300">
             <div className="flex-1">
                 <a className="btn btn-ghost normal-case text-xl">{classRoom?.classRoomName}</a>
             </div>
@@ -35,8 +35,13 @@ const ClassRoomNav = ({ setNoticeCreatdModal,classRoom,isLoading }) => {
                         </div>
                     </div>
                 </div>
+                {
+                       trainer && <div className=" ">
+                       <label htmlFor="post-create-modal" onClick={() => setPostModal(true)} className="btn btn-primary btn-sm text-white mr-3">Attachment</label>
+                      </div>
+                }
                     { 
-                        (userDetails?.role==="trainer" || userDetails?.role==="admin") &&
+                        (userDetails?.role==="TRAINER" || userDetails?.role==="ADMIN") &&
                     <label htmlFor="notice-Created-modal" onClick={() => setNoticeCreatdModal(true)} className="btn btn-primary btn-sm">Notice</label>
                             
                     }

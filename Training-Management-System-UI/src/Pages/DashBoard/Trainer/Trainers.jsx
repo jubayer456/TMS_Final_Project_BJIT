@@ -68,12 +68,12 @@ const Trainers = () => {
     }
     return (
         <div className="m-2 p-4">
-            <div>
+             <div className='bg-white rounded-lg shadow-lg p-6 mb-4 min-h-screen'>
                 <div className=" ">
-                    <label htmlFor="trainer-create-modal" onClick={() => setTrainerModal(true)} className="btn btn-primary btn-sm">Create Trainer</label>
+                    <label htmlFor="trainer-create-modal" onClick={() => setTrainerModal(true)} className="btn btn-primary btn-sm text-white">Create Trainer</label>
                 </div>
-                <div className="divider"></div>
-                <h1 className='text-3xl py-5 text-center'>All Trainers</h1>
+                <div className="divider m-2"></div>
+                <h1 className='text-3xl mb-5 text-center'>All Trainers</h1>
                 <div>
                     <div className="overflow-x-auto">
                         <table className="table">
@@ -88,7 +88,6 @@ const Trainers = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                            </tbody>
                             {
                                 trainers.map((trainer, index) => <Trainer
                                     key={trainer.trainerId}
@@ -97,6 +96,7 @@ const Trainers = () => {
                                     setDeletingTrainer={setDeletingTrainer}
                                 ></Trainer>)
                             }
+                            </tbody>
                         </table>
                     </div>
                 </div>

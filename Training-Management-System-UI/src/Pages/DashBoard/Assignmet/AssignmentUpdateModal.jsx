@@ -22,7 +22,6 @@ const AssignmentUpdateModal = ({ setAssignUpdatedModal, assignUpdateModal }) => 
     const onSubmit = data => {
         const file = data.assignmentFile[0];
         const formData = new FormData();
-        console.log(file);
         formData.append('file', file);
         axios.post('http://localhost:8082/api/upload', formData)
             .then((response) => {
@@ -79,7 +78,7 @@ const AssignmentUpdateModal = ({ setAssignUpdatedModal, assignUpdateModal }) => 
             <input type="checkbox" id="assignment-updated-modal" className="modal-toggle" />
             <div className="modal">
                 <div className="modal-box">
-                    < header className='text-center text-2xl'>Assignment Creation Form</header>
+                    < header className='text-center text-2xl text-blue'>Assignment Creation Form</header>
                     <button onClick={() => setAssignUpdatedModal(false)} className="btn btn-md btn-circle btn-ghost absolute right-2 top-2">✕</button>
                     <form onSubmit={handleSubmit(onSubmit)} className="form">
                         <div className="input-box">

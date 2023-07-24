@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 import { useParams } from 'react-router-dom';
 
-const NoticeCreateModal = ({setNoticeCreatdModal}) => {
+const NoticeCreateModal = ({setNoticeCreatdModal,refetch}) => {
     const {classRoomId}=useParams();
     const { state, dispatch } = useUser();
     const { userDetails } = state;
@@ -40,6 +40,7 @@ const NoticeCreateModal = ({setNoticeCreatdModal}) => {
             .then(data => {
                 console.log(data);
                 if (data.status == 200) {
+                    refetch();
                     setNoticeCreatdModal(false)
                     toast.success(`succesfully Notice Created`)
                 }

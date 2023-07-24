@@ -16,19 +16,19 @@ const Batch = ({batch,index}) => {
         navigate(`/dashboard/classroom/${classRoomId}`);
     }
     return (
-        <div className="card w-96 bg-base-100 shadow-xl">
+        <div className="card w-64 bg-base-100 shadow-xl">
         <div className="card-body">
-            <h5 className='text-xl'>Batch Name: { batchName} </h5>
-            <h5 className='text-lg'>Batch Id: { batchId} </h5>
+            <h5 className='text-xl'>Name: { batchName} </h5>
+            {/* <h5 className='text-sm'>Batch Id: { batchId} </h5> */}
 
-            <p className='text-md'>Starting Date: {startingDate }</p>
-            <p className='text-md'>Ending Date: {endingDate }</p>
-            <p className='text-md'>Capacity: {totalNumOfTrainee}</p>
-            <p className='text-md'>Number Of Trainee: { }</p>
+            <p className='text-sm leading-3'>Starting Date: {startingDate }</p>
+            <p className='text-sm leading-3'>Ending Date: {endingDate }</p>
+            <p className='text-sm leading-3'>Capacity: {totalNumOfTrainee}</p>
+            <p className='text-sm leading-3'>Number Of Trainee: { }</p>
             <div>
-            <label onClick={() => AssignTrainee(batch.batchId)} className="btn btn-sm btn-success text-base-100 mt-4 mx-1">Assign Trainee</label>
-            <label onClick={() => AssignSchedule(batch.batchId)} className="btn btn-sm btn-success text-base-100 mt-4 mx-1">Assign Schedule</label>
-            <label onClick={() => handleClassRoom(batch.batchId)} className="btn btn-sm btn-success text-base-100 mt-4 mx-1">ClassRoom</label>
+            <label onClick={() => AssignTrainee(batch.batchId)} className="btn btn-sm btn-success text-base-100 mt-2 mx-1">Assign Trainee</label>
+            <label onClick={() => AssignSchedule(batch.batchId)} className="btn btn-sm btn-success text-base-100 mt-2 mx-1">Assign Schedule</label>
+            <label onClick={() => handleClassRoom(batch.batchId)} className="btn btn-sm btn-success text-base-100 mt-2 mx-1">ClassRoom</label>
             </div>
         </div>
     </div>

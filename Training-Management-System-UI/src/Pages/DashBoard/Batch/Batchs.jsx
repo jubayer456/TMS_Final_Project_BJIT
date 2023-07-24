@@ -4,21 +4,21 @@ import AllBatch from './AllBatch';
 import BatchCreatedModal from './BatchCreatedModal';
 
 const Batchs = () => {
-    const[createdModal,setCreatedModal]=useState(false);
+    const [createdModal, setCreatedModal] = useState(false);
 
     return (
         <div className="m-2 p-4">
-            <div>
+            <div className='bg-white rounded-lg shadow-lg p-6 mb-4 min-h-screen'>
                 <div className=" ">
-                    <label htmlFor="batch-created-modal" onClick={()=>setCreatedModal(true)} className="btn btn-primary btn-sm">Create Batch</label>
+                    <label htmlFor="batch-created-modal" onClick={() => setCreatedModal(true)} className="btn btn-primary btn-sm text-white">Create Batch</label>
                 </div>
-                <div className="divider"></div>
-                <><AllBatch/>
-                {
-                    createdModal && <BatchCreatedModal 
-                    setCreatedModal={setCreatedModal}
-                    ></BatchCreatedModal>
-                }
+                <div className="divider m-2"></div>
+                <><AllBatch />
+                    {
+                        createdModal && <BatchCreatedModal
+                            setCreatedModal={setCreatedModal}
+                        ></BatchCreatedModal>
+                    }
                 </>
             </div>
         </div>

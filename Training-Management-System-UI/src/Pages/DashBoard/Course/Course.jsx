@@ -1,11 +1,12 @@
 import React from 'react';
+import { FaEdit, FaTrash } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 
 const Course = ({course,setDeletingCourse,index,setCourseUpdateModal}) => {
     const { courseId,trainerId,trainerName, name, profilePicture } = course;
     const navigate = useNavigate();
     return (
-        <tr>
+      <tr className='hover:bg-slate-100 font-medium'>
           <td>
             <div className="flex items-center space-x-3">
               <div className="avatar">
@@ -14,7 +15,7 @@ const Course = ({course,setDeletingCourse,index,setCourseUpdateModal}) => {
                 </div>
               </div>
               <div>
-                <div className="font-bold">{trainerName}</div>
+              <div className="font-bold font-bold text-blue-500">{trainerName}</div>
                 <div className="text-sm opacity-50">{trainerId}</div>
               </div>
             </div>
@@ -23,8 +24,8 @@ const Course = ({course,setDeletingCourse,index,setCourseUpdateModal}) => {
           <td>{name}</td>
           <th>
             <div className=''>
-                <label htmlFor="course-update-modal" onClick={() => setCourseUpdateModal(course)} className="btn btn-primary btn-sm mx-1">update</label>
-                <label onClick={() => setDeletingCourse(course)} htmlFor="confirmation-modal" className="btn btn-sm btn-error text-base-100 mx-1">Delete</label>
+                <label htmlFor="course-update-modal" onClick={() => setCourseUpdateModal(course)} className="btn btn-primary btn-sm mx-1"><FaEdit/></label>
+                <label onClick={() => setDeletingCourse(course)} htmlFor="confirmation-modal" className="btn btn-sm btn-error text-base-100 mx-1"><FaTrash/></label>
             </div>
           </th>
         </tr>

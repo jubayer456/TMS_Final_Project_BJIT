@@ -33,11 +33,11 @@ const AllAssignment = () => {
         return <Loading></Loading>
     }
     return (
-        <div className='m-2'>
+        <div >
             <h1 className='text-3xl pb-3 text-center'>All Assignment</h1>
             <div>
                 <div className="overflow-x-auto">
-                    <table className="table">
+                    <table className="table ">
                         <thead>
                             <tr>
                                 <th>Assignment Id</th>

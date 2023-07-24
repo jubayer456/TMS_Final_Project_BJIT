@@ -42,7 +42,7 @@ const CreatedTraineeModal = ({ setTraineeModal, refetch }) => {
             })
             .then(data => {
                 if (data.status == 200) {
-                    setTraineeModal(false);
+                    // setTraineeModal(false);
                     toast.success(data.msg)
                 }
                 else {

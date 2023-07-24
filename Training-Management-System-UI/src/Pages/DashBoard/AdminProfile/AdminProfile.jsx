@@ -15,7 +15,12 @@ const AdminProfile = () => {
     const { data: admin, refetch, isLoading } = useQuery({
         queryKey: ['getAdmin'],
         queryFn: async () => {
-            const res = await fetch(`http://localhost:8082/api/admin/${userDetails?.userId}`);
+            const url =`http://localhost:8082/api/admin/${userDetails?.userId}`;
+
+            const headers = {
+                Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+            };
+            const res = await fetch(url, { headers });
             if (res.status === 401 || res.status === 403) {
                 toast.error(`Access denied please login again`);
                 localStorage.removeItem('accessToken');
@@ -23,7 +28,7 @@ const AdminProfile = () => {
                 navigate('/login');
             }
             const data = await res.json();
-            return data
+            return data;
         }
     });
     const updateProfile = (e) => {
@@ -112,7 +117,8 @@ const AdminProfile = () => {
             });
     };
     return (
-        <div>
+       <div className='p-4 m-2'>
+         <div className='bg-white rounded-lg shadow-lg p-6 mb-4'>
             <h1 className='text-3xl py-4 text-center'>My Profile</h1>
             <div className='hero-content flex-col lg:flex-row-reverse justify-between items-start'>
 
@@ -158,10 +164,11 @@ const AdminProfile = () => {
                             <input type="text" name="contactNumber" defaultValue={admin?.contactNumber} required />
                         </div>
                     </div>
-                    <button type='submit'>Update</button>
+                    <button type='submit' className='btn btn-primary btn-md text-white font bold'>Update</button>
                 </form>
             </div>
         </div>
+       </div>
     );
 };
 

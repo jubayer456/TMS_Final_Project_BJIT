@@ -63,8 +63,8 @@ const AllCourse = () => {
             })
     }
     return (
-        <div className='m-2'>
-        <h1 className='text-3xl pb-3 text-center'>All Courses</h1>
+        <div>
+        <h1 className='text-3xl pb-5 text-center'>All Courses</h1>
         <div>
             <div className="overflow-x-auto">
                 <table className="table">

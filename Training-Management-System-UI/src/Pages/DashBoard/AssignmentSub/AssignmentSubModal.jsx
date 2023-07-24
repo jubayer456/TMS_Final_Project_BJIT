@@ -14,15 +14,14 @@ const AssignmentSubModal = ({ assignSubModal, setAssignSubModal,traineeId }) => 
             traineeId: traineeId
         },
     });
-    const getCurrentDate = () => {
-        const currentDate = new Date();
-        const year = currentDate.getFullYear().toString().slice(-2); // Get the last two digits of the year
-        const month = (currentDate.getMonth() + 1).toString().padStart(2, '0'); // Add leading zero if needed
-        const day = currentDate.getDate().toString().padStart(2, '0'); // Add leading zero if needed
-        return `${year}-${month}-${day}`;
-      };
 
     const onSubmit = data => {
+        const currentDate = new Date();
+        const year = currentDate.getFullYear();
+        const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+        const day = String(currentDate.getDate()).padStart(2, '0');
+        const formattedDate = `${year}-${month}-${day}`;
+
         const file = data.submissionFile[0];
         const formData = new FormData();
         formData.append('file', file);
@@ -35,7 +34,7 @@ const AssignmentSubModal = ({ assignSubModal, setAssignSubModal,traineeId }) => 
                         traineeId: data.traineeId,
                         batchId: batchId,
                         submissionFile: response.data.name,
-                        submissionDate: getCurrentDate()
+                        submissionDate: formattedDate
                     }
                     console.log(assignmentSubData);
                     fetch(`http://localhost:8082/api/schedule/add-assignmentSub`, {

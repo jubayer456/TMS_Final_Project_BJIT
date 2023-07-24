@@ -31,4 +31,6 @@ public interface BatchService {
 
     ResponseEntity<Set<TraineeResDto>> getAllTraineeBatch(Long batchId);
 
+
+    ResponseEntity<Object> updateScheduleFromBatch(Long scheduleId, ScheduleReqDto scheduleReqDto);
 }

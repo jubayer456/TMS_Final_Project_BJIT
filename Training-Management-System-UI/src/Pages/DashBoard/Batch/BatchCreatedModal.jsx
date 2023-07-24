@@ -49,7 +49,6 @@ const BatchCreatedModal = ({ setCreatedModal }) => {
             <input type="checkbox" id="batch-created-modal" className="modal-toggle" />
             <div className="modal">
                 <div className="modal-box">
-                    {/* <section className="container"> */}
                     < header className='text-center text-2xl'>Batch Creation Form</header>
                     <button onClick={() => setCreatedModal(false)} className="btn btn-md btn-circle btn-ghost absolute right-2 top-2">✕</button>
                     <form onSubmit={handleSubmit} className="form">

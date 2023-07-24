@@ -26,6 +26,7 @@ public class FileController {
 
     @GetMapping("/api/download/{fileName}")
     public ResponseEntity<?> downloadImageFromFileSystem(@PathVariable String fileName) throws IOException {
+        //
         byte[] imageData=fileService.downloadImageFromFileSystem(fileName);
         Optional<FileDataEntity> attachment=fileRepository.findByName(fileName);
         MediaType type=(MediaType.parseMediaType(attachment.get().getType()));
@@ -33,35 +34,4 @@ public class FileController {
                 .contentType(type)
                 .body(imageData);
     }
-
-//    @GetMapping("/api/download/{fileName}")
-//        public ResponseEntity<Resource> downloadFile(@PathVariable String fileName) {
-//            try {
-//                // Load the file as a resource
-//                Path filePath = Paths.get("file-upload").resolve(fileName).normalize();
-//                Resource resource = new UrlResource(filePath.toUri());
-//
-//                // Check if the file exists
-//                if (!resource.exists()) {
-//                    throw new FileNotFoundException("File not found: " + fileName);
-//                }
-//
-//                // Determine the file's content type
-//                String contentType = Files.probeContentType(filePath);
-//
-//                // Set the response headers
-//                HttpHeaders headers = new HttpHeaders();
-//                headers.setContentType(MediaType.parseMediaType(contentType));
-//                headers.setContentDispositionFormData("attachment", fileName);
-//
-//                // Create the response entity
-//                return ResponseEntity.ok()
-//                        .headers(headers)
-//                        .body(resource);
-//            } catch (MalformedURLException e) {
-//                return ResponseEntity.notFound().build();
-//            } catch (IOException e) {
-//                return ResponseEntity.badRequest().build();
-//            }
-//        }
 }
