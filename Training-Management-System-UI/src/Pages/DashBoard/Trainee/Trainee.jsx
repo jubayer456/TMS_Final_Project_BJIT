@@ -1,6 +1,7 @@
 import React from 'react';
 import img from '../../../assets/18942381.png'
 import { FaTrash } from 'react-icons/fa';
+
 const Trainee = ({ trainee, index, setDeletingTrainee }) => {
   const { traineeId, email, fullName, profilePicture, contactNumber, batchId } = trainee;
 

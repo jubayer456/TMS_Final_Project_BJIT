@@ -40,9 +40,9 @@ const AllAssignment = () => {
                     <table className="table ">
                         <thead>
                             <tr>
-                                <th>Assignment Id</th>
-                                <th>Assignment Name</th>
-                                <th>Assignment File</th>
+                                <th>AssignId</th>
+                                <th>Name</th>
+                                <th>File</th>
                                 <th>DeadLine</th>
                                 <th>More</th>
                             </tr>

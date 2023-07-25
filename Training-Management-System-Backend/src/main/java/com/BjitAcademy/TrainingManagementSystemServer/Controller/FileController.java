@@ -26,7 +26,6 @@ public class FileController {
 
     @GetMapping("/api/download/{fileName}")
     public ResponseEntity<?> downloadImageFromFileSystem(@PathVariable String fileName) throws IOException {
-        //
         byte[] imageData=fileService.downloadImageFromFileSystem(fileName);
         Optional<FileDataEntity> attachment=fileRepository.findByName(fileName);
         MediaType type=(MediaType.parseMediaType(attachment.get().getType()));

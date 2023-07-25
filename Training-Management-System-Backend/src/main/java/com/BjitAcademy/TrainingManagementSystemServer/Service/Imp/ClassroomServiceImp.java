@@ -6,6 +6,7 @@ import com.BjitAcademy.TrainingManagementSystemServer.Dto.ClassRoom.*;
 import com.BjitAcademy.TrainingManagementSystemServer.Dto.Schedule.ScheduleResDto;
 import com.BjitAcademy.TrainingManagementSystemServer.Entity.*;
 import com.BjitAcademy.TrainingManagementSystemServer.Exception.ClassRoomNotFoundException;
+import com.BjitAcademy.TrainingManagementSystemServer.Exception.TraineeNotFoundException;
 import com.BjitAcademy.TrainingManagementSystemServer.Exception.TrainerNotFoundException;
 import com.BjitAcademy.TrainingManagementSystemServer.Mapper.BatchMappingModel;
 import com.BjitAcademy.TrainingManagementSystemServer.Mapper.ClassRoomMappingModel;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -35,18 +37,18 @@ public class ClassroomServiceImp implements ClassroomService {
 
     @Override
     public ResponseEntity<Object> addPost(ClassRoomPostReqDto postReq) {
-        //converting post req dto to entity for db
-        PostEntity post= ClassRoomMappingModel.postDtoToEntity(postReq);
         //finding classRoom using classRoomId
         ClassRoom classRoom=classRoomRepository.findByClassRoomId(postReq.getClassRoomId());
         if (classRoom==null){
             throw new ClassRoomNotFoundException("classRoom not found for post");
         }
+        //converting post req dto to entity for db
+        PostEntity post= ClassRoomMappingModel.postDtoToEntity(postReq);
         //firstly get all post from the classroom and add new post to the list
         classRoom.getPosts().add(postRepository.save(post));
         //save the classRoom entity to classRoom
         classRoomRepository.save(classRoom);
-
+       //give success msg to UI with status code
         SuccessResponseDto success=SuccessResponseDto.builder()
                 .msg("Successfully Post To the ClassRoom")
                 .status(HttpStatus.OK.value())
@@ -64,8 +66,9 @@ public class ClassroomServiceImp implements ClassroomService {
         ClassRoomNotice notice=ClassRoomMappingModel.noticeDtoToEntity(noticeReqDto);
         //save the notice in classRoom notice List
         classRoom.getClassRoomNotice().add(noticeRepository.save(notice));
-
+        //save the updated classRoom in classRoom Repository
         classRoomRepository.save(classRoom);
+        //give success msg to UI with status code
         SuccessResponseDto success= SuccessResponseDto.builder()
                 .msg("Successfully create notice")
                 .status(HttpStatus.OK.value()).build();
@@ -74,7 +77,7 @@ public class ClassroomServiceImp implements ClassroomService {
     @Override
     public ResponseEntity<List<NoticeResDto>> getAllNotice(Long classId) {
         //get all the notice for classroom
-       List<ClassRoomNotice> notice=classRoomRepository.findByClassRoomId(classId).getClassRoomNotice();
+        List<ClassRoomNotice> notice=classRoomRepository.findByClassRoomId(classId).getClassRoomNotice();
         //convert the entity to response dto using mapper class named ClassRoomMappingModel
         List<NoticeResDto> noticeRes=notice.stream().map(ClassRoomMappingModel::noticeEntityToDto).toList();
         return new ResponseEntity<>(noticeRes,HttpStatus.OK);
@@ -92,6 +95,7 @@ public class ClassroomServiceImp implements ClassroomService {
         existPost.getPostComments().add(postCommentRepository.save(newComment));
        //save the post in post repository
         postRepository.save(existPost);
+        //give success msg to UI with status code
         SuccessResponseDto success= SuccessResponseDto.builder()
                 .msg("Successfully create Comment")
                 .status(HttpStatus.OK.value()).build();
@@ -104,11 +108,18 @@ public class ClassroomServiceImp implements ClassroomService {
         if (existComment==null){
             throw new ClassRoomNotFoundException("comment can not updated");
         }
+        if (!Objects.equals(existComment.getTraineeId(), comment.getTraineeId())){
+            throw new TraineeNotFoundException("Trainee has no access to updated");
+        }
         //set the msg for update
         existComment.setMsg(comment.getMsg());
         //save it postCommentRepository
         postCommentRepository.save(existComment);
-        return new ResponseEntity<>("update post comment ",HttpStatus.OK);
+        //give success msg to UI with status code
+        SuccessResponseDto success= SuccessResponseDto.builder()
+                .msg("update post comment ")
+                .status(HttpStatus.OK.value()).build();
+        return new ResponseEntity<>(success,HttpStatus.OK);
     }
     @Override
     public ResponseEntity<Object> updatePost(Long postId, ClassRoomPostReqDto post) {
@@ -117,12 +128,14 @@ public class ClassroomServiceImp implements ClassroomService {
         if ((existPost==null)){
             throw new ClassRoomNotFoundException("post Not found for delete");
         }
+        if (!Objects.equals(existPost.getTrainerId(), post.getTrainerId())){
+            throw new TrainerNotFoundException("Trainer has no access to updated");
+        }
         //set the msg for update
         existPost.setMsg(post.getMsg());
-//        existPost.setPostFile(post.getPostFile());
         //save it postRepository
         postRepository.save(existPost);
-
+        //give success msg to UI with status code
         SuccessResponseDto success=SuccessResponseDto.builder()
                 .msg("Successfully Updated Post")
                 .status(HttpStatus.OK.value())
@@ -130,14 +143,18 @@ public class ClassroomServiceImp implements ClassroomService {
         return new ResponseEntity<>(success, HttpStatus.OK);
     }
     @Override
-    public ResponseEntity<Object> removePost(Long postId) {
+    public ResponseEntity<Object> removePost(Long postId,Long trainerId) {
         //checking post is exist or not?
         PostEntity post=postRepository.findByPostId(postId);
         if ((post==null)){
             throw new ClassRoomNotFoundException("post Not found for delete");
         }
+        if (!Objects.equals(post.getTrainerId(), trainerId)){
+            throw new TrainerNotFoundException("Trainer has no access to updated other post");
+        }
         //delete the entity from the repository
         postRepository.delete(post);
+        //give success msg to UI with status code
         SuccessResponseDto success=SuccessResponseDto.builder()
                 .msg("Successfully Deleted Post")
                 .status(HttpStatus.OK.value())
@@ -145,7 +162,7 @@ public class ClassroomServiceImp implements ClassroomService {
         return new ResponseEntity<>(success, HttpStatus.OK);
     }
     @Override
-    public ResponseEntity<Object> removeComment(Long postId,Long commentId) {
+    public ResponseEntity<Object> removeComment(Long postId,Long commentId,Long userId) {
         //checking comment is exist or not?
         PostComment existComment=postCommentRepository.findByCommentId(commentId);
         if (existComment==null){
@@ -156,10 +173,14 @@ public class ClassroomServiceImp implements ClassroomService {
         if(postEntity==null){
             throw new ClassRoomNotFoundException("comment can not deleted");
         }
+        if (!Objects.equals(existComment.getTraineeId(), userId)){
+            throw new TrainerNotFoundException("User has no access to remove other comment");
+        }
         //post has list of comment . then remove the comment from the list
         postEntity.getPostComments().remove(existComment);
         //remove the comment from the comment repository
         postCommentRepository.delete(existComment);
+        //give success msg to UI with status code
         SuccessResponseDto success=SuccessResponseDto.builder()
                 .msg("Successfully Deleted Comment")
                 .status(HttpStatus.OK.value())
@@ -168,22 +189,15 @@ public class ClassroomServiceImp implements ClassroomService {
     }
 
     @Override
-    public ResponseEntity<Set<ClassRoomPostResDto>> getAllPost(Long classId) {
+    public ResponseEntity<List<ClassRoomPostResDto>> getAllPost(Long classId) {
         //get All the post
         List<PostEntity> posts=postRepository.findAll();
         //get all the comment for specifics post and convert it response dto using mapper class named ClassRoomMappingModel
-        Set<ClassRoomPostResDto> allComments= posts.stream().map(postEntity -> {
+        List<ClassRoomPostResDto> allComments= posts.stream().map(postEntity -> {
             //convert comment to post comment res dto
-            Set<PostCommentResDto> comments=postEntity.getPostComments().stream().map(ClassRoomMappingModel::commentEntityToDto).collect(Collectors.toSet());
-            return ClassRoomPostResDto.builder()
-                    .postId(postEntity.getPostId())
-                    .msg(postEntity.getMsg())
-                    .trainerId(postEntity.getTrainerId())
-                    .postFile(postEntity.getPostFile())
-                    .classRoomId(postEntity.getClassRoomId())
-//                    .comments(comments)
-                    .build();
-        }).collect(Collectors.toSet());
+            List<PostCommentResDto> comments=postEntity.getPostComments().stream().map(ClassRoomMappingModel::commentEntityToDto).toList();
+            return ClassRoomMappingModel.postEntityToDto(postEntity,comments);
+            }).toList();
         return new ResponseEntity<>(allComments,HttpStatus.OK);
     }
 
@@ -195,7 +209,8 @@ public class ClassroomServiceImp implements ClassroomService {
             throw new TrainerNotFoundException("Trainer are not found for ClassRoom");
         }
         //find the schedule for specific trainer
-        List<ScheduleResDto> scheduleEntities=scheduleRepository.findAllByTrainerId(trainerId).stream().map(ScheduleMappingModel::scheduleEntityToDto).toList();
+        List<ScheduleResDto> scheduleEntities=scheduleRepository.findAllByTrainerId(trainerId).stream()
+                .map(ScheduleMappingModel::scheduleEntityToDto).toList();
         //initialize hash set for output
         Set<BatchResDto> classRooms=new HashSet<>();
         //initialize hash set for unique batch

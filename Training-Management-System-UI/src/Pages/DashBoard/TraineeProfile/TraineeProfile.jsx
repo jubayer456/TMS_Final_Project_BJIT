@@ -7,6 +7,7 @@ import '../../Shared/Register.css'
 import { useUser } from '../../../Context/UserProvider';
 import { useNavigate } from 'react-router-dom';
 import Loading from '../../Shared/Loading';
+import img from '../../../assets/18942381.png'
 
 const TraineeProfile = () => {
     const navigate = useNavigate();
@@ -49,7 +50,7 @@ const TraineeProfile = () => {
         axios.put(`http://localhost:8082/api/trainee`, updatedData, {
             headers: {
                 'Content-Type': 'application/json',
-                 authorization: `Bearer ${localStorage.getItem('accessToken')}`
+                authorization: `Bearer ${localStorage.getItem('accessToken')}`
             }
         }).then((response) => {
             refetch();
@@ -59,7 +60,7 @@ const TraineeProfile = () => {
 
 
     }
-    if(isLoading){
+    if (isLoading) {
         <Loading></Loading>
     }
     const updateProfilePic = data => {
@@ -109,90 +110,93 @@ const TraineeProfile = () => {
     };
     return (
         <div className='p-4 m-2'>
-<div className='bg-white rounded-lg shadow-lg p-6 mb-4'>
-            <h1 className='text-3xl py-4 text-center'>My Profile</h1>
-            <div className='hero-content flex-col lg:flex-row-reverse justify-between items-start'>
+            <div className='bg-white rounded-lg shadow-lg p-6 mb-4'>
+                <h1 className='text-3xl py-4 text-center'>My Profile</h1>
+                <div className='hero-content flex-col lg:flex-row-reverse justify-between items-start'>
 
-                <div>
-                    <div className="avatar online">
-                        <div className="w-24 rounded-full">
-                            <img src={`http://localhost:8082/api/download/${trainee?.profilePicture}`} />
+                    <div>
+                        <div className="avatar online">
+                            <div className="w-24 rounded-full">
+                                {
+                                    trainee?.profilePicture ? <img src={`http://localhost:8082/api/download/${trainee?.profilePicture}`} alt="Admin Profile Picture" /> :
+                                        <img src={img} alt="Trainee default Profile Picture" />
+                                }
+                            </div>
                         </div>
+
+                        <form onSubmit={handleSubmit(updateProfilePic)}>
+                            <div >
+                                <span className="label-text">Change profile Picture</span><br />
+                                <input type="file" name="" id=""
+                                    {...register('profilePicture')}
+                                    required
+                                />
+                            </div>
+                            <input type='submit' value='upload' className='btn btn-sm my-5'></input>
+                        </form>
                     </div>
-
-                    <form onSubmit={handleSubmit(updateProfilePic)}>
-                        <div >
-                            <span className="label-text">Change profile Picture</span><br />
-                            <input type="file" name="" id=""
-                                {...register('profilePicture')}
-                                required
-                            />
+                    <form onSubmit={updateProfile} className="form px-4">
+                        <div className="column">
+                            <div className="input-box">
+                                <label>Trainee Id</label>
+                                <input type="number" name="traineeId" defaultValue={trainee?.traineeId} />
+                            </div>
+                            <div className="input-box">
+                                <label>Full Name:</label>
+                                <input type="text" name="fullName" defaultValue={trainee?.fullName} required />
+                            </div>
                         </div>
-                        <input type='submit' value='upload' className='btn btn-sm my-5'></input>
+
+                        <div className="column">
+                            <div className="input-box">
+                                <label>Email Address:</label>
+                                <input type="email" name="email" defaultValue={trainee?.email} required />
+                            </div>
+                        </div>
+
+
+                        <div className="column">
+                            <div className="input-box">
+                                <label>Contact Number:</label>
+                                <input type="number" name="contactNumber" defaultValue={trainee?.contactNumber} required />
+                            </div>
+                            <div className="input-box">
+                                <label>Birth Date</label>
+                                <input type="date" name="dob" defaultValue={trainee?.dob} required />
+                            </div>
+                        </div>
+
+                        <div className="input-box address">
+                            <label>Address</label>
+                            <input type="text" name="address" defaultValue={trainee?.address} required />
+
+                            <div className="column">
+                                <div className="input-box">
+                                    <label>Educational Institute:</label>
+                                    <input type="text" name="educationalInstitute" defaultValue={trainee?.educationalInstitute} required />
+                                </div>
+                                <div className="input-box">
+                                    <label>Degree Name:</label>
+                                    <input type="text" name="degreeName" defaultValue={trainee?.degreeName} required />
+                                </div>
+                            </div>
+                            <div className="column">
+                                <div className="input-box">
+                                    <label>Passing Year:</label>
+                                    <input type="text" name="passingYear" defaultValue={trainee?.passingYear} required />
+                                </div>
+                                <div className="input-box">
+                                    <label>CGPA:</label>
+                                    <input type="number" name="cgpa" defaultValue={trainee?.cgpa} required />
+                                </div>
+                            </div>
+                        </div>
+                        <button type='submit'>Updated</button>
                     </form>
                 </div>
-                <form onSubmit={updateProfile} className="form px-4">
-                    <div className="column">
-                        <div className="input-box">
-                            <label>Trainee Id</label>
-                            <input type="number" name="traineeId" defaultValue={trainee?.traineeId} />
-                        </div>
-                        <div className="input-box">
-                            <label>Full Name:</label>
-                            <input type="text" name="fullName" defaultValue={trainee?.fullName} required />
-                        </div>
-                    </div>
-
-                    <div className="column">
-                        <div className="input-box">
-                            <label>Email Address:</label>
-                            <input type="email" name="email" defaultValue={trainee?.email} required />
-                        </div>
-                    </div>
-
-
-                    <div className="column">
-                        <div className="input-box">
-                            <label>Contact Number:</label>
-                            <input type="number" name="contactNumber" defaultValue={trainee?.contactNumber} required />
-                        </div>
-                        <div className="input-box">
-                            <label>Birth Date</label>
-                            <input type="date" name="dob" defaultValue={trainee?.dob} required />
-                        </div>
-                    </div>
-
-                    <div className="input-box address">
-                        <label>Address</label>
-                        <input type="text" name="address" defaultValue={trainee?.address} required />
-
-                        <div className="column">
-                            <div className="input-box">
-                                <label>Educational Institute:</label>
-                                <input type="text" name="educationalInstitute" defaultValue={trainee?.educationalInstitute} required />
-                            </div>
-                            <div className="input-box">
-                                <label>Degree Name:</label>
-                                <input type="text" name="degreeName" defaultValue={trainee?.degreeName} required />
-                            </div>
-                        </div>
-                        <div className="column">
-                            <div className="input-box">
-                                <label>Passing Year:</label>
-                                <input type="text" name="passingYear" defaultValue={trainee?.passingYear} required />
-                            </div>
-                            <div className="input-box">
-                                <label>CGPA:</label>
-                                <input type="number" name="cgpa" defaultValue={trainee?.cgpa} required />
-                            </div>
-                        </div>
-                    </div>
-                    <button type='submit'>Updated</button>
-                </form>
             </div>
         </div>
-        </div>
-        
+
     );
 };
 

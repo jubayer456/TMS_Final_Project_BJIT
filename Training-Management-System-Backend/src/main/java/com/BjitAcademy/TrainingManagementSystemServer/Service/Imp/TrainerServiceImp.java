@@ -7,7 +7,6 @@ import com.BjitAcademy.TrainingManagementSystemServer.Exception.TrainerNotFoundE
 import com.BjitAcademy.TrainingManagementSystemServer.Exception.UserAlreadyExistException;
 import com.BjitAcademy.TrainingManagementSystemServer.Exception.UserNotFoundException;
 import com.BjitAcademy.TrainingManagementSystemServer.Mapper.TrainerMappingModel;
-import com.BjitAcademy.TrainingManagementSystemServer.Mapper.UserMappingModel;
 import com.BjitAcademy.TrainingManagementSystemServer.Repository.CourseRepository;
 import com.BjitAcademy.TrainingManagementSystemServer.Repository.ScheduleRepository;
 import com.BjitAcademy.TrainingManagementSystemServer.Repository.TrainerRepository;
@@ -18,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
@@ -31,6 +31,7 @@ public class TrainerServiceImp implements TrainerService {
     private final ScheduleRepository scheduleRepository;
     private final CourseRepository courseRepository;
     @Override
+    @Transactional
     public ResponseEntity<Object> createTrainers(TrainerRegReqDto trainerRegReqDto) {
         UserEntity userEntityById=userRepository.findByUserId(trainerRegReqDto.getTrainerId());
         if (userEntityById!=null){

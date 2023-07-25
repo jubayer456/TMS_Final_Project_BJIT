@@ -8,14 +8,15 @@ const TrainerSchedule = ({ trainerSchedule, index }) => {
         navigate(`/dashboard/schedules/${scheduleId}/getAllAssignment`)
     }
     return (
-        <div className="card w-96 bg-base-100 shadow-xl">
-            <div className="card-body">
-                <h3 className='text-2xl'>Course Id: {courseId}</h3>
-                <h3 className='text-lg'>Schedule Id: {scheduleId}</h3>
-                <h3 className='text-lg'>Starting Date: {startingDate}</h3>
-                <h3 className='text-lg'>Ending Date: {endingDate}</h3>
-                <h3 className='text-lg'>Trainer Id: {trainerId}</h3>
-                <label onClick={() => AssignmentHandler(scheduleId)} className="btn btn-sm btn-success text-base-100 mt-4 mx-1">Assignment Details</label>
+        <div className="card bg-base-100 shadow-xl p-4">
+        <div className="card-body">
+                <h5 className='text-xl font-semibold'>Course Id: { courseId} </h5>
+                <h3 className='text-base leading-6'>Schedule Id: {scheduleId}</h3>
+                <h3 className='text-base leading-6'>Starting Date: {startingDate}</h3>
+                <h3 className='text-base leading-6'>Ending Date: {endingDate}</h3>
+                <h3 className='text-base leading-6'>Trainer Id: {trainerId}</h3>
+
+                <label onClick={() => AssignmentHandler(scheduleId)} className="btn btn-sm bg-blue-500 text-white hover:bg-blue-700">Assignment Details</label>
             </div>
         </div>
     );

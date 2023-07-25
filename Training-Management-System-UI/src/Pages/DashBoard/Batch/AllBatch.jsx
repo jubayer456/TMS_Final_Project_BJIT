@@ -31,7 +31,7 @@ const AllBatch = () => {
     return (
         <div className=''>
             <h1 className='text-2xl text-center mb-5'>Batch Details!!!</h1>
-            <div className='grid lg:grid-cols-3 md:grid-cols-3 grid-col-1 gap-10 justify-items-center'>
+            <div className='grid lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-10 justify-items-center'>
                 {
                     batchs.map((batch, index) => <Batch
                     key={batch.batchId}

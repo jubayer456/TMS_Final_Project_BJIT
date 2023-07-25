@@ -14,9 +14,9 @@ public interface ClassroomService {
     ResponseEntity<Object> addComment(PostCommentReqDto comment);
     ResponseEntity<Object> updateComment(Long commentId, PostCommentReqDto comment);
     ResponseEntity<Object> updatePost(Long postId, ClassRoomPostReqDto post);
-    ResponseEntity<Object> removePost(Long postId);
-    ResponseEntity<Object> removeComment(Long postId,Long commentId);
-    ResponseEntity<Set<ClassRoomPostResDto>> getAllPost(Long classId);
+    ResponseEntity<Object> removePost(Long postId,Long trainerId);
+    ResponseEntity<Object> removeComment(Long postId,Long commentId,Long userId);
+    ResponseEntity<List<ClassRoomPostResDto>> getAllPost(Long classId);
 
     ResponseEntity<Set<BatchResDto>> getAllTrainerClass(Long trainerId);
 

@@ -4,16 +4,20 @@ import Comment from './Comment';
 import CommentForm from './CommentForm';
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import img from '../../../assets/18942381.png'
+import { useUser } from '../../../Context/UserProvider';
 
-const Post = ({ post,trainer,trainee,refetch }) => {
-  const {postId,classRoomId,profilePicture,postDate,msg,postFile,comments,trainerName}=post;
+const Post = ({ post, trainer, trainee, refetch }) => {
+  const { postId, classRoomId, profilePicture, postDate, msg, postFile, comments, trainerName,trainerId } = post;
 
   const [isEditing, setIsEditing] = useState(false);
   const [editedPost, setEditedPost] = useState(post);
   const [showCommentForm, setShowCommentForm] = useState(false);
   const [showComments, setShowComments] = useState(true);
-  const navigate=useNavigate();
-  console.log(post);
+  const { state, dispatch } = useUser();
+  const { userDetails } = state;
+  const navigate = useNavigate();
+
   const handleEdit = () => {
     setIsEditing(true);
   };
@@ -31,85 +35,85 @@ const Post = ({ post,trainer,trainee,refetch }) => {
     fetch(`http://localhost:8082/api/classroom/update-post/${post.postId}`, {
       method: 'PUT',
       headers: {
-          'Content-Type': 'application/json',
-          authorization: `Bearer ${localStorage.getItem('accessToken')}`
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${localStorage.getItem('accessToken')}`
       },
       body: JSON.stringify(updateData)
-  })
+    })
       .then(res => {
-          if (res.status === 401 || res.status === 403) {
-              toast.error(`Access denied please login again`);
-              localStorage.removeItem('accessToken');
-              localStorage.removeItem('myAppState');
-              navigate('/login');
-          }
-          return res.json();
+        if (res.status === 401 || res.status === 403) {
+          toast.error(`Access denied please login again`);
+          localStorage.removeItem('accessToken');
+          localStorage.removeItem('myAppState');
+          navigate('/login');
+        }
+        return res.json();
       })
       .then(data => {
-          if (data.status == 200) {
-              refetch();
-              toast.success(`succesfully post Created`)
-          }
-          else {
-              toast.error(data.msg);
-          }
+        if (data.status == 200) {
+          refetch();
+          toast.success(`succesfully post Created`)
+        }
+        else {
+          toast.error(data.msg);
+        }
       })
   };
 
   const handleDelete = post => {
-    fetch(`http://localhost:8082/api/classroom/remove-post/${post.postId}`, {
+    fetch(`http://localhost:8082/api/classroom/remove-post/${post.postId}/${trainerId}`, {
       method: 'DELETE',
       headers: {
-          'Content-Type': 'application/json',
-          authorization: `Bearer ${localStorage.getItem('accessToken')}`
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${localStorage.getItem('accessToken')}`
       }
-  })
+    })
       .then(res => {
-          if (res.status === 401 || res.status === 403) {
-            toast.error(`Access denied please login again`);
-              localStorage.removeItem('accessToken');
-              localStorage.removeItem('myAppState');
-              navigate('/login');
-          }
-          return res.json();
+        if (res.status === 401 || res.status === 403) {
+          toast.error(`Access denied please login again`);
+          localStorage.removeItem('accessToken');
+          localStorage.removeItem('myAppState');
+          navigate('/login');
+        }
+        return res.json();
       })
       .then(data => {
-          if (data.status == 200) {
-              refetch();
-              toast.success(data.msg);
-          }
-          else {
-              toast.error(data.msg);
-          }
+        if (data.status == 200) {
+          refetch();
+          toast.success(data.msg);
+        }
+        else {
+          toast.error(data.msg);
+        }
       })
   };
 
   const handleDeleteComment = comment => {
-    fetch(`http://localhost:8082/api/classroom/remove-comment/${postId}/${comment.commentId}`, {
+    fetch(`http://localhost:8082/api/classroom/${postId}/${userDetails?.userId}/remove-comment?userId=${comment.traineeId}`, {
       method: 'DELETE',
       headers: {
-          'Content-Type': 'application/json',
-          authorization: `Bearer ${localStorage.getItem('accessToken')}`
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${localStorage.getItem('accessToken')}`
       }
-  })
+    })
       .then(res => {
-          if (res.status === 401 || res.status === 403) {
-              toast.error(`Access denied please login again`);
-              localStorage.removeItem('accessToken');
-              localStorage.removeItem('myAppState');
-              navigate('/login');
-          }
-          return res.json();
+        if (res.status === 401 || res.status === 403) {
+          toast.error(`Access denied please login again`);
+          localStorage.removeItem('accessToken');
+          localStorage.removeItem('myAppState');
+          navigate('/login');
+        }
+        return res.json();
       })
       .then(data => {
-          console.log(data);
-          if (data.status == 200) {
-              refetch();
-              toast.success(data.msg);
-          }
-          else {
-              toast.error(data.msg);
-          }
+        console.log(data);
+        if (data.status == 200) {
+          refetch();
+          toast.success(data.msg);
+        }
+        else {
+          toast.error(data.msg);
+        }
       })
 
   };
@@ -120,35 +124,37 @@ const Post = ({ post,trainer,trainee,refetch }) => {
   const handleSaveComment = (commentToUpdate, updatedText) => {
   };
 
-  const handleDownload=postFile=>{
+  const handleDownload = postFile => {
     fetch(`http://localhost:8082/api/download/${postFile}`)
-   .then((response) => response.blob())
-   .then((blob) => {
-    // Create a URL object from the file blob
-    const url = window.URL.createObjectURL(blob);
-    
-    // Create a temporary link element
-    const link = document.createElement('a');
-    link.href = url;
-    link.download =postFile; // Specify the desired file name here
-    link.click();
-    
-    // Cleanup by revoking the object URL
-    window.URL.revokeObjectURL(url);
-  })
-  .catch((error) => {
-    console.error('Error downloading the file:', error);
-  });
-}
+      .then((response) => response.blob())
+      .then((blob) => {
+        // Create a URL object from the file blob
+        const url = window.URL.createObjectURL(blob);
+
+        // Create a temporary link element
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = postFile; // Specify the desired file name here
+        link.click();
+
+        // Cleanup by revoking the object URL
+        window.URL.revokeObjectURL(url);
+      })
+      .catch((error) => {
+        console.error('Error downloading the file:', error);
+      });
+  }
 
   return (
     <div className="bg-white rounded-lg shadow-lg p-6 mb-4">
       <div className="flex items-center justify-between mb-4">
-        <img
-          src={`http://localhost:8082/api/download/${profilePicture}`}
-          alt="Post"
-          className="w-16 h-16 object-cover rounded-full mr-4"
-        />
+
+        {
+          profilePicture ? <img src={`http://localhost:8082/api/download/${profilePicture}`} alt="Trainer Profile Picture"
+            className="w-16 h-16 rounded-full mr-4" /> :
+            <img src={img} alt="Trainee default Profile Picture"
+              className="w-16 h-16 rounded-full mr-4" />
+        }
         <div className="w-3/4">
           {isEditing ? (
             <div className="mb-4">
@@ -175,7 +181,7 @@ const Post = ({ post,trainer,trainee,refetch }) => {
             <>
               <button
                 className="text-blue-500 mr-2"
-                onClick={()=>handleSave(post)}
+                onClick={() => handleSave(post)}
                 title="Save"
               >
                 Save
@@ -188,7 +194,7 @@ const Post = ({ post,trainer,trainee,refetch }) => {
                 Cancel
               </button>
             </>
-          ) : ( trainer &&
+          ) : (trainer &&
             <>
               <button
                 className="text-blue-500 mr-2"
@@ -199,7 +205,7 @@ const Post = ({ post,trainer,trainee,refetch }) => {
               </button>
               <button
                 className="text-red-500"
-                onClick={()=>handleDelete(post)}
+                onClick={() => handleDelete(post)}
                 title="Delete"
               >
                 <FaTrash />
@@ -208,32 +214,32 @@ const Post = ({ post,trainer,trainee,refetch }) => {
           )}
         </div>
       </div>
-      {showCommentForm && <CommentForm refetch={refetch} setShowCommentForm={setShowCommentForm} trainee={trainee} post={post}/>}
+      {showCommentForm && <CommentForm refetch={refetch} setShowCommentForm={setShowCommentForm} trainee={trainee} post={post} />}
       <div className="w-full mb-2">
         <button
-                 className="bg-blue-500 text-slate-50 rounded mx-2 px-2"
-                onClick={() => setShowCommentForm(!showCommentForm)}
-                title="Toggle Comment Form"
-              >
-                {showCommentForm ? 'cancel' : 'Comment'}
-              </button>
+          className="bg-blue-500 text-slate-50 rounded mx-2 px-2"
+          onClick={() => setShowCommentForm(!showCommentForm)}
+          title="Toggle Comment Form"
+        >
+          {showCommentForm ? 'cancel' : 'Comment'}
+        </button>
         {showComments ? (
-                <button
-                className="bg-blue-500 text-slate-50 rounded mx-2 px-2"
-                  onClick={() => setShowComments(false)}
-                  title="Hide Comments"
-                >
-                  Hide Comments
-                </button>
-              ) : (
-                <button
-                className="bg-blue-500 text-slate-50 rounded mx-2 px-2"
-                  onClick={() => setShowComments(true)}
-                  title="Show Comments"
-                >
-                  Show Comments
-                </button>
-              )}
+          <button
+            className="bg-blue-500 text-slate-50 rounded mx-2 px-2"
+            onClick={() => setShowComments(false)}
+            title="Hide Comments"
+          >
+            Hide Comments
+          </button>
+        ) : (
+          <button
+            className="bg-blue-500 text-slate-50 rounded mx-2 px-2"
+            onClick={() => setShowComments(true)}
+            title="Show Comments"
+          >
+            Show Comments
+          </button>
+        )}
         {showComments &&
           comments.map((comment, index) =>
             comment.isEditing ? (
@@ -246,7 +252,7 @@ const Post = ({ post,trainer,trainee,refetch }) => {
                   }
                 />
                 <button
-                    className="bg-blue-500 text-slate-50 rounded mx-2 px-2"
+                  className="bg-blue-500 text-slate-50 rounded mx-2 px-2"
                   onClick={() => handleSaveComment(comment, comment.text)}
                 >
                   Save Comment

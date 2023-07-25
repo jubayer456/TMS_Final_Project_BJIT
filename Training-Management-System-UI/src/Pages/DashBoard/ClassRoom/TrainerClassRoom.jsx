@@ -28,8 +28,8 @@ const TrainerClassRoom = () => {
     });
     return (
         <div className='bg-white rounded-lg shadow-lg p-6 mb-4 min-h-screen'>
-            <h1 className='text-2xl text-center mb-5'>Your Classes!!!</h1>
-            <div className='grid md:grid-cols-2 grid-col-1 gap-10 justify-items-center'>
+            <h1 className='text-2xl text-center mb-5'>All Classes!!!</h1>
+            <div className='grid lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-10 justify-items-center'>
                 {
                     classes?.map((trainerClass, index) => <Class
                         key={trainerClass.classId}

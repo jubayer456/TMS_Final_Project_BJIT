@@ -45,19 +45,19 @@ public class ClassroomController {
         return classroomService.updatePost(postId,post);
     }
 
-    @DeleteMapping("/api/classroom/remove-post/{postId}")
+    @DeleteMapping("/api/classroom/remove-post/{postId}/{trainerId}")
     @PreAuthorize("hasRole('TRAINER')")
-    public ResponseEntity<Object> removePost(@PathVariable Long postId){
-        return classroomService.removePost(postId);
+    public ResponseEntity<Object> removePost(@PathVariable Long postId,@PathVariable Long trainerId){
+        return classroomService.removePost(postId,trainerId);
     }
 
-    @DeleteMapping("/api/classroom/remove-comment/{postId}/{commentId}")
+    @DeleteMapping("/api/classroom/{postId}/{userId}/remove-comment")
     @PreAuthorize("hasRole('TRAINER') AND hasRole('TRAINEE')")
-    public ResponseEntity<Object> removeComment(@PathVariable Long postId,@PathVariable Long commentId){
-        return classroomService.removeComment(postId,commentId);
+    public ResponseEntity<Object> removeComment(@PathVariable Long postId,@PathVariable Long userId,@RequestParam Long commentId){
+        return classroomService.removeComment(postId,commentId,userId);
     }
     @GetMapping("/api/classroom/{classId}/getAllPost")
-    public ResponseEntity<Set<ClassRoomPostResDto>> getAllPost(@PathVariable Long classId){
+    public ResponseEntity<List<ClassRoomPostResDto>> getAllPost(@PathVariable Long classId){
         return classroomService.getAllPost(classId);
     }
     @GetMapping("/api/classroom/{trainerId}/getAllClassRoom")

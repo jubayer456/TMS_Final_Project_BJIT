@@ -11,6 +11,7 @@ const Trainees = () => {
     const [traineeModal, setTraineeModal] = useState(false);
     const [deletingTrainee, setDeletingTrainee] = useState(null);
     const navigate=useNavigate();
+
     const closeModal = () => {
         setDeletingTrainee(null);
     }
@@ -37,6 +38,7 @@ const Trainees = () => {
     if (isLoading) {
         return <Loading></Loading>
     }
+
     const handleDeleteTrainee = trainee => {
         fetch(`http://localhost:8082/api/trainee/${trainee.traineeId}`, {
             method: 'DELETE',

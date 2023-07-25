@@ -28,7 +28,8 @@ const Login = () => {
                 const accesssToken = data.token;
                 localStorage.setItem('accessToken', accesssToken);
                 setUserDetails(data.user);
-                navigate(`/dashboard/${data.user.role}`)
+                const role = data.user.role.toLowerCase();
+                navigate(`/dashboard/${role}`)
                
             })
             .catch(e=> {
