@@ -7,10 +7,10 @@ const Batch = ({batch,index}) => {
     
     const navigate = useNavigate();
     const   AssignTrainee=(batchId)=>{
-        navigate(`/dashboard/batch/${batchId}/getAllTrainee`);
+        navigate(`/dashboard/batch/${batchId}/trainees`);
     }
     const   AssignSchedule=(batchId)=>{
-        navigate(`/dashboard/batch/${batchId}/getAllSchedule`);
+        navigate(`/dashboard/batch/${batchId}/schedules`);
     }
     const   handleClassRoom=(classRoomId)=>{
         navigate(`/dashboard/classroom/${classRoomId}`);

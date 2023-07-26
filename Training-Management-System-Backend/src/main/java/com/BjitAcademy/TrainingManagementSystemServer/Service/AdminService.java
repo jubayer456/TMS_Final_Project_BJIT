@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface AdminService {
     ResponseEntity<Object> createAdmin(AdminRegReqDto adminRegReqDto);
+
     ResponseEntity<List<UserResDto>> getAllUser();
 
     ResponseEntity<Object> updateAdmin(@PathVariable Long adminId, AdminRegReqDto adminRegReqDto);

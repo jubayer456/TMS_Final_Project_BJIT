@@ -16,7 +16,7 @@ const AssignScheduleModal = ({ setScheduleModal }) => {
             courseId: e.target.courseId.value
         }
         console.log(scheduleData);
-        fetch('http://localhost:8082/api/batch/add-schedule', {
+        fetch('http://localhost:8082/api/batches/add-schedule', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -37,7 +37,7 @@ const AssignScheduleModal = ({ setScheduleModal }) => {
             .then(data => {
                 if (data.status == 200) {
                     // setScheduleModal(false);
-                    toast.success(`succesfully course Created`)
+                    toast.success(data.msg);
                 }
                 else {
                     // setScheduleModal(false);

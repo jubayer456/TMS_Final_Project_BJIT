@@ -9,6 +9,7 @@ public interface AssignmentSubRepository extends JpaRepository<AssignmentSubEnti
     AssignmentSubEntity findBySubmissionFile(String fileName);
 
     AssignmentSubEntity findByTraineeId(Long traineeId);
+    AssignmentSubEntity findByTraineeIdAndAssignmentId(Long traineeId,Long assignmentId);
 
     AssignmentSubEntity findByAsgSubId(Long submissionId);
 }

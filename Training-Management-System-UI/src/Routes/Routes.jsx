@@ -44,7 +44,7 @@ const router = createBrowserRouter([
                 element: <DashboardLayout />
             },
             {
-                path: '/dashboard/registerTrainer',
+                path: '/dashboard/trainers',
                 element: <Trainers />
             },
             {
@@ -56,7 +56,7 @@ const router = createBrowserRouter([
                 element: <TrainerClassRoom />
             },
             {
-                path: '/dashboard/registerTrainee',
+                path: '/dashboard/trainees',
                 element: <Trainees />
             },
             {
@@ -80,11 +80,11 @@ const router = createBrowserRouter([
                 element: <Batch />
             },
             {
-                path: '/dashboard/batch/:batchId/getAllTrainee',
+                path: '/dashboard/batch/:batchId/trainees',
                 element: <BatchTrainee />
             },
             {
-                path: '/dashboard/batch/:batchId/getAllSchedule',
+                path: '/dashboard/batch/:batchId/schedules',
                 element: <BatchSchedule />
             },
             {

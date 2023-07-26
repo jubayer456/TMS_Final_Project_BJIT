@@ -42,8 +42,8 @@ const DashboardLayout = () => {
                         {/* Sidebar content here */}
                         {
                            userDetails?.role == "ADMIN" && <>
-                            <li><Link to="/dashboard/registerTrainer">Create Trainer</Link></li>
-                            <li><Link to="/dashboard/registerTrainee">Create Trainee</Link></li>
+                            <li><Link to="/dashboard/trainers">Create Trainer</Link></li>
+                            <li><Link to="/dashboard/trainees">Create Trainee</Link></li>
                             <li><Link to="/dashboard/admin">My Profile</Link></li>
                             <li><Link to="/dashboard/course">course</Link></li>
                             <li><Link to="/dashboard/batch">Batch</Link></li>

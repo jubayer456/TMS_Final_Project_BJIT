@@ -78,7 +78,7 @@ const CreateTraierModal = ({ setTrainerModal, refetch }) => {
                                     type='email'
                                     placeholder="Your Email"
                                     {...control.register("email", {
-                                        required: 'trainerId is required',
+                                        required: 'Email is required',
                                         pattern: {
                                             value: /[a-z0-9]+@[a-z]+[a-z]{2,3}/,
                                             message: "Please provide a valid email"

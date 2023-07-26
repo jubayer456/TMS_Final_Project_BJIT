@@ -107,7 +107,7 @@ public class ScheduleServiceImp implements ScheduleService {
             throw new AssignmentException("Assignment are not found for submission");
         }
 //        assignment.getAssignmentSubEntities().stream().anyMatch(assignmentSubEntity -> assignmentSubEntity.)
-        AssignmentSubEntity assignmentSubEntity=assignmentSubRepository.findByTraineeId(asignSubReqDto.getTraineeId());
+        AssignmentSubEntity assignmentSubEntity=assignmentSubRepository.findByTraineeIdAndAssignmentId(asignSubReqDto.getTraineeId(),asignSubReqDto.getAssignmentId());
         if (assignmentSubEntity!=null){
             throw new TraineeException("Trainee Already Submit their Assignment");
         }

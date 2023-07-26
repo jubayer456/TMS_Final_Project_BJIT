@@ -13,7 +13,7 @@ const Post = ({ post, trainer, trainee, refetch }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedPost, setEditedPost] = useState(post);
   const [showCommentForm, setShowCommentForm] = useState(false);
-  const [showComments, setShowComments] = useState(true);
+  const [showComments, setShowComments] = useState(false);
   const { state, dispatch } = useUser();
   const { userDetails } = state;
   const navigate = useNavigate();
@@ -237,7 +237,7 @@ const Post = ({ post, trainer, trainee, refetch }) => {
             onClick={() => setShowComments(true)}
             title="Show Comments"
           >
-            Show Comments
+            Show Comments ({comments.length})
           </button>
         )}
         {showComments &&
