@@ -12,7 +12,7 @@ const AllAssignment = () => {
     const { data: assignments = [], refetch, isLoading } = useQuery({
         queryKey: ['getAllAssignment'],
         queryFn: async () => {
-            const url = `http://localhost:8082/api/schedule/${scheduleId}/allAssignment`;
+            const url = `http://localhost:8082/api/schedules/${scheduleId}/assignments`;
 
             const headers = {
                 Authorization: `Bearer ${localStorage.getItem('accessToken')}`,

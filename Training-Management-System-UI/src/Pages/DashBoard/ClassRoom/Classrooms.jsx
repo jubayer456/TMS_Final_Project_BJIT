@@ -20,7 +20,7 @@ const Classrooms = () => {
     const { data: classRoom, refetch, isLoading } = useQuery({
         queryKey: ['getClassRoom'],
         queryFn: async () => {
-            const url = `http://localhost:8082/api/classroom/${classRoomId}`;
+            const url = `http://localhost:8082/api/classrooms/${classRoomId}`;
 
             const headers = {
                 Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
@@ -41,7 +41,7 @@ const Classrooms = () => {
 
     useEffect(() => {
         if (userDetails?.userId && userDetails?.role == 'TRAINEE') {
-            fetch(`http://localhost:8082/api/trainee/${userDetails.userId}`, {
+            fetch(`http://localhost:8082/api/trainees/${userDetails.userId}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -52,7 +52,7 @@ const Classrooms = () => {
                 .then((data) => setTrainee(data));
         }
         else if (userDetails?.userId && userDetails?.role == 'TRAINER') {
-            fetch(`http://localhost:8082/api/trainer/${userDetails.userId}`, {
+            fetch(`http://localhost:8082/api/trainers/${userDetails.userId}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -85,7 +85,7 @@ const Classrooms = () => {
             postDate: formattedDate
         };
         console.log(postData);
-        fetch('http://localhost:8082/api/classroom/add-post', {
+        fetch('http://localhost:8082/api/classrooms/add-post', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

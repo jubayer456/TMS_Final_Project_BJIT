@@ -5,7 +5,7 @@ import com.BjitAcademy.TrainingManagementSystemServer.Dto.Authentication.LoginDt
 import com.BjitAcademy.TrainingManagementSystemServer.Dto.Authentication.SuccessResponseDto;
 import com.BjitAcademy.TrainingManagementSystemServer.Dto.Authentication.UserResDto;
 import com.BjitAcademy.TrainingManagementSystemServer.Entity.UserEntity;
-import com.BjitAcademy.TrainingManagementSystemServer.Exception.UserNotFoundException;
+import com.BjitAcademy.TrainingManagementSystemServer.Exception.UserException;
 import com.BjitAcademy.TrainingManagementSystemServer.Mapper.UserMappingModel;
 import com.BjitAcademy.TrainingManagementSystemServer.Repository.UserRepository;
 import com.BjitAcademy.TrainingManagementSystemServer.Service.AuthService;
@@ -39,7 +39,7 @@ public class AuthServiceImp implements AuthService {
     public ResponseEntity<Object> updateUserPicture(Long userId, String picture) {
         UserEntity user = userRepository.findByUserId(userId);
         if (user==null){
-            throw new UserNotFoundException("Admin Found");
+            throw new UserException("Admin Found");
         }
         user.setProfilePicture(picture);
         userRepository.save(user);
@@ -54,7 +54,7 @@ public class AuthServiceImp implements AuthService {
     public ResponseEntity<Object> userDetails(Long userId) {
         UserEntity user = userRepository.findByUserId(userId);
         if (user==null){
-            throw new UserNotFoundException("User Not Found");
+            throw new UserException("User Not Found");
         }
         UserResDto userResDto=UserMappingModel.userEntityToResDto(user);
         return new ResponseEntity<>(userResDto,HttpStatus.OK);

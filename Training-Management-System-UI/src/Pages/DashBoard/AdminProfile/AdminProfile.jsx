@@ -17,7 +17,7 @@ const AdminProfile = () => {
     const { data: admin, refetch, isLoading } = useQuery({
         queryKey: ['getAdmin'],
         queryFn: async () => {
-            const url = `http://localhost:8082/api/admin/${userDetails?.userId}`;
+            const url = `http://localhost:8082/api/admins/${userDetails?.userId}`;
 
             const headers = {
                 Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
@@ -43,7 +43,7 @@ const AdminProfile = () => {
 
         }
         console.log(updatedData)
-        fetch(`http://localhost:8082/api/admin/${userDetails?.userId}`, {
+        fetch(`http://localhost:8082/api/admins/${userDetails?.userId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

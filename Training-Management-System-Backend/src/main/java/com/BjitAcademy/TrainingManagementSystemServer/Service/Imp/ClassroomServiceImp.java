@@ -5,9 +5,8 @@ import com.BjitAcademy.TrainingManagementSystemServer.Dto.Batch.BatchResDto;
 import com.BjitAcademy.TrainingManagementSystemServer.Dto.ClassRoom.*;
 import com.BjitAcademy.TrainingManagementSystemServer.Dto.Schedule.ScheduleResDto;
 import com.BjitAcademy.TrainingManagementSystemServer.Entity.*;
-import com.BjitAcademy.TrainingManagementSystemServer.Exception.ClassRoomNotFoundException;
-import com.BjitAcademy.TrainingManagementSystemServer.Exception.TraineeNotFoundException;
-import com.BjitAcademy.TrainingManagementSystemServer.Exception.TrainerNotFoundException;
+import com.BjitAcademy.TrainingManagementSystemServer.Exception.ClassRoomException;
+import com.BjitAcademy.TrainingManagementSystemServer.Exception.TrainerException;
 import com.BjitAcademy.TrainingManagementSystemServer.Mapper.BatchMappingModel;
 import com.BjitAcademy.TrainingManagementSystemServer.Mapper.ClassRoomMappingModel;
 import com.BjitAcademy.TrainingManagementSystemServer.Mapper.ScheduleMappingModel;
@@ -17,12 +16,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -36,11 +35,12 @@ public class ClassroomServiceImp implements ClassroomService {
     private final BatchesRepository batchesRepository;
 
     @Override
+    @Transactional
     public ResponseEntity<Object> addPost(ClassRoomPostReqDto postReq) {
         //finding classRoom using classRoomId
         ClassRoom classRoom=classRoomRepository.findByClassRoomId(postReq.getClassRoomId());
         if (classRoom==null){
-            throw new ClassRoomNotFoundException("classRoom not found for post");
+            throw new ClassRoomException("classRoom not found for post");
         }
         //converting post req dto to entity for db
         PostEntity post= ClassRoomMappingModel.postDtoToEntity(postReq);
@@ -56,11 +56,12 @@ public class ClassroomServiceImp implements ClassroomService {
         return new ResponseEntity<>(success, HttpStatus.OK);
     }
     @Override
+    @Transactional
     public ResponseEntity<Object> addNotice(NoticeReqDto noticeReqDto) {
         //checking classroom is present or not?
         ClassRoom classRoom=classRoomRepository.findByClassRoomId(noticeReqDto.getClassRoomId());
         if (classRoom==null){
-            throw new ClassRoomNotFoundException("ClassRoom is not found for notice");
+            throw new ClassRoomException("ClassRoom is not found for notice");
         }
         //converting NOTICE req dto to entity for db
         ClassRoomNotice notice=ClassRoomMappingModel.noticeDtoToEntity(noticeReqDto);
@@ -83,11 +84,12 @@ public class ClassroomServiceImp implements ClassroomService {
         return new ResponseEntity<>(noticeRes,HttpStatus.OK);
     }
     @Override
+    @Transactional
     public ResponseEntity<Object> addComment(PostCommentReqDto comment) {
         //checking post is exist or not using post Id
         PostEntity existPost=postRepository.findByPostId(comment.getPostId());
         if ((existPost==null)){
-            throw new ClassRoomNotFoundException("post Not found for delete");
+            throw new ClassRoomException("post Not found for delete");
         }
         //converting comment dto to entity
         PostComment newComment=ClassRoomMappingModel.commentDtoEntity(comment);
@@ -106,10 +108,10 @@ public class ClassroomServiceImp implements ClassroomService {
         //checking post is exist or not?
         PostComment existComment=postCommentRepository.findByCommentId(commentId);
         if (existComment==null){
-            throw new ClassRoomNotFoundException("comment can not updated");
+            throw new ClassRoomException("comment can not updated");
         }
         if (!Objects.equals(existComment.getTraineeId(), comment.getTraineeId())){
-            throw new TraineeNotFoundException("Trainee has no access to updated");
+            throw new TrainerException("Trainee has no access to updated");
         }
         //set the msg for update
         existComment.setMsg(comment.getMsg());
@@ -126,10 +128,10 @@ public class ClassroomServiceImp implements ClassroomService {
         //checking post is exist or not?
         PostEntity existPost=postRepository.findByPostId(postId);
         if ((existPost==null)){
-            throw new ClassRoomNotFoundException("post Not found for delete");
+            throw new ClassRoomException("post Not found for delete");
         }
         if (!Objects.equals(existPost.getTrainerId(), post.getTrainerId())){
-            throw new TrainerNotFoundException("Trainer has no access to updated");
+            throw new TrainerException("Trainer has no access to updated");
         }
         //set the msg for update
         existPost.setMsg(post.getMsg());
@@ -147,10 +149,10 @@ public class ClassroomServiceImp implements ClassroomService {
         //checking post is exist or not?
         PostEntity post=postRepository.findByPostId(postId);
         if ((post==null)){
-            throw new ClassRoomNotFoundException("post Not found for delete");
+            throw new ClassRoomException("post Not found for delete");
         }
         if (!Objects.equals(post.getTrainerId(), trainerId)){
-            throw new TrainerNotFoundException("Trainer has no access to updated other post");
+            throw new TrainerException("Trainer has no access to updated other post");
         }
         //delete the entity from the repository
         postRepository.delete(post);
@@ -162,19 +164,20 @@ public class ClassroomServiceImp implements ClassroomService {
         return new ResponseEntity<>(success, HttpStatus.OK);
     }
     @Override
+    @Transactional
     public ResponseEntity<Object> removeComment(Long postId,Long commentId,Long userId) {
         //checking comment is exist or not?
         PostComment existComment=postCommentRepository.findByCommentId(commentId);
         if (existComment==null){
-            throw new ClassRoomNotFoundException("comment can not deleted");
+            throw new ClassRoomException("comment can not deleted");
         }
         //checking post is exist or not?
         PostEntity postEntity=postRepository.findByPostId(postId);
         if(postEntity==null){
-            throw new ClassRoomNotFoundException("comment can not deleted");
+            throw new ClassRoomException("comment can not deleted");
         }
         if (!Objects.equals(existComment.getTraineeId(), userId)){
-            throw new TrainerNotFoundException("User has no access to remove other comment");
+            throw new TrainerException("User has no access to remove other comment");
         }
         //post has list of comment . then remove the comment from the list
         postEntity.getPostComments().remove(existComment);
@@ -206,7 +209,7 @@ public class ClassroomServiceImp implements ClassroomService {
         //checking trainer is exist or not?
         TrainerEntity trainer=trainerRepository.findByTrainerId(trainerId);
         if (trainer==null){
-            throw new TrainerNotFoundException("Trainer are not found for ClassRoom");
+            throw new TrainerException("Trainer are not found for ClassRoom");
         }
         //find the schedule for specific trainer
         List<ScheduleResDto> scheduleEntities=scheduleRepository.findAllByTrainerId(trainerId).stream()
@@ -230,7 +233,7 @@ public class ClassroomServiceImp implements ClassroomService {
     public ResponseEntity<ClassRoomResponseDto> getClassRoomDetails(Long classroomId) {
         ClassRoom classRoom=classRoomRepository.findByClassRoomId(classroomId);
         if (classRoom==null){
-            throw new ClassRoomNotFoundException("ClassRoom are Not found");
+            throw new ClassRoomException("ClassRoom are Not found");
         }
         List<PostEntity> posts=classRoom.getPosts();
         //get all the comment for specifics post and convert it response dto using mapper class named ClassRoomMappingModel

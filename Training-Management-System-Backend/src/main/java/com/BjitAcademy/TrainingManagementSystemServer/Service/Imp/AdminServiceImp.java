@@ -14,10 +14,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -26,14 +26,15 @@ public class AdminServiceImp implements AdminService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     @Override
+    @Transactional
     public ResponseEntity<Object> createAdmin(AdminRegReqDto adminRegReqDto) {
         UserEntity userEntityById = userRepository.findByUserId(adminRegReqDto.getAdminId());
         if (userEntityById != null) {
-            throw new UserAlreadyExistException("Admin is Already taken. Please enter a new trainee Id");
+            throw new UserException("Admin is Already taken. Please enter a new trainee Id");
         }
         UserEntity userEntityByEmail = userRepository.findByEmail(adminRegReqDto.getEmail());
         if (userEntityByEmail != null) {
-            throw new UserAlreadyExistException("Admin Already Exist.. Please Change the email");
+            throw new UserException("Admin Already Exist.. Please Change the email");
         }
 
         // admin Registration Dto have some filed which is insert to user table,,,
@@ -58,10 +59,11 @@ public class AdminServiceImp implements AdminService {
         return new ResponseEntity<>(success,HttpStatus.OK);
     }
     @Override
+    @Transactional
     public ResponseEntity<Object> updateAdmin(@PathVariable Long adminId, AdminRegReqDto adminRegReqDto) {
         UserEntity admin = userRepository.findByUserId(adminId);
         if (admin == null) {
-            throw new UserNotFoundException("Admin is not found for update");
+            throw new UserException("Admin is not found for update");
         }
         //set Al the properties without adminId for update
         admin.setEmail(adminRegReqDto.getEmail());
@@ -79,7 +81,7 @@ public class AdminServiceImp implements AdminService {
     public ResponseEntity<Object> getAdminDetails(Long adminId) {
         UserEntity admin = userRepository.findByUserId(adminId);
         if (admin==null){
-            throw new UserNotFoundException("Admin Found");
+            throw new UserException("Admin Found");
         }
         UserResDto adminResDto=UserMappingModel.userEntityToResDto(admin);
         return new ResponseEntity<>(adminResDto,HttpStatus.OK);
@@ -88,7 +90,6 @@ public class AdminServiceImp implements AdminService {
     @Override
     public ResponseEntity<List<UserResDto>> getAllUser() {
         List<UserEntity> users=userRepository.findAll();
-
         //Convert the user entity to user response Dto using mapping method
         List<UserResDto> userResList=users.stream().map(UserMappingModel::userEntityToResDto).toList();
         return new ResponseEntity<>(userResList,HttpStatus.OK);

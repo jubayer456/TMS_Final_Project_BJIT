@@ -11,7 +11,7 @@ const ScheduleUpdateModal = ({scheduleUpdateModal,setScheduleUpdateModal}) => {
             endingDate: e.target.endingDate.value,
             courseId: e.target.courseId.value
         }
-        fetch(`http://localhost:8082/api/batch/update-schedule/${scheduleUpdateModal.scheduleId}`, {
+        fetch(`http://localhost:8082/api/batches/schedules/${scheduleUpdateModal.scheduleId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

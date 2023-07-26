@@ -3,9 +3,8 @@ package com.BjitAcademy.TrainingManagementSystemServer.Service.Imp;
 import com.BjitAcademy.TrainingManagementSystemServer.Dto.Trainer.TrainerRegReqDto;
 import com.BjitAcademy.TrainingManagementSystemServer.Dto.Trainer.TrainerResDto;
 import com.BjitAcademy.TrainingManagementSystemServer.Entity.*;
-import com.BjitAcademy.TrainingManagementSystemServer.Exception.TrainerNotFoundException;
-import com.BjitAcademy.TrainingManagementSystemServer.Exception.UserAlreadyExistException;
-import com.BjitAcademy.TrainingManagementSystemServer.Exception.UserNotFoundException;
+import com.BjitAcademy.TrainingManagementSystemServer.Exception.TrainerException;
+import com.BjitAcademy.TrainingManagementSystemServer.Exception.UserException;
 import com.BjitAcademy.TrainingManagementSystemServer.Mapper.TrainerMappingModel;
 import com.BjitAcademy.TrainingManagementSystemServer.Repository.CourseRepository;
 import com.BjitAcademy.TrainingManagementSystemServer.Repository.ScheduleRepository;
@@ -35,11 +34,11 @@ public class TrainerServiceImp implements TrainerService {
     public ResponseEntity<Object> createTrainers(TrainerRegReqDto trainerRegReqDto) {
         UserEntity userEntityById=userRepository.findByUserId(trainerRegReqDto.getTrainerId());
         if (userEntityById!=null){
-            throw new UserAlreadyExistException("Trainer is Already taken. Please enter a new trainee Id");
+            throw new UserException("Trainer is Already taken. Please enter a new trainee Id");
         }
         UserEntity userEntityByEmail=userRepository.findByEmail(trainerRegReqDto.getEmail());
         if(userEntityByEmail!=null){
-            throw new UserAlreadyExistException("Trainer Already Exist.. Please Change the email");
+            throw new UserException("Trainer Already Exist.. Please Change the email");
         }
 
         //trainer reg req to user entity then pass the user entity to mapper class
@@ -71,10 +70,11 @@ public class TrainerServiceImp implements TrainerService {
     }
 
     @Override
+    @Transactional
     public ResponseEntity<Object> updateTrainers(TrainerRegReqDto trainerRegReqDto) {
         UserEntity user = userRepository.findByUserId(trainerRegReqDto.getTrainerId());
         if (user == null) {
-            throw new UserNotFoundException("trainer is not found for update");
+            throw new UserException("trainer is not found for update");
         }
         //update trainer details using set method
         user.setEmail(trainerRegReqDto.getEmail());
@@ -96,12 +96,12 @@ public class TrainerServiceImp implements TrainerService {
     public ResponseEntity<Object> deleteTrainer(Long trainerId) {
         TrainerEntity trainer = trainerRepository.findByTrainerId(trainerId);
         if (trainer==null){
-            throw new UserNotFoundException("trainer is not found for delete");
+            throw new UserException("trainer is not found for delete");
         }
         List<CourseEntity> course=courseRepository.findAll();
         boolean isTrainerAssociated= course.stream().anyMatch(courseEntity -> Objects.equals(courseEntity.getTrainer().getTrainerId(), trainerId));
         if (isTrainerAssociated){
-            throw new TrainerNotFoundException("trainer is Already exist in course");
+            throw new TrainerException("trainer is Already exist in course");
         }
         trainerRepository.delete(trainer);
         return new ResponseEntity<>("SuccessFully Deleted Trainer",HttpStatus.OK);
@@ -111,7 +111,7 @@ public class TrainerServiceImp implements TrainerService {
     public ResponseEntity<Object> trainerDetails(Long trainerId) {
         TrainerEntity trainer = trainerRepository.findByTrainerId(trainerId);
         if (trainer==null){
-            throw new UserNotFoundException("trainer is not found");
+            throw new UserException("trainer is not found");
         }
         TrainerResDto trainerResDto=TrainerMappingModel.trainerEntityToDto(trainer,trainer.getUser());
         return new ResponseEntity<>(trainerResDto,HttpStatus.OK);

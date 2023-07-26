@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 public class BatchMappingModel {
     public static BatchEntity BatchDtoToEntity(BatchReqDto batchReqDto){
         return BatchEntity.builder()
+                .batchId(batchReqDto.getBatchId())
                 .batchName(batchReqDto.getBatchName())
                 .startingDate(batchReqDto.getStartingDate())
                 .endingDate(batchReqDto.getEndingDate())

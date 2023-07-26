@@ -14,7 +14,7 @@ const CourseUpdateModal = ({ setCourseUpdateModal, courseUpdateModal }) => {
             name: e.target.name.value
         }
         console.log(courseData);
-        fetch(`http://localhost:8082/api/course/${courseId}`, {
+        fetch(`http://localhost:8082/api/courses/${courseId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

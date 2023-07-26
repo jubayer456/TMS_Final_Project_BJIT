@@ -15,68 +15,47 @@ import java.nio.file.FileAlreadyExistsException;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<Object> UserException(UserNotFoundException ex) {
+    @ExceptionHandler(UserException.class)
+    public ResponseEntity<Object> UserException(UserException ex) {
         ErrorResponseDto error = new ErrorResponseDto(HttpStatus.NOT_FOUND.value(), ex.getMessage());
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(UserAlreadyExistException.class)
-    public ResponseEntity<Object> UserException(UserAlreadyExistException ex) {
+
+
+    @ExceptionHandler(TraineeException.class)
+    public ResponseEntity<Object> UserException(TraineeException ex) {
         ErrorResponseDto error = new ErrorResponseDto(HttpStatus.NOT_FOUND.value(), ex.getMessage());
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(TraineeNotFoundException.class)
-    public ResponseEntity<Object> UserException(TraineeNotFoundException ex) {
+    @ExceptionHandler(TrainerException.class)
+    public ResponseEntity<Object> UserException(TrainerException ex) {
         ErrorResponseDto error = new ErrorResponseDto(HttpStatus.NOT_FOUND.value(), ex.getMessage());
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(TraineeAlreadyExistException.class)
-    public ResponseEntity<Object> UserException(TraineeAlreadyExistException ex) {
+    @ExceptionHandler(CourseException.class)
+    public ResponseEntity<Object> UserException(CourseException ex) {
         ErrorResponseDto error = new ErrorResponseDto(HttpStatus.NOT_FOUND.value(), ex.getMessage());
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(TrainerNotFoundException.class)
-    public ResponseEntity<Object> UserException(TrainerNotFoundException ex) {
+    @ExceptionHandler(BatchException.class)
+    public ResponseEntity<Object> UserException(BatchException ex) {
         ErrorResponseDto error = new ErrorResponseDto(HttpStatus.NOT_FOUND.value(), ex.getMessage());
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(CourseNotFoundException.class)
-    public ResponseEntity<Object> UserException(CourseNotFoundException ex) {
+
+    @ExceptionHandler(ScheduleException.class)
+    public ResponseEntity<Object> UserException(ScheduleException ex) {
         ErrorResponseDto error = new ErrorResponseDto(HttpStatus.NOT_FOUND.value(), ex.getMessage());
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(BatchAlreadyExistException.class)
-    public ResponseEntity<Object> UserException(BatchAlreadyExistException ex) {
-        ErrorResponseDto error = new ErrorResponseDto(HttpStatus.NOT_FOUND.value(), ex.getMessage());
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(BatchNotFoundException.class)
-    public ResponseEntity<Object> UserException(BatchNotFoundException ex) {
-        ErrorResponseDto error = new ErrorResponseDto(HttpStatus.NOT_FOUND.value(), ex.getMessage());
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(ScheduleAlreadyExistException.class)
-    public ResponseEntity<Object> UserException(ScheduleAlreadyExistException ex) {
-        ErrorResponseDto error = new ErrorResponseDto(HttpStatus.NOT_FOUND.value(), ex.getMessage());
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(ScheduleNotFoundException.class)
-    public ResponseEntity<Object> UserException(ScheduleNotFoundException ex) {
-        ErrorResponseDto error = new ErrorResponseDto(HttpStatus.NOT_FOUND.value(), ex.getMessage());
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(AssignmentNotFoundException.class)
-    public ResponseEntity<Object> UserException(AssignmentNotFoundException ex) {
+    @ExceptionHandler(AssignmentException.class)
+    public ResponseEntity<Object> UserException(AssignmentException ex) {
         ErrorResponseDto error = new ErrorResponseDto(HttpStatus.NOT_FOUND.value(), ex.getMessage());
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
@@ -87,8 +66,8 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(ClassRoomNotFoundException.class)
-    public ResponseEntity<Object> UserException(ClassRoomNotFoundException ex) {
+    @ExceptionHandler(ClassRoomException.class)
+    public ResponseEntity<Object> UserException(ClassRoomException ex) {
         ErrorResponseDto error = new ErrorResponseDto(HttpStatus.NOT_FOUND.value(), ex.getMessage());
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
@@ -108,6 +87,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(FileNotFoundException.class)
     public ResponseEntity<Object> handleFileNotFoundException(FileNotFoundException ex) {
+        ErrorResponseDto error = new ErrorResponseDto(HttpStatus.NOT_FOUND.value(), ex.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
+    @ExceptionHandler(FileAlreadyExistsException.class)
+    public ResponseEntity<Object> handleFileNotFoundException(FileAlreadyExistsException ex) {
         ErrorResponseDto error = new ErrorResponseDto(HttpStatus.NOT_FOUND.value(), ex.getMessage());
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }

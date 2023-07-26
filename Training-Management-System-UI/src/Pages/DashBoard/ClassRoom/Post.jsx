@@ -32,7 +32,7 @@ const Post = ({ post, trainer, trainee, refetch }) => {
       msg: editedPost.msg,
     };
     console.log(updateData);
-    fetch(`http://localhost:8082/api/classroom/update-post/${post.postId}`, {
+    fetch(`http://localhost:8082/api/classrooms/posts/${post.postId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -61,7 +61,7 @@ const Post = ({ post, trainer, trainee, refetch }) => {
   };
 
   const handleDelete = post => {
-    fetch(`http://localhost:8082/api/classroom/remove-post/${post.postId}/${trainerId}`, {
+    fetch(`http://localhost:8082/api/classrooms/posts/${post.postId}/${trainerId}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -89,7 +89,7 @@ const Post = ({ post, trainer, trainee, refetch }) => {
   };
 
   const handleDeleteComment = comment => {
-    fetch(`http://localhost:8082/api/classroom/${postId}/${userDetails?.userId}/remove-comment?userId=${comment.traineeId}`, {
+    fetch(`http://localhost:8082/api/classrooms/${postId}/${userDetails?.userId}/comments?commentId=${comment.commentId}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',

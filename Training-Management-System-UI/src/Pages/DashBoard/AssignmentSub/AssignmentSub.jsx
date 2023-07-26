@@ -35,7 +35,7 @@ const AssignmentSub = ({ assignment, setAssignSubModal }) => {
             <td>{deadLine}</td>
             <th>
                 <div className=''>
-                    <label htmlFor="assignmentSub-modal" onClick={() => setAssignSubModal(assignment)} className="btn btn-primary btn-sm mx-1">Upload Assignment</label>
+                    <label htmlFor="assignmentSub-modal" onClick={() => setAssignSubModal(assignment)} className="btn btn-primary btn-sm mx-1 text-white">Upload Assignment</label>
                 </div>
             </th>
         </tr>

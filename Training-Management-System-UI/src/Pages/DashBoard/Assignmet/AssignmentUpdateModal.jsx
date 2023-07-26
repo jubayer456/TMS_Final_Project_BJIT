@@ -33,7 +33,7 @@ const AssignmentUpdateModal = ({ setAssignUpdatedModal, assignUpdateModal }) => 
                         deadLine: data.deadLine
                     }
                     console.log(assignmentData);
-                    fetch(`http://localhost:8082/api/schedule/${assignmentId}`, {
+                    fetch(`http://localhost:8082/api/schedules/${assignmentId}`, {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json',
@@ -78,7 +78,7 @@ const AssignmentUpdateModal = ({ setAssignUpdatedModal, assignUpdateModal }) => 
             <input type="checkbox" id="assignment-updated-modal" className="modal-toggle" />
             <div className="modal">
                 <div className="modal-box">
-                    < header className='text-center text-2xl text-blue'>Assignment Creation Form</header>
+                    < header className='text-center text-2xl text-blue'>Assignment Update Form</header>
                     <button onClick={() => setAssignUpdatedModal(false)} className="btn btn-md btn-circle btn-ghost absolute right-2 top-2">✕</button>
                     <form onSubmit={handleSubmit(onSubmit)} className="form">
                         <div className="input-box">

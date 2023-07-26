@@ -3,13 +3,14 @@ import {  useNavigate } from 'react-router-dom';
 import Loading from '../../Shared/Loading';
 import Batch from './Batch';
 import { useQuery } from 'react-query';
+import { toast } from 'react-hot-toast';
 
 const AllBatch = () => {
     const navigate=useNavigate();
     const { data: batchs = [], refetch, isLoading } = useQuery({
         queryKey: ['getAllBatchs'],
         queryFn: async () => {
-            const url = `http://localhost:8082/api/batch/getAll`;
+            const url = `http://localhost:8082/api/batches`;
 
             const headers = {
                 Authorization: `Bearer ${localStorage.getItem('accessToken')}`,

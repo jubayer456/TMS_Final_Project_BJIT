@@ -36,7 +36,7 @@ public class ScheduleServiceImp implements ScheduleService {
         // checking schedule is already exist or not?
         ScheduleEntity schedule=scheduleRepository.findByScheduleId(assignmentReqDto.getScheduleId());
         if (schedule==null){
-            throw new ScheduleNotFoundException("Schedule Not found");
+            throw new ScheduleException("Schedule Not found");
         }
         //adding batch id in assignment so that specific trainee can see their assignment
         assignment.setBatchId(schedule.getBatchId());
@@ -55,7 +55,7 @@ public class ScheduleServiceImp implements ScheduleService {
     public ResponseEntity<Object> getAllScheduleForTrainer(Long trainerId) {
         TrainerEntity trainer=trainerRepository.findByTrainerId(trainerId);
         if (trainer==null){
-            throw new TrainerNotFoundException("Trainer Not found for checking All schedule");
+            throw new TrainerException("Trainer Not found for checking All schedule");
         }
         //search schedules using trainer id and convert schedule entity to schedule response dto for UI
         List<ScheduleResDto> trainerSchedules=scheduleRepository.findByTrainerId(trainerId).stream().map(ScheduleMappingModel::scheduleEntityToDto).toList();
@@ -66,7 +66,7 @@ public class ScheduleServiceImp implements ScheduleService {
     public ResponseEntity<Object> updateAssignment(Long assignmentId,AssignmentReqDto assignmentReqDto) {
         AssignmentEntity assignment=assignmentRepository.findByAssignmentId(assignmentId);
         if (assignment==null){
-            throw new AssignmentNotFoundException("Assignment are not found for update");
+            throw new AssignmentException("Assignment are not found for update");
         }
         //using set method for updating assignment data
         assignment.setAssignmentFile(assignmentReqDto.getAssignmentFile());
@@ -86,7 +86,7 @@ public class ScheduleServiceImp implements ScheduleService {
     public ResponseEntity<Object> removeAssignment(Long assignmentId) {
         AssignmentEntity assignment=assignmentRepository.findByAssignmentId(assignmentId);
         if (assignment==null){
-            throw new AssignmentNotFoundException("Assignment are not found for delete");
+            throw new AssignmentException("Assignment are not found for delete");
         }
         //find schedule entity using scheduleId ,,,then get the assignment list and remove the assignment from the list
         scheduleRepository.findByScheduleId(assignment.getScheduleId()).getAssignments().remove(assignment);
@@ -104,17 +104,17 @@ public class ScheduleServiceImp implements ScheduleService {
     public ResponseEntity<Object> addAssignmentSubmission(AsignSubReqDto asignSubReqDto) {
         AssignmentEntity assignment=assignmentRepository.findByAssignmentId(asignSubReqDto.getAssignmentId());
         if (assignment==null){
-            throw new AssignmentNotFoundException("Assignment are not found for submission");
+            throw new AssignmentException("Assignment are not found for submission");
         }
 //        assignment.getAssignmentSubEntities().stream().anyMatch(assignmentSubEntity -> assignmentSubEntity.)
         AssignmentSubEntity assignmentSubEntity=assignmentSubRepository.findByTraineeId(asignSubReqDto.getTraineeId());
         if (assignmentSubEntity!=null){
-            throw new TraineeAlreadyExistException("Trainee Already Submit their Assignment");
+            throw new TraineeException("Trainee Already Submit their Assignment");
         }
         //for checking date ,,, using date formatter
         DateTimeFormatter dateTimeFormatter=DateTimeFormatter.ofPattern("yyyy-MM-dd");
         if(LocalDate.parse((CharSequence)asignSubReqDto.getSubmissionDate() ,dateTimeFormatter).isAfter(LocalDate.parse((CharSequence)assignment.getDeadLine() ,dateTimeFormatter))){
-            throw new TraineeAlreadyExistException("Times up for submission");
+            throw new TraineeException("Times up for submission");
         }
         // assignment submission req dto to assignment submission entity using mapper class
         AssignmentSubEntity assignmentSub=AssignmentMappingModel.assignmentSubDtoToEntity(asignSubReqDto);
@@ -135,7 +135,7 @@ public class ScheduleServiceImp implements ScheduleService {
         //checking, schedule is presented or not?
         ScheduleEntity schedule=scheduleRepository.findByScheduleId(scheduleId);
         if (schedule==null){
-            throw new ScheduleNotFoundException("Schedule Not found");
+            throw new ScheduleException("Schedule Not found");
         }
         //in schedule there is assignment list ,,, then using map function to convert entity to dto for UI
         Set<AssignmentResDto> assignments=schedule.getAssignments().stream().map(AssignmentMappingModel::assignmentEntityToDto).collect(Collectors.toSet());
@@ -146,7 +146,7 @@ public class ScheduleServiceImp implements ScheduleService {
         //checking assignment is existed or not?
         AssignmentEntity assignment=assignmentRepository.findByAssignmentId(assignmentId);
         if (assignment==null){
-            throw new AssignmentNotFoundException("Assignment are not found");
+            throw new AssignmentException("Assignment are not found");
         }
         //for UI firstly take assignment list then using map function inside the map function getting trainee Entity then pass
         // the entity to Assignment mapping model then it will give respected response dto
@@ -169,11 +169,11 @@ public class ScheduleServiceImp implements ScheduleService {
     public ResponseEntity<Object> giveEvolution(Long assignmentId, Long submissionId, AssignmentEvoReqDto assignmentEvoReqDto) {
         AssignmentEntity assignment=assignmentRepository.findByAssignmentId(assignmentId);
         if (assignment==null){
-            throw new AssignmentNotFoundException("Assignment are not found");
+            throw new AssignmentException("Assignment are not found");
         }
         AssignmentSubEntity assignmentSub=assignmentSubRepository.findByAsgSubId(submissionId);
         if (assignmentSub==null){
-            throw new AssignmentNotFoundException("Assignment Sub  are not found");
+            throw new AssignmentException("Assignment Sub  are not found");
         }
         assignmentSub.setEvolution(assignmentEvoReqDto.getEvolution());
         assignmentSubRepository.save(assignmentSub);

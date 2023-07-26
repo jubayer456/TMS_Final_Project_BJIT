@@ -20,54 +20,54 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class BatchController {
     private final BatchService batchService;
-    @PostMapping("/api/batch/save")
+    @PostMapping("/api/batch-save")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Object> createBatch(@RequestBody BatchReqDto batchReqDto){
         return batchService.createBatch(batchReqDto);
     }
-    @PutMapping("/api/batch/{batchId}")
+    @PutMapping("/api/batches/{batchId}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Object> updateBatch(@PathVariable Long batchId, @RequestBody BatchReqDto batchReqDto){
         return batchService.updateBatch(batchId,batchReqDto);
     }
-    @GetMapping("/api/batch/getAll")
+    @GetMapping("/api/batches")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<BatchResDto>> getAllBatch(){
         return batchService.getAllBatch();
     }
 
 
-    @PostMapping("/api/batch/add-trainee")
+    @PostMapping("/api/batches/add-trainee")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Object> addTraineeToBatch(@RequestBody BatchTraineeReqDto batchTraineeReqDto){
         return batchService.addTraineeToBatch(batchTraineeReqDto);
     }
-    @DeleteMapping("/api/batch/remove-trainee/{traineeId}")
+    @DeleteMapping("/api/batches/trainees/{traineeId}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Object> removeTraineeFromBatch(@PathVariable Long traineeId){
         return batchService.removeTraineeFromBatch(traineeId);
     }
-    @PostMapping("/api/batch/add-schedule")
+    @PostMapping("/api/batches/add-schedule")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Object> addScheduleToBatch(@RequestBody ScheduleReqDto scheduleReqDto){
         return batchService.addScheduleToBatch(scheduleReqDto);
     }
-    @DeleteMapping("/api/batch/remove-schedule/{scheduleId}")
+    @DeleteMapping("/api/batches/schedules/{scheduleId}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Object> removeScheduleFromBatch(@PathVariable Long scheduleId){
         return batchService.removeScheduleFromBatch(scheduleId);
     }
-    @PutMapping("/api/batch/update-schedule/{scheduleId}")
+    @PutMapping("/api/batches/schedules/{scheduleId}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Object> updateScheduleFromBatch(@PathVariable Long scheduleId,@RequestBody ScheduleReqDto scheduleReqDto){
         return batchService.updateScheduleFromBatch(scheduleId,scheduleReqDto);
     }
-    @GetMapping("/api/batch/{batchId}/getAllSchedule")
+    @GetMapping("/api/batches/{batchId}/schedules")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Set<BatchScheduleResDto>> getAllBatchSchedule(@PathVariable Long batchId){
         return batchService.getAllBatchSchedule(batchId);
     }
-    @GetMapping("/api/batch/{batchId}/getAllTrainee")
+    @GetMapping("/api/batches/{batchId}/trainees")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Set<TraineeResDto>> getAllTraineeBatch(@PathVariable Long batchId){
         return batchService.getAllTraineeBatch(batchId);

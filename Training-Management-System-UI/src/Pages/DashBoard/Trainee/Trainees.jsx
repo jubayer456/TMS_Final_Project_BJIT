@@ -19,7 +19,7 @@ const Trainees = () => {
     const { data: trainee = [], refetch, isLoading } = useQuery({
         queryKey: ['getAllTrainee'],
         queryFn: async () => {
-            const url = `http://localhost:8082/api/trainee/getAll`;
+            const url = `http://localhost:8082/api/trainees`;
 
             const headers = {
                 Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
@@ -40,7 +40,7 @@ const Trainees = () => {
     }
 
     const handleDeleteTrainee = trainee => {
-        fetch(`http://localhost:8082/api/trainee/${trainee.traineeId}`, {
+        fetch(`http://localhost:8082/api/trainees/${trainee.traineeId}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',

@@ -45,7 +45,7 @@ const CreatedTraineeModal = ({ setTraineeModal, refetch }) => {
         return true;
     };
     const onsubmit = registerData => {
-        fetch(`http://localhost:8082/api/trainee`, {
+        fetch(`http://localhost:8082/api/trainee-save`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

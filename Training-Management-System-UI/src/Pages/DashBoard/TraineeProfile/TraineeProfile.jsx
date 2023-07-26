@@ -18,7 +18,7 @@ const TraineeProfile = () => {
     const { data: trainee, refetch, isLoading } = useQuery({
         queryKey: ['getTrainee'],
         queryFn: async () => {
-            const url = `http://localhost:8082/api/trainee/${userDetails?.userId}`;
+            const url = `http://localhost:8082/api/trainees/${userDetails?.userId}`;
             const headers = {
                 Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
             };

@@ -14,7 +14,7 @@ const CreatedCourseModal = ({setCourseModal}) => {
             name: e.target.name.value
         }
         console.log(courseData);
-         fetch('http://localhost:8082/api/course/save', {
+         fetch('http://localhost:8082/api/course-save', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

@@ -5,11 +5,9 @@ import com.BjitAcademy.TrainingManagementSystemServer.Dto.Trainee.TraineeRegReqD
 import com.BjitAcademy.TrainingManagementSystemServer.Dto.Trainee.TraineeResDto;
 import com.BjitAcademy.TrainingManagementSystemServer.Entity.TraineeEntity;
 import com.BjitAcademy.TrainingManagementSystemServer.Entity.UserEntity;
-import com.BjitAcademy.TrainingManagementSystemServer.Exception.TraineeNotFoundException;
-import com.BjitAcademy.TrainingManagementSystemServer.Exception.UserAlreadyExistException;
-import com.BjitAcademy.TrainingManagementSystemServer.Exception.UserNotFoundException;
+import com.BjitAcademy.TrainingManagementSystemServer.Exception.TraineeException;
+import com.BjitAcademy.TrainingManagementSystemServer.Exception.UserException;
 import com.BjitAcademy.TrainingManagementSystemServer.Mapper.TraineeMappingModel;
-import com.BjitAcademy.TrainingManagementSystemServer.Mapper.UserMappingModel;
 import com.BjitAcademy.TrainingManagementSystemServer.Repository.TraineeRepository;
 import com.BjitAcademy.TrainingManagementSystemServer.Repository.UserRepository;
 import com.BjitAcademy.TrainingManagementSystemServer.Service.TraineeService;
@@ -31,15 +29,13 @@ public class TraineeServiceImp implements TraineeService {
     public ResponseEntity<Object> createTrainee(TraineeRegReqDto traineeRegReqDto) {
         UserEntity userEntityById=userRepository.findByUserId(traineeRegReqDto.getTraineeId());
         if (userEntityById!=null){
-            throw new UserAlreadyExistException("TraineeId is Already taken. Please enter a new trainee Id");
+            throw new UserException("TraineeId is Already taken. Please enter a new trainee Id");
         }
         UserEntity userEntityByEmail=userRepository.findByEmail(traineeRegReqDto.getEmail());
         if(userEntityByEmail!=null){
-            throw new UserAlreadyExistException("User Already Exist.. Please Change the email");
+            throw new UserException("User Already Exist.. Please Change the email");
         }
-
         // trainee Registration Dto have some filed which is insert to user table,,,
-
         UserEntity user = UserEntity.builder()
                 .userId(traineeRegReqDto.getTraineeId())
                 .fullName(traineeRegReqDto.getFullName())
@@ -52,7 +48,6 @@ public class TraineeServiceImp implements TraineeService {
                 .build();
         TraineeEntity trainee= TraineeMappingModel.traineeDtoToEntity(traineeRegReqDto,user);
         traineeRepository.save(trainee);
-
         //creating success class for getting backend response msg to frontend
         SuccessResponseDto success=SuccessResponseDto.builder()
                 .status(HttpStatus.OK.value())
@@ -72,7 +67,7 @@ public class TraineeServiceImp implements TraineeService {
     public ResponseEntity<Object> updateTrainee(TraineeRegReqDto traineeReqDto) {
         UserEntity user = userRepository.findByUserId(traineeReqDto.getTraineeId());
         if (user == null) {
-            throw new UserNotFoundException("trainee is not found for update");
+            throw new UserException("trainee is not found for update");
         }
         user.setEmail(traineeReqDto.getEmail());
         user.setFullName(traineeReqDto.getFullName());
@@ -98,7 +93,7 @@ public class TraineeServiceImp implements TraineeService {
     public ResponseEntity<Object> deleteTrainee(Long traineeId) {
         TraineeEntity trainee = traineeRepository.findByTraineeId(traineeId);
         if (trainee==null){
-            throw new TraineeNotFoundException("Trainee Not Found for delete");
+            throw new TraineeException("Trainee Not Found for delete");
         }
         traineeRepository.delete(trainee);
         return new ResponseEntity<>("Successfully Deleted",HttpStatus.OK);
@@ -108,7 +103,7 @@ public class TraineeServiceImp implements TraineeService {
     public ResponseEntity<Object> traineeDetails(Long traineeId) {
         TraineeEntity trainee = traineeRepository.findByTraineeId(traineeId);
         if (trainee == null) {
-            throw new UserNotFoundException("trainee is not found for details");
+            throw new UserException("trainee is not found for details");
         }
         TraineeResDto traineeResDto=TraineeMappingModel.traineeEntityToDto(trainee,trainee.getUser());
         return new ResponseEntity<>(traineeResDto,HttpStatus.OK);

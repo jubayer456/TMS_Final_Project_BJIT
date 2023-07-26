@@ -27,7 +27,7 @@ const AssignmentCreatedModalTest = ({ setCreatedModal }) => {
                         deadLine: data.deadLine
                     }
                     console.log(assignmentData);
-                    fetch(`http://localhost:8082/api/schedule/${scheduleId}/add-assignment`, {
+                    fetch(`http://localhost:8082/api/schedules/${scheduleId}/add-assignment`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',

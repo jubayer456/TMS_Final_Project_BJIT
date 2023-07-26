@@ -6,10 +6,9 @@ import com.BjitAcademy.TrainingManagementSystemServer.Dto.Course.CourseResDto;
 import com.BjitAcademy.TrainingManagementSystemServer.Entity.CourseEntity;
 import com.BjitAcademy.TrainingManagementSystemServer.Entity.ScheduleEntity;
 import com.BjitAcademy.TrainingManagementSystemServer.Entity.TrainerEntity;
-import com.BjitAcademy.TrainingManagementSystemServer.Exception.CourseNotFoundException;
-import com.BjitAcademy.TrainingManagementSystemServer.Exception.ScheduleAlreadyExistException;
-import com.BjitAcademy.TrainingManagementSystemServer.Exception.TraineeNotFoundException;
-import com.BjitAcademy.TrainingManagementSystemServer.Exception.TrainerNotFoundException;
+import com.BjitAcademy.TrainingManagementSystemServer.Exception.CourseException;
+import com.BjitAcademy.TrainingManagementSystemServer.Exception.ScheduleException;
+import com.BjitAcademy.TrainingManagementSystemServer.Exception.TrainerException;
 import com.BjitAcademy.TrainingManagementSystemServer.Mapper.CourseMappingModel;
 import com.BjitAcademy.TrainingManagementSystemServer.Repository.CourseRepository;
 import com.BjitAcademy.TrainingManagementSystemServer.Repository.ScheduleRepository;
@@ -34,7 +33,7 @@ public class CourseServiceImp implements CourseService {
     public ResponseEntity<Object> createCourse(CourseReqDto courseReqDto) {
         TrainerEntity trainer=trainerRepository.findByTrainerId(courseReqDto.getTrainerId());
         if (trainer==null){
-            throw new TrainerNotFoundException("Trainer not found for Course");
+            throw new TrainerException("Trainer not found for Course");
         }
         CourseEntity course= CourseMappingModel.CourseDtoToEntity(courseReqDto,trainer);
         courseRepository.save(course);
@@ -49,11 +48,11 @@ public class CourseServiceImp implements CourseService {
     public ResponseEntity<Object> updateCourse(Long courseId, CourseReqDto courseReqDto) {
        CourseEntity course=courseRepository.findByCourseId(courseId);
        if(course==null){
-           throw new CourseNotFoundException("course not found for update");
+           throw new CourseException("course not found for update");
        }
        TrainerEntity trainer=trainerRepository.findByTrainerId(courseReqDto.getTrainerId());
        if (trainer==null){
-           throw new TraineeNotFoundException("please enter valid trainerId");
+           throw new TrainerException("please enter valid trainerId");
        }
        course.setName(courseReqDto.getName());
        course.setTrainer(trainer);
@@ -69,7 +68,7 @@ public class CourseServiceImp implements CourseService {
     public ResponseEntity<Object> getCourseDetails(Long courseId) {
         CourseEntity course=courseRepository.findByCourseId(courseId);
         if(course==null){
-            throw new CourseNotFoundException("course not found for update");
+            throw new CourseException("course not found for update");
         }
         CourseResDto courseResDto=CourseMappingModel.CourseEntityToDto(course);
         return new ResponseEntity<>(courseResDto,HttpStatus.OK);
@@ -87,11 +86,11 @@ public class CourseServiceImp implements CourseService {
     public ResponseEntity<Object> deleteCourse(Long courseId) {
         List<ScheduleEntity> schedules=scheduleRepository.findAll();
         if(schedules.stream().anyMatch(scheduleEntity -> Objects.equals(scheduleEntity.getCourseId(), courseId))){
-            throw new ScheduleAlreadyExistException("Schedule already exist so you can not delete");
+            throw new ScheduleException("Schedule already exist so you can not delete");
         }
         CourseEntity course=courseRepository.findByCourseId(courseId);
         if (course==null){
-            throw new CourseNotFoundException("Course id is invalid,,, please give a valid course Id");
+            throw new CourseException("Course id is invalid,,, please give a valid course Id");
         }
         course.setTrainer(null);
         courseRepository.delete(course);

@@ -31,7 +31,7 @@ const SubmissionEvoUpdateModal = ({asignEvoUpdateModel,setAsignEvoUpdateModel,re
             .then(res => {
                 console.log(res);
                 if (res.status === 401 || res.status === 403) {
-                    toast.error(`${res.statusText} Access`);
+                    toast.error(`Access denied Login again Please`);
                     localStorage.removeItem('accessToken');
                     localStorage.removeItem('myAppState');
                     navigate('/login');

@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -26,8 +27,9 @@ public class SecurityConfig {
                 .csrf()
                 .disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/api/admin","/api/auth/login","/api/auth/updatePicture/{userId}","/api/download/{fileName}","/api/upload").permitAll()
-                .requestMatchers("/api/auth/{userId}","/api/classroom/{classroomId}").hasAnyAuthority("ADMIN","TRAINEE","TRAINER")
+                .requestMatchers("/api-docs/**").permitAll()
+                .requestMatchers("/api/admin-save","/api/auth/login","/api/auth/updatePicture/{userId}","/api/download/{fileName}","/api/upload").permitAll()
+                .requestMatchers("/api/auth/{userId}","/api/classrooms/{classroomId}").hasAnyAuthority("ADMIN","TRAINEE","TRAINER")
                 .anyRequest()
                 .authenticated()
                 .and()

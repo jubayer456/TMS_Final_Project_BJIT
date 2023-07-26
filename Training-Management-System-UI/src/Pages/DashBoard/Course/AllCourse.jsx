@@ -16,7 +16,7 @@ const AllCourse = () => {
     const { data: courses = [], refetch, isLoading } = useQuery({
         queryKey: ['getAllCourse'],
         queryFn: async () => {
-            let url = `http://localhost:8082/api/course/getAll`;
+            let url = `http://localhost:8082/api/courses`;
             const headers = {
                 Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
             };
@@ -35,7 +35,7 @@ const AllCourse = () => {
         return <Loading></Loading>
     }
     const handleDeleteCourse = course => {
-        fetch(`http://localhost:8082/api/course/${course.courseId}`, {
+        fetch(`http://localhost:8082/api/courses/${course.courseId}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',

@@ -17,7 +17,7 @@ const ShowAllAssignmentSubmission = () => {
     const { data: submissions = [], refetch, isLoading } = useQuery({
         queryKey: ['getAllAssignmentSubmission'],
         queryFn: async () => {
-            const url = `http://localhost:8082/api/schedule/${scheduleId}/${assignmentId}`;
+            const url = `http://localhost:8082/api/schedules/${scheduleId}/${assignmentId}`;
 
             const headers = {
                 Authorization: `Bearer ${localStorage.getItem('accessToken')}`,

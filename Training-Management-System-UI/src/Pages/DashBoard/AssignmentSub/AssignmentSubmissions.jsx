@@ -15,7 +15,7 @@ const AssignmentSubmissions = () => {
     // console.log(user);
     useEffect(() => {
         if (userDetails?.userId) {
-          fetch(`http://localhost:8082/api/trainee/${userDetails?.userId}`, {
+          fetch(`http://localhost:8082/api/trainees/${userDetails?.userId}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -41,7 +41,7 @@ const AssignmentSubmissions = () => {
         queryKey: ['getAllAssignmentSub'],
         queryFn: async () => {
           if (user?.batchId) {
-            const url = `http://localhost:8082/api/schedule/${user?.batchId}/allAssignmentSub`;
+            const url = `http://localhost:8082/api/schedules/${user?.batchId}/assignmentSubmissions`;
 
             const headers = {
                 Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
@@ -56,9 +56,6 @@ const AssignmentSubmissions = () => {
             const data = await res.json();
             return data;
           }
-        //   return []; // Return an empty array if the user object doesn't have a batchId yet
-        // },
-        // enabled: !!user.batchId, // Enable the query only if user.batchId is available
       }});
     if (isLoading) {
         return <Loading></Loading>

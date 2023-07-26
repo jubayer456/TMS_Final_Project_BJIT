@@ -4,14 +4,9 @@ import com.BjitAcademy.TrainingManagementSystemServer.Dto.Trainee.TraineeRegReqD
 import com.BjitAcademy.TrainingManagementSystemServer.Dto.Trainee.TraineeResDto;
 import com.BjitAcademy.TrainingManagementSystemServer.Entity.TraineeEntity;
 import com.BjitAcademy.TrainingManagementSystemServer.Entity.UserEntity;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 
 public class TraineeMappingModel {
-    @Autowired
-    private static PasswordEncoder passwordEncoder;
-
     public static TraineeEntity traineeDtoToEntity(TraineeRegReqDto traineeRegReqDto, UserEntity user){
         return TraineeEntity.builder()
                 .traineeId(traineeRegReqDto.getTraineeId())

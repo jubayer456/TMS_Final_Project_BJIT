@@ -12,7 +12,7 @@ const TrainerSchedules = () => {
     const { data: trainerSchedules = [], refetch, isLoading } = useQuery({
         queryKey: ['getTrainerAllSchedules'],
         queryFn: async () => {
-            const url = `http://localhost:8082/api/schedule/${userDetails?.userId}`;
+            const url = `http://localhost:8082/api/schedules/${userDetails?.userId}`;
 
             const headers = {
                 Authorization: `Bearer ${localStorage.getItem('accessToken')}`,

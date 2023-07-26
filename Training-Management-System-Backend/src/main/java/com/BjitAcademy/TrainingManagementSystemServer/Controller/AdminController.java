@@ -11,28 +11,26 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping
 @RequiredArgsConstructor
-//@CrossOrigin
 public class AdminController {
     private final AdminService adminService;
-    @PostMapping("/api/admin")
+    @PostMapping("/api/admin-save")
 //    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Object> createAdmin(@RequestBody AdminRegReqDto adminRegReqDto){
         return adminService.createAdmin(adminRegReqDto);
     }
-    @PutMapping("/api/admin/{adminId}")
+    @PutMapping("/api/admins/{adminId}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Object> updateAdmin(@PathVariable Long adminId,@RequestBody AdminRegReqDto adminRegReqDto){
         return adminService.updateAdmin(adminId,adminRegReqDto);
     }
 
-    @GetMapping("/api/admin/{adminId}")
+    @GetMapping("/api/admins/{adminId}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Object> getAdminDetails(@PathVariable Long adminId){
         return adminService.getAdminDetails(adminId);
     }
-    @GetMapping("/api/admin/AllUser")
+    @GetMapping("/api/admins")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<UserResDto>> getAllUser(){
         return adminService.getAllUser();

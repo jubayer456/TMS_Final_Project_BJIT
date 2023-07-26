@@ -13,6 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class BatchReqDto {
+    private Long batchId;
     private String batchName;
     private String startingDate;
     private String endingDate;

@@ -19,7 +19,7 @@ const Trainers = () => {
     const { data: trainers = [], refetch, isLoading } = useQuery({
         queryKey: ['getAllTrainer'],
         queryFn: async () => {
-            let url = `http://localhost:8082/api/trainer/getAll`;
+            let url = `http://localhost:8082/api/trainers`;
             const headers = {
                 Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
             };
@@ -39,7 +39,7 @@ const Trainers = () => {
     }
 
     const handleDeleteTrainee = trainer => {
-        fetch(`http://localhost:8082/api/trainer/${trainer.trainerId}`, {
+        fetch(`http://localhost:8082/api/trainers/${trainer.trainerId}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',

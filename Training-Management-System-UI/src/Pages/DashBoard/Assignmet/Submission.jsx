@@ -1,5 +1,6 @@
 import React from 'react';
 import { FaEdit } from 'react-icons/fa';
+import img from '../../../assets/18942381.png'
 
 const Submission = ({ submission, index, setAsignEvoModel, setAsignEvoUpdateModel }) => {
   const { profilePicture, fullName, traineeId, assignmentName, assignmentId, asgSubId, submissionFile, submissionDate, evolution } = submission;
@@ -32,7 +33,10 @@ const Submission = ({ submission, index, setAsignEvoModel, setAsignEvoUpdateMode
         <div className="flex items-center space-x-3">
           <div className="avatar">
             <div className="mask mask-squircle w-12 h-12">
-              <img src={`http://localhost:8082/api/download/${profilePicture}`} alt="Avatar Tailwind CSS Component" />
+              {
+                profilePicture ? <img src={`http://localhost:8082/api/download/${profilePicture}`} alt="Admin Profile Picture" /> :
+                  <img src={img} alt="Trainee default Profile Picture" />
+              }
             </div>
           </div>
           <div>

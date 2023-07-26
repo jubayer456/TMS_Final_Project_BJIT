@@ -17,7 +17,7 @@ const AllBatchTrainee = () => {
         queryKey: ['getAllBatchTrainee'],
 
         queryFn: async () => {
-            const url = `http://localhost:8082/api/batch/${batchId}/getAllTrainee`;
+            const url = `http://localhost:8082/api/batches/${batchId}/trainees`;
 
             const headers = {
                 Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
@@ -37,7 +37,7 @@ const AllBatchTrainee = () => {
         return <Loading></Loading>
     }
     const handleRemoveTrainee = trainee => {
-        fetch(`http://localhost:8082/api/batch/remove-trainee/${trainee.traineeId}`, {
+        fetch(`http://localhost:8082/api/batches/trainees/${trainee.traineeId}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',

@@ -10,7 +10,7 @@ const TrainerClassRoom = () => {
     const { data: classes = [], refetch, isLoading } = useQuery({
         queryKey: ['getAllTrainerClass'],
         queryFn: async () => {
-            const url = `http://localhost:8082/api/classroom/${userDetails?.userId}/getAllClassRoom`;
+            const url = `http://localhost:8082/api/classrooms/${userDetails?.userId}/classRooms`;
 
             const headers = {
                 Authorization: `Bearer ${localStorage.getItem('accessToken')}`,

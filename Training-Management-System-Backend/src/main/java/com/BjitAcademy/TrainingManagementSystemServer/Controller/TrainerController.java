@@ -15,28 +15,28 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class TrainerController {
     private final TrainerService trainerService;
-    @PostMapping("/api/trainer")
+    @PostMapping("/api/trainer-save")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Object> createTrainers(@RequestBody TrainerRegReqDto trainerRegReqDto){
         return trainerService.createTrainers(trainerRegReqDto);
     }
-    @PutMapping("/api/trainer")
+    @PutMapping("/api/trainers")
     @PreAuthorize("hasRole('TRAINER')")
     public ResponseEntity<Object> updateTrainers(@RequestBody TrainerRegReqDto trainerRegReqDto){
         return trainerService.updateTrainers(trainerRegReqDto);
     }
-    @DeleteMapping("/api/trainer/{trainerId}")
+    @DeleteMapping("/api/trainers/{trainerId}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Object> deleteTrainer(@PathVariable Long trainerId){
         return trainerService.deleteTrainer(trainerId);
     }
 
-    @GetMapping("/api/trainer/{trainerId}")
+    @GetMapping("/api/trainers/{trainerId}")
     @PreAuthorize("hasRole('TRAINER')")
     public ResponseEntity<Object> trainerDetails(@PathVariable Long trainerId){
         return trainerService.trainerDetails(trainerId);
     }
-    @GetMapping("/api/trainer/getAll")
+    @GetMapping("/api/trainers")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<TrainerResDto>> getAllTrainer() {
         return trainerService.getAllTrainer();

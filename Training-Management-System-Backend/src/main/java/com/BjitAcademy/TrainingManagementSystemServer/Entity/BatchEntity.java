@@ -18,7 +18,6 @@ import java.util.Set;
 @Table(name = "batches")
 public class BatchEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long batchId;
     private String batchName;
     private String startingDate;

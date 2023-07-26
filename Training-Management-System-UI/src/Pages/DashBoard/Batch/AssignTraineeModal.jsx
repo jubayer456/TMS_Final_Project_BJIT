@@ -14,7 +14,7 @@ const AssignTraineeModal = ({setTraineeModal}) => {
             traineeId: e.target.traineeId.value,            
         }
         console.log(batchTraineeData);
-         fetch('http://localhost:8082/api/batch/add-trainee', {
+         fetch('http://localhost:8082/api/batches/add-trainee', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

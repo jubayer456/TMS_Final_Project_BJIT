@@ -3,6 +3,7 @@ import Navbar from '../Pages/DashBoard/Navbar/Navbar';
 import { Link, Outlet } from 'react-router-dom';
 import { useUser } from '../Context/UserProvider';
 import { useQuery } from 'react-query';
+import { toast } from 'react-hot-toast';
 
 const DashboardLayout = () => {
     const { state, dispatch } = useUser();
@@ -12,19 +13,18 @@ const DashboardLayout = () => {
     const { data: trainee, refetch, isLoading } = useQuery({
         queryKey: ['getTraineeBatch'],
         queryFn: async () => {
-            const url = `http://localhost:8082/api/trainee/${userDetails?.userId}`;
+            if(userDetails?.role=='TRAINEE'){
+                const url = `http://localhost:8082/api/trainees/${userDetails?.userId}`;
             const headers = {
                 Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
             };
             const res = await fetch(url, { headers });
             if (res.status === 401 || res.status === 403) {
-                toast.error(`Access DENIED Please Again Login`);
-                localStorage.removeItem('accessToken');
-                localStorage.removeItem('myAppState');
-                navigate('/login');
+                toast.error(`Access denied`);
             }
             const data = await res.json();
             return data;
+            }
         }
     });
 

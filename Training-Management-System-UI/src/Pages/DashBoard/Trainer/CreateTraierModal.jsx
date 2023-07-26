@@ -20,7 +20,7 @@ const CreateTraierModal = ({ setTrainerModal, refetch }) => {
     const onsubmit = registerData => {
         console.log(registerData);
    
-        axios.post("http://localhost:8082/api/trainer", registerData, {
+        axios.post("http://localhost:8082/api/trainer-save", registerData, {
             headers: {
                 'Content-Type': 'application/json',
                 authorization: `Bearer ${localStorage.getItem('accessToken')}`

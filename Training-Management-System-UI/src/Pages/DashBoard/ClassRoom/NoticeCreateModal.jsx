@@ -20,7 +20,7 @@ const NoticeCreateModal = ({setNoticeCreatdModal,refetch}) => {
             description :data.description,
             classRoomId :classRoomId
         }
-        fetch(`http://localhost:8082/api/classroom/add-notice`, {
+        fetch(`http://localhost:8082/api/classrooms/add-notice`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

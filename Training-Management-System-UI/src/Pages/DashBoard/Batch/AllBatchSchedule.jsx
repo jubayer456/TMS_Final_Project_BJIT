@@ -19,7 +19,7 @@ const AllBatchSchedule = () => {
     const { data: schedules = [], refetch, isLoading } = useQuery({
         queryKey: ['getAllSchedule'],
         queryFn: async () => {
-            const url =`http://localhost:8082/api/batch/${batchId}/getAllSchedule`;
+            const url =`http://localhost:8082/api/batches/${batchId}/schedules`;
 
             const headers = {
                 Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
@@ -39,7 +39,7 @@ const AllBatchSchedule = () => {
         return <Loading></Loading>
     }
     const handleDeleteSchedule = schedule => {
-        fetch(`http://localhost:8082/api/batch/remove-schedule/${schedule.scheduleId}`, {
+        fetch(`http://localhost:8082/api/batches/schedules/${schedule.scheduleId}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',

@@ -32,7 +32,7 @@ const PostCreatedModal = ({ setPostModal, trainer,refetch }) => {
                         postDate: formattedDate
                     }
                     console.log(attachmentData);
-                    fetch('http://localhost:8082/api/classroom/add-post', {
+                    fetch('http://localhost:8082/api/classrooms/add-post', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',

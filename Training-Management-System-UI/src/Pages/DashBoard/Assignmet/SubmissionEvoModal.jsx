@@ -18,7 +18,7 @@ const SubmissionEvoModal = ({setAsignEvoModel,asignEvoModel,refetch}) => {
             evolution: data.evolution
         }
         console.log(evoData);
-        fetch(`http://localhost:8082/api/schedule/${assignmentId}/${asgSubId}`, {
+        fetch(`http://localhost:8082/api/schedules/${assignmentId}/${asgSubId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -27,7 +27,6 @@ const SubmissionEvoModal = ({setAsignEvoModel,asignEvoModel,refetch}) => {
             body: JSON.stringify(evoData)
         })
             .then(res => {
-                console.log(res);
                 if (res.status === 401 || res.status === 403) {
                     toast.error(`Access denied please login again`);
                     localStorage.removeItem('accessToken');
@@ -37,9 +36,8 @@ const SubmissionEvoModal = ({setAsignEvoModel,asignEvoModel,refetch}) => {
                 return res.json();
             })
             .then(data => {
-                console.log(data);
                 if (data.status == 200) {
-                    refetch;
+                    refetch();
                     setAsignEvoModel(null);
                     toast.success(`succesfully Marks Submitted`)
                 }

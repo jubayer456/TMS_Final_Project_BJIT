@@ -37,7 +37,7 @@ const AssignmentSubModal = ({ assignSubModal, setAssignSubModal,traineeId }) => 
                         submissionDate: formattedDate
                     }
                     console.log(assignmentSubData);
-                    fetch(`http://localhost:8082/api/schedule/add-assignmentSub`, {
+                    fetch(`http://localhost:8082/api/schedules/add-assignmentSub`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',

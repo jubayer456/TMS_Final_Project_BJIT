@@ -25,7 +25,7 @@ const CommentForm = ({ addComment, refetch, setShowCommentForm, trainee, post })
       msg: commentText
     }
     console.log(commentData)
-    fetch('http://localhost:8082/api/classroom/add-comment', {
+    fetch('http://localhost:8082/api/classrooms/add-comment', {
       method: 'POST',
       headers: {
           'Content-Type': 'application/json',
