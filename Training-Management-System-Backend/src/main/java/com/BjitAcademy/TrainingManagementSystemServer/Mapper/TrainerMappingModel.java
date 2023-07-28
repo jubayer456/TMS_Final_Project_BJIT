@@ -9,7 +9,7 @@ import com.BjitAcademy.TrainingManagementSystemServer.Entity.UserEntity;
 public class TrainerMappingModel {
     public static TrainerEntity trainerDtoToEntity(TrainerRegReqDto trainerRegReqDto, UserEntity user){
         return TrainerEntity.builder()
-                .trainerId(trainerRegReqDto.getTrainerId())
+                .trainerId(user.getUserId())
                 .address(trainerRegReqDto.getAddress())
                 .designation(trainerRegReqDto.getDesignation())
                 .totalYrsExp(trainerRegReqDto.getTotalYrsExp())

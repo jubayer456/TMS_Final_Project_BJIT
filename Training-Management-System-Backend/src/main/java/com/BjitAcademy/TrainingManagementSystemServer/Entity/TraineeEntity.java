@@ -17,7 +17,6 @@ import java.util.Date;
 public class TraineeEntity{
     @Id
     private Long traineeId;
-
     private String address;
     private String dob;
     private String degreeName;

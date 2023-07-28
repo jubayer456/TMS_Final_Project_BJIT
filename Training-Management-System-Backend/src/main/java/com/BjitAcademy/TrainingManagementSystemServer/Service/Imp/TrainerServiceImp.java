@@ -32,10 +32,6 @@ public class TrainerServiceImp implements TrainerService {
     @Override
     @Transactional
     public ResponseEntity<Object> createTrainers(TrainerRegReqDto trainerRegReqDto) {
-        UserEntity userEntityById=userRepository.findByUserId(trainerRegReqDto.getTrainerId());
-        if (userEntityById!=null){
-            throw new UserException("Trainer is Already taken. Please enter a new trainee Id");
-        }
         UserEntity userEntityByEmail=userRepository.findByEmail(trainerRegReqDto.getEmail());
         if(userEntityByEmail!=null){
             throw new UserException("Trainer Already Exist.. Please Change the email");
@@ -43,7 +39,6 @@ public class TrainerServiceImp implements TrainerService {
 
         //trainer reg req to user entity then pass the user entity to mapper class
         UserEntity user =UserEntity.builder()
-                .userId(trainerRegReqDto.getTrainerId())
                 .fullName(trainerRegReqDto.getFullName())
                 .email(trainerRegReqDto.getEmail())
                 .password(passwordEncoder.encode(trainerRegReqDto.getPassword()))
@@ -52,9 +47,9 @@ public class TrainerServiceImp implements TrainerService {
                 .contactNumber(trainerRegReqDto.getContactNumber())
                 .role(trainerRegReqDto.getRole())
                 .build();
-
+        UserEntity savedUser=userRepository.save(user);
         // trainer req dto convert to trainer entity using mapper class named trainerMappingModel
-        TrainerEntity trainer= TrainerMappingModel.trainerDtoToEntity(trainerRegReqDto,user);
+        TrainerEntity trainer= TrainerMappingModel.trainerDtoToEntity(trainerRegReqDto,savedUser);
         trainerRepository.save(trainer);
         return new ResponseEntity<>("successfully Registered", HttpStatus.OK);
     }

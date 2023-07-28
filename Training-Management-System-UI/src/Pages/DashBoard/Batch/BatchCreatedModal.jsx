@@ -8,7 +8,6 @@ const BatchCreatedModal = ({ setCreatedModal }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         const batchData = {
-            batchId:e.target.batchId.value,
             batchName: e.target.batchName.value,
             startingDate: e.target.startingDate.value,
             endingDate: e.target.endingDate.value,
@@ -53,10 +52,6 @@ const BatchCreatedModal = ({ setCreatedModal }) => {
                     < header className='text-center text-2xl'>Batch Creation Form</header>
                     <button onClick={() => setCreatedModal(false)} className="btn btn-md btn-circle btn-ghost absolute right-2 top-2">✕</button>
                     <form onSubmit={handleSubmit} className="form">
-                    <div className="input-box">
-                            <label>Batch ID:</label>
-                            <input type="number" name="batchId" placeholder="Enter Batch Id" required />
-                        </div>
                         <div className="input-box">
                             <label>Batch Name:</label>
                             <input type="text" name="batchName" placeholder="Enter Batch Name" required />

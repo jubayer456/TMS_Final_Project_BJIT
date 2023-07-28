@@ -82,7 +82,7 @@ const Trainees = () => {
                                     <th>Name</th>
                                     <th>email</th>
                                     <th>contact Num</th>
-                                    <th>Batch Name</th>
+                                    <th>Batch Id</th>
                                     <th>More</th>
                                 </tr>
                             </thead>

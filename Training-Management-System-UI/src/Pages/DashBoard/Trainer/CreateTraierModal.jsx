@@ -42,20 +42,6 @@ const CreateTraierModal = ({ setTrainerModal, refetch }) => {
                     <form onSubmit={handleSubmit(onsubmit)} className="form">
                         <div className="column">
                             <div className="input-box">
-                                <label>Trainer Id:</label>
-                                <input
-                                    type="number"
-                                    placeholder='Enter Trainer Id'
-                                    {...control.register('trainerId', {
-                                        required: 'trainerId is required',
-                                        validate: validateNonNegative,
-                                    })}
-                                />
-                                <label >
-                                    {errors.trainerId && <span className="label-text-alt text-red-500">{errors.trainerId.message}</span>}
-                                </label>
-                            </div>
-                            <div className="input-box">
                                 <label>Full Name:</label>
                                 <input
                                     type="text"

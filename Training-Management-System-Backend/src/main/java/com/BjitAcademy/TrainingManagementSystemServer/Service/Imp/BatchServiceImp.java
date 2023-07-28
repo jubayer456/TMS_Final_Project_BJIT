@@ -40,10 +40,6 @@ public class BatchServiceImp implements BatchService {
     @Override
     @Transactional
     public ResponseEntity<Object> createBatch(BatchReqDto batchReqDto) {
-        BatchEntity batchById=batchesRepository.findByBatchId(batchReqDto.getBatchId());
-        if (batchById!=null){
-            throw new UserException("Already created Batch in this Id... please insert new batch name");
-        }
         BatchEntity batchByName=batchesRepository.findByBatchName(batchReqDto.getBatchName());
         if (batchByName!=null){
             throw new UserException("Already created Batch in this name... please insert new batch name");
@@ -54,14 +50,11 @@ public class BatchServiceImp implements BatchService {
         if(LocalDate.parse((CharSequence) batchReqDto.getStartingDate(),dateTimeFormatter).isAfter(LocalDate.parse((CharSequence) batchReqDto.getEndingDate(),dateTimeFormatter))){
             throw new ScheduleException("please enter a valid date range");
         }
-        //mapping batch req dto to entity using batch mapper model
-        BatchEntity batch= BatchMappingModel.BatchDtoToEntity(batchReqDto);
-//        BatchEntity savedBatch= batchesRepository.save(batch);
-        //When creating batch it also create classroom as the same name of batch name and ID
         ClassRoom classRoom=new ClassRoom();
         classRoom.setClassRoomId(batchReqDto.getBatchId());
-        classRoom.setClassRoomName(batch.getBatchName());
-        batch.setClassRoom(classRoomRepository.save(classRoom));
+        classRoom.setClassRoomName(batchReqDto.getBatchName());
+        ClassRoom savedClassRoom=classRoomRepository.save(classRoom);
+        BatchEntity batch= BatchMappingModel.BatchDtoToEntity(batchReqDto,savedClassRoom);
         //saving batch entity to batch repository
         batchesRepository.save(batch);
         //showing backend msg to frontend using success object

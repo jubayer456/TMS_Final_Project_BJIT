@@ -27,17 +27,12 @@ public class TraineeServiceImp implements TraineeService {
     private final PasswordEncoder passwordEncoder;
     @Override
     public ResponseEntity<Object> createTrainee(TraineeRegReqDto traineeRegReqDto) {
-        UserEntity userEntityById=userRepository.findByUserId(traineeRegReqDto.getTraineeId());
-        if (userEntityById!=null){
-            throw new UserException("TraineeId is Already taken. Please enter a new trainee Id");
-        }
         UserEntity userEntityByEmail=userRepository.findByEmail(traineeRegReqDto.getEmail());
         if(userEntityByEmail!=null){
             throw new UserException("User Already Exist.. Please Change the email");
         }
         // trainee Registration Dto have some filed which is insert to user table,,,
         UserEntity user = UserEntity.builder()
-                .userId(traineeRegReqDto.getTraineeId())
                 .fullName(traineeRegReqDto.getFullName())
                 .email(traineeRegReqDto.getEmail())
                 .password(passwordEncoder.encode(traineeRegReqDto.getPassword()))
@@ -46,7 +41,8 @@ public class TraineeServiceImp implements TraineeService {
                 .profilePicture(traineeRegReqDto.getProfilePicture())
                 .role(traineeRegReqDto.getRole())
                 .build();
-        TraineeEntity trainee= TraineeMappingModel.traineeDtoToEntity(traineeRegReqDto,user);
+        UserEntity savedUser=userRepository.save(user);
+        TraineeEntity trainee= TraineeMappingModel.traineeDtoToEntity(traineeRegReqDto,savedUser);
         traineeRepository.save(trainee);
         //creating success class for getting backend response msg to frontend
         SuccessResponseDto success=SuccessResponseDto.builder()

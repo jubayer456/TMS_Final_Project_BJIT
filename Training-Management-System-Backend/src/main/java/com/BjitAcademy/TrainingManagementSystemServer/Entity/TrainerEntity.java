@@ -15,7 +15,6 @@ import lombok.NoArgsConstructor;
 public class TrainerEntity {
     @Id
     private Long trainerId;
-
     private String address;
     private String designation;
     private String joiningDate;

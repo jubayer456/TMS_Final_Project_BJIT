@@ -15,7 +15,7 @@ import java.util.List;
 public class AdminController {
     private final AdminService adminService;
     @PostMapping("/api/admin-save")
-//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Object> createAdmin(@RequestBody AdminRegReqDto adminRegReqDto){
         return adminService.createAdmin(adminRegReqDto);
     }

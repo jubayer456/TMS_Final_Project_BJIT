@@ -37,13 +37,6 @@ const CreatedTraineeModal = ({ setTraineeModal, refetch }) => {
         }
         return true;
     };
-      const validateNonNegative = (value) => {
-        const numberValue = parseFloat(value);
-        if (isNaN(numberValue) || numberValue < 0) {
-            return 'Please enter a non-negative number';
-        }
-        return true;
-    };
     const onsubmit = registerData => {
         fetch(`http://localhost:8082/api/trainee-save`, {
             method: 'POST',
@@ -81,20 +74,6 @@ const CreatedTraineeModal = ({ setTraineeModal, refetch }) => {
                     <button onClick={() => setTraineeModal(false)} className="btn btn-md btn-circle btn-ghost absolute right-2 top-2">✕</button>
                     <form onSubmit={handleSubmit(onsubmit)} className="form">
                         <div className="column">
-                            <div className="input-box">
-                                <label>Trainee Id:</label>
-                                <input
-                                    type="number"
-                                    placeholder='Enter Trainee Id'
-                                    {...control.register('traineeId', {
-                                        required: 'traineeId is required',
-                                        validate: validateNonNegative,
-                                    })}
-                                />
-                                <label >
-                                    {errors.traineeId && <span className="label-text-alt text-red-500">{errors.traineeId.message}</span>}
-                                </label>
-                            </div>
                             <div className="input-box">
                                 <label>Full Name:</label>
                                 <input

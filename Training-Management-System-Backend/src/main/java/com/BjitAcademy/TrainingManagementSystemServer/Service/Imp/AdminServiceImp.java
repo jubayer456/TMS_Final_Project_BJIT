@@ -28,18 +28,12 @@ public class AdminServiceImp implements AdminService {
     @Override
     @Transactional
     public ResponseEntity<Object> createAdmin(AdminRegReqDto adminRegReqDto) {
-        UserEntity userEntityById = userRepository.findByUserId(adminRegReqDto.getAdminId());
-        if (userEntityById != null) {
-            throw new UserException("Admin is Already taken. Please enter a new trainee Id");
-        }
         UserEntity userEntityByEmail = userRepository.findByEmail(adminRegReqDto.getEmail());
         if (userEntityByEmail != null) {
             throw new UserException("Admin Already Exist.. Please Change the email");
         }
-
         // admin Registration Dto have some filed which is insert to user table,,,
         UserEntity user =  UserEntity.builder()
-                .userId(adminRegReqDto.getAdminId())
                 .fullName(adminRegReqDto.getFullName())
                 .email(adminRegReqDto.getEmail())
                 .password(passwordEncoder.encode(adminRegReqDto.getPassword()))
@@ -48,9 +42,9 @@ public class AdminServiceImp implements AdminService {
                 .contactNumber(adminRegReqDto.getContactNumber())
                 .role(adminRegReqDto.getRole())
                 .build();
-
+        UserEntity saveUser=userRepository.save(user);
         //convert admin dto to entity using admin mapping model
-        AdminEntity admin = AdminMappingModel.AdminDtoToEntity(adminRegReqDto, user);
+        AdminEntity admin = AdminMappingModel.AdminDtoToEntity(adminRegReqDto, saveUser);
         adminRepository.save(admin);
         SuccessResponseDto success=SuccessResponseDto.builder()
                 .status(HttpStatus.OK.value())

@@ -9,7 +9,7 @@ import com.BjitAcademy.TrainingManagementSystemServer.Entity.UserEntity;
 public class TraineeMappingModel {
     public static TraineeEntity traineeDtoToEntity(TraineeRegReqDto traineeRegReqDto, UserEntity user){
         return TraineeEntity.builder()
-                .traineeId(traineeRegReqDto.getTraineeId())
+                .traineeId(user.getUserId())
                 .dob(traineeRegReqDto.getDob())
                 .cgpa(traineeRegReqDto.getCgpa())
                 .address(traineeRegReqDto.getAddress())

@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 public class AdminMappingModel {
     public static AdminEntity AdminDtoToEntity(AdminRegReqDto adminRegReqDto, UserEntity user){
         return AdminEntity.builder()
-                .adminId(adminRegReqDto.getAdminId())
+                .adminId(user.getUserId())
                 .user(user)
                 .build();
     }
